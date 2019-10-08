@@ -1,0 +1,9 @@
+D:\DFS Website\DFS\DFS.Constants\bin\Debug\netstandard2.0\DFS.Common.deps.json
+D:\DFS Website\DFS\DFS.Constants\bin\Debug\netstandard2.0\DFS.Common.dll
+D:\DFS Website\DFS\DFS.Constants\bin\Debug\netstandard2.0\DFS.Common.pdb
+D:\DFS Website\DFS\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.csprojAssemblyReference.cache
+D:\DFS Website\DFS\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.csproj.CoreCompileInputs.cache
+D:\DFS Website\DFS\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.AssemblyInfoInputs.cache
+D:\DFS Website\DFS\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.AssemblyInfo.cs
+D:\DFS Website\DFS\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.dll
+D:\DFS Website\DFS\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.pdb

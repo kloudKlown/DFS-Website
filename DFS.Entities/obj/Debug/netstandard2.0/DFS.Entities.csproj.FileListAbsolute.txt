@@ -1,0 +1,12 @@
+D:\DFS Website\DFS\DFS.Entities\bin\Debug\netstandard2.0\DFS.Entities.deps.json
+D:\DFS Website\DFS\DFS.Entities\bin\Debug\netstandard2.0\DFS.Entities.dll
+D:\DFS Website\DFS\DFS.Entities\bin\Debug\netstandard2.0\DFS.Entities.pdb
+D:\DFS Website\DFS\DFS.Entities\bin\Debug\netstandard2.0\DFS.Common.dll
+D:\DFS Website\DFS\DFS.Entities\bin\Debug\netstandard2.0\DFS.Common.pdb
+D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.csprojAssemblyReference.cache
+D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.csproj.CoreCompileInputs.cache
+D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.AssemblyInfoInputs.cache
+D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.AssemblyInfo.cs
+D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.csproj.CopyComplete
+D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.dll
+D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.pdb

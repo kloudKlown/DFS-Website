@@ -1,0 +1,9 @@
+D:\DFS Website\DFS\DFS.Data\bin\Debug\netstandard2.0\DFS.Data.deps.json
+D:\DFS Website\DFS\DFS.Data\bin\Debug\netstandard2.0\DFS.Data.dll
+D:\DFS Website\DFS\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.csproj.CoreCompileInputs.cache
+D:\DFS Website\DFS\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.AssemblyInfoInputs.cache
+D:\DFS Website\DFS\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.AssemblyInfo.cs
+D:\DFS Website\DFS\DFS.Data\bin\Debug\netstandard2.0\DFS.Data.pdb
+D:\DFS Website\DFS\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.csprojAssemblyReference.cache
+D:\DFS Website\DFS\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.dll
+D:\DFS Website\DFS\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.pdb

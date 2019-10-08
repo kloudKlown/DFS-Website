@@ -1,0 +1,298 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\DFS Website\\DFS\\DFS.Services\\DFS.Services.csproj": {}
+  },
+  "projects": {
+    "D:\\DFS Website\\DFS\\DataManagers\\DFS.Data.Managers.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\DFS Website\\DFS\\DataManagers\\DFS.Data.Managers.csproj",
+        "projectName": "DFS.Data.Managers",
+        "projectPath": "D:\\DFS Website\\DFS\\DataManagers\\DFS.Data.Managers.csproj",
+        "packagesPath": "C:\\Users\\suhas\\.nuget\\packages\\",
+        "outputPath": "D:\\DFS Website\\DFS\\DataManagers\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\suhas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {
+              "D:\\DFS Website\\DFS\\DFS.Constants\\DFS.Common.csproj": {
+                "projectPath": "D:\\DFS Website\\DFS\\DFS.Constants\\DFS.Common.csproj"
+              },
+              "D:\\DFS Website\\DFS\\DFS.Entities\\DFS.Entities.csproj": {
+                "projectPath": "D:\\DFS Website\\DFS\\DFS.Entities\\DFS.Entities.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.30, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[2.2.6, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
+    "D:\\DFS Website\\DFS\\DFS.Constants\\DFS.Common.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\DFS Website\\DFS\\DFS.Constants\\DFS.Common.csproj",
+        "projectName": "DFS.Common",
+        "projectPath": "D:\\DFS Website\\DFS\\DFS.Constants\\DFS.Common.csproj",
+        "packagesPath": "C:\\Users\\suhas\\.nuget\\packages\\",
+        "outputPath": "D:\\DFS Website\\DFS\\DFS.Constants\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\suhas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
+    "D:\\DFS Website\\DFS\\DFS.Data\\DFS.Data.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\DFS Website\\DFS\\DFS.Data\\DFS.Data.csproj",
+        "projectName": "DFS.Data",
+        "projectPath": "D:\\DFS Website\\DFS\\DFS.Data\\DFS.Data.csproj",
+        "packagesPath": "C:\\Users\\suhas\\.nuget\\packages\\",
+        "outputPath": "D:\\DFS Website\\DFS\\DFS.Data\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\suhas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
+    "D:\\DFS Website\\DFS\\DFS.Entities\\DFS.Entities.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\DFS Website\\DFS\\DFS.Entities\\DFS.Entities.csproj",
+        "projectName": "DFS.Entities",
+        "projectPath": "D:\\DFS Website\\DFS\\DFS.Entities\\DFS.Entities.csproj",
+        "packagesPath": "C:\\Users\\suhas\\.nuget\\packages\\",
+        "outputPath": "D:\\DFS Website\\DFS\\DFS.Entities\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\suhas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {
+              "D:\\DFS Website\\DFS\\DFS.Constants\\DFS.Common.csproj": {
+                "projectPath": "D:\\DFS Website\\DFS\\DFS.Constants\\DFS.Common.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
+    "D:\\DFS Website\\DFS\\DFS.Services\\DFS.Services.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\DFS Website\\DFS\\DFS.Services\\DFS.Services.csproj",
+        "projectName": "DFS.Services",
+        "projectPath": "D:\\DFS Website\\DFS\\DFS.Services\\DFS.Services.csproj",
+        "packagesPath": "C:\\Users\\suhas\\.nuget\\packages\\",
+        "outputPath": "D:\\DFS Website\\DFS\\DFS.Services\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\suhas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {
+              "D:\\DFS Website\\DFS\\DataManagers\\DFS.Data.Managers.csproj": {
+                "projectPath": "D:\\DFS Website\\DFS\\DataManagers\\DFS.Data.Managers.csproj"
+              },
+              "D:\\DFS Website\\DFS\\DFS.Data\\DFS.Data.csproj": {
+                "projectPath": "D:\\DFS Website\\DFS\\DFS.Data\\DFS.Data.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    }
+  }
+}

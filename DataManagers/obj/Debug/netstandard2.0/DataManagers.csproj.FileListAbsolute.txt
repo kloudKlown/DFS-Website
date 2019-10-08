@@ -1,0 +1,9 @@
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DataManagers.csprojAssemblyReference.cache
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DataManagers.csproj.CoreCompileInputs.cache
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DataManagers.AssemblyInfoInputs.cache
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DataManagers.AssemblyInfo.cs
+D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DataManagers.deps.json
+D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DataManagers.dll
+D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DataManagers.pdb
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DataManagers.dll
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DataManagers.pdb

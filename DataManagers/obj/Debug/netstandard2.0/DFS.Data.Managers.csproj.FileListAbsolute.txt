@@ -1,0 +1,14 @@
+D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DFS.Data.Managers.deps.json
+D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DFS.Data.Managers.dll
+D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DFS.Data.Managers.pdb
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.csprojAssemblyReference.cache
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.csproj.CoreCompileInputs.cache
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.AssemblyInfoInputs.cache
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.AssemblyInfo.cs
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.dll
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.pdb
+D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DFS.Common.dll
+D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DFS.Common.pdb
+D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.csproj.CopyComplete
+D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DFS.Entities.dll
+D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DFS.Entities.pdb
