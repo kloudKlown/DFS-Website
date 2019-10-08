@@ -25,8 +25,32 @@ namespace DFS.Data.Managers
             }
         }
 
+        public IEnumerable<NBATeamPlayers> GetTeamPlayersByDate(DateTime date)
+        {
+            List<NBATeamPlayers> result = new List<NBATeamPlayers>();
+            using (IDbConnection connection = GetConnection(NBADatabase))
+            {
+                var queryResult = connection.Query("usp_GetTeamPlayersByDate",
+                    new
+                    {
+                        // TODO: Fix this with DBNull value instead
+                        gameDate_ = date.Year < 2016 ? null : date.ToShortDateString()
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+                foreach (var item in queryResult)
+                {
+                    result.Add(new NBATeamPlayers(item.Name, item.Position, item.Height, item.Weight, item.Team, item.GameDate));
+                }
+
+                return result;
+            }
+        }
+
+
+
         #region Private Helpers
-        
+
         #endregion
     }
 }

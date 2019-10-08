@@ -23,9 +23,11 @@ namespace DFS.Controllers
         
         public IActionResult Index(NBAPlayerViewModel vm)
         {
-            List<NBAPlayers> allPlayers = NBAService.GetAllPlayers();
+            //List<NBAPlayers> allPlayers = NBAService.GetAllPlayers();            
             NBAPlayerViewModel model = new NBAPlayerViewModel();
-            model.PlayerList.AddRange(allPlayers.Select(x => new NBAPlayerViewModel(x)));
+            var test = NBAService.GetNBATeamPlayersForDate(new DateTime(2015, 1, 1));
+            //model.PlayerList.AddRange(allPlayers.Select(x => new NBAPlayerViewModel(x)));
+
             return View(model);
         }
 

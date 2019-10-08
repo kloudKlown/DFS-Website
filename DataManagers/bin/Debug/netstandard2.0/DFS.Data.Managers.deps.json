@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETStandard,Version=v2.0/",
-    "signature": "876ff0430d781f2dd427bd585ad4bef9d6412cc9"
+    "signature": "27630ca22bf70d665881dfdedb40930f3ad8d87f"
   },
   "compilationOptions": {},
   "targets": {
@@ -12,6 +12,7 @@
           "DFS.Common": "1.0.0",
           "DFS.Entities": "1.0.0",
           "Dapper": "2.0.30",
+          "Microsoft.CSharp": "4.6.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "2.2.6",
           "NETStandard.Library": "2.0.3"
         },
@@ -27,6 +28,14 @@
           "lib/netstandard2.0/Dapper.dll": {
             "assemblyVersion": "2.0.0.0",
             "fileVersion": "2.0.30.32292"
+          }
+        }
+      },
+      "Microsoft.CSharp/4.6.0": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.CSharp.dll": {
+            "assemblyVersion": "4.0.4.0",
+            "fileVersion": "4.700.19.46214"
           }
         }
       },
@@ -623,6 +632,13 @@
       "sha512": "sha512-nL0VEpvunjIQ3jTI1x27b7BS3BnRnn5b2vhxsU2pWEd9SljF5WUQLoV/83qXTm0yaHmejRV/ndI3EApGlrgPqw==",
       "path": "dapper/2.0.30",
       "hashPath": "dapper.2.0.30.nupkg.sha512"
+    },
+    "Microsoft.CSharp/4.6.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kxn3M2rnAGy5N5DgcIwcE8QTePWU/XiYcQVzn9HqTls2NKluVzVSmVWRjK7OUPWbljCXuZxHyhEz9kPRIQeXow==",
+      "path": "microsoft.csharp/4.6.0",
+      "hashPath": "microsoft.csharp.4.6.0.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore/2.2.6": {
       "type": "package",

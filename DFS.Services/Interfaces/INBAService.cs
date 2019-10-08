@@ -9,6 +9,8 @@ namespace DFS.Services.Interfaces
     {
         List<NBAPlayers> GetAllPlayers();
 
+        List<NBATeamPlayers> GetNBATeamPlayersForDate(DateTime gameDate);
+
     }
 
 }

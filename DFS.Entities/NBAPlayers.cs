@@ -7,9 +7,10 @@ namespace DFS.Entities
     {
         public NBAPlayers()
         {            
+
         }
 
-        public NBAPlayers(string name, NBATeam team, int height, string position, int weight): base()
+        public NBAPlayers(string name, string position, int height, int weight): base()
         {
             Name = name;            
             Height = height;        

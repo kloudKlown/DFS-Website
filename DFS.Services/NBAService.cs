@@ -29,5 +29,16 @@ namespace DFS.Services.Interfaces
             }
         }
 
+        public List<NBATeamPlayers> GetNBATeamPlayersForDate(DateTime gameDate)
+        {
+            try
+            {
+                return NBAManager.GetTeamPlayersByDate(gameDate).Select(x => x).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

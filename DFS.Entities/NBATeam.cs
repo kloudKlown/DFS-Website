@@ -8,7 +8,11 @@ namespace DFS.Entities
     {
         public NBATeam()
         {
-
+            
+        }
+        public NBATeam(string name)
+        {
+            Name = name;
         }
 
         public string Name { get; set; }
