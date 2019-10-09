@@ -13,7 +13,9 @@ namespace DFS.Data.Managers.Interfaces
 
         IEnumerable<NBATeamPlayers> GetTeamPlayersByDate(DateTime date);
 
-        IEnumerable<NBAPlayerGameStats> GetPlayerStatsHistorical(DateTime date);
+        IEnumerable<NBAPlayerStats> GetPlayerStatsHistorical(DateTime date);
+
+        IEnumerable<NBAPlayerAdvancedStats> GetPlayerAdvancedStatsHistorical(DateTime date);
 
     }
 }

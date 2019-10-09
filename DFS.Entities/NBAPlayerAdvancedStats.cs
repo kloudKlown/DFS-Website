@@ -12,11 +12,17 @@ namespace DFS.Entities
             Opposition = new NBATeam();
         }
 
+        public DateTime GameDate { get; set; }
+
         public NBATeam Team { get; set; }
 
         public NBATeam Opposition { get; set; }
 
         public bool Home { get; set; }
+
+        public int WinLoss { get; set; }
+
+        public TimeSpan MinutesPlayed { get; set; }
 
         public float TrueShootingPercentage { get; set; }
 
