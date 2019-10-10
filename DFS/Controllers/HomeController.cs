@@ -25,7 +25,7 @@ namespace DFS.Controllers
         {
             //List<NBAPlayers> allPlayers = NBAService.GetAllPlayers();            
             NBAPlayerViewModel model = new NBAPlayerViewModel();
-            var test = NBAService.GetNBATeamPlayersForDate(new DateTime(2015, 1, 1));
+            //var test = NBAService.GetPlayerStatsHistorical(new DateTime(2018,12, 1), 10);
             //model.PlayerList.AddRange(allPlayers.Select(x => new NBAPlayerViewModel(x)));
 
             return View(model);

@@ -40,5 +40,17 @@ namespace DFS.Services.Interfaces
                 throw e;
             }
         }
+
+        public List<NBAPlayerStats> GetPlayerStatsHistorical(DateTime gameDate, int daysBefore)
+        {
+            try
+            {
+                return NBAManager.GetPlayerStatsHistorical(gameDate, daysBefore).Select(x => x).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

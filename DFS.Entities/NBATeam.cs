@@ -14,7 +14,7 @@ namespace DFS.Entities
         {
             Name = name;
         }
-
+        
         public string Name { get; set; }
     }
 }

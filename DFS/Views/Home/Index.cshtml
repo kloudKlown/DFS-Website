@@ -7,13 +7,33 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
+    <div class="card col-md-12">
+        <div class="card-header text-left">
+            Filter Games
+        </div>        
+        <div class="card-body row col-md-12">
+            <div class="col-md-12">
+                <label>
+                    Game Date
+                </label>               
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" class="form-control">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    @*@foreach (var item in @Model.PlayerList)
-    {
-        <p style="color:rebeccapurple">
-            @item.Name
-        </p>
-
-    }*@
-
+        <div class="card-footer">
+            <input type="button" value="Search" id="GetGames"/>
+        </div>
+    </div>
 </div>
+
+<script>
+    $(function() {
+        $('.date').datepicker();
+    });
+</script>
+

@@ -24,43 +24,43 @@ namespace DFS.Entities
 
         public int WinLoss { get; set; }
 
-        public int FieldGoal { get; set; }
-
         public TimeSpan MinutesPlayed { get; set; }
 
-        public int FieldGoalAttempted { get; set; }
+        public double FieldGoal { get; set; }        
 
-        public float FieldGoalPercentage { get; set; }
+        public double FieldGoalAttempted { get; set; }
 
-        public int ThreePointer { get; set; }
+        public double FieldGoalPercentage { get; set; }
 
-        public int ThreePointerAttempted { get; set; }
+        public double ThreePointer { get; set; }
 
-        public float ThreePointerPercentage { get; set; }
+        public double ThreePointerAttempted { get; set; }
 
-        public int FreeThrow { get; set; }
+        public double ThreePointerPercentage { get; set; }
 
-        public int FreeThrowAttempted { get; set; }
+        public double FreeThrow { get; set; }
 
-        public float FreeThrowPercentage { get; set; }
+        public double FreeThrowAttempted { get; set; }
 
-        public int OffensiveRebound { get; set; }
+        public double FreeThrowPercentage { get; set; }
 
-        public int DefensiveRebound { get; set; }
+        public double OffensiveRebound { get; set; }
 
-        public int TotalRebound { get; set; }
+        public double DefensiveRebound { get; set; }
 
-        public int Assits { get; set; }
+        public double TotalRebound { get; set; }
 
-        public int Steals { get; set; }
+        public double Assists { get; set; }
 
-        public int Blocks { get; set; }
+        public double Steals { get; set; }
 
-        public int TurnOvers { get; set; }
+        public double Blocks { get; set; }
 
-        public int PersonalFouls { get; set; }
+        public double TurnOvers { get; set; }
 
-        public int PointsScored { get; set; }
+        public double PersonalFouls { get; set; }
+
+        public double PointsScored { get; set; }
 
     }
 }
