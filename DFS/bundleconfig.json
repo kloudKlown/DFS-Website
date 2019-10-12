@@ -2,13 +2,15 @@
   {
     "outputFileName": "wwwroot/css/main.min.css",
     "inputFiles": [
-      "wwwroot/css/main.css"
+      "wwwroot/css/site.css"
     ]
   },
   {
     "outputFileName": "wwwroot/js/main.min.js",
     "inputFiles": [
-      "wwwroot/js/main.js"
+      "wwwroot/js/site.js",
+      "wwwroot/js/jqgrid.js",
+      "wwwroot/js/nba.js"
     ],
     "minify": {
       "enabled": true,
