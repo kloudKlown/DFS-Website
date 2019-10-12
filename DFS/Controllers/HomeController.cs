@@ -9,6 +9,7 @@ using DFS.Services;
 using DFS.Services.Interfaces;
 using DFS.Entities;
 using DFS.UI.Models;
+using Newtonsoft.Json;
 
 namespace DFS.Controllers
 {
@@ -29,6 +30,14 @@ namespace DFS.Controllers
             //model.PlayerList.AddRange(allPlayers.Select(x => new NBAPlayerViewModel(x)));
 
             return View(model);
+        }
+
+        [HttpPost]        
+        public IActionResult GetGameResults(DateTime date, int daysBefore)
+        {
+            NBAPlayerViewModel model = new NBAPlayerViewModel();
+            var test = NBAService.GetPlayerStatsHistorical(new DateTime(2018, 12, 1), 10);            
+            return Json(JsonConvert.SerializeObject(test));
         }
 
         public IActionResult Privacy()

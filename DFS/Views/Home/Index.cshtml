@@ -1,39 +1,310 @@
-﻿@model DFS.UI.Models.NBAPlayerViewModel
+﻿@using DFS.UI.Common;
+@model DFS.UI.Models.NBAPlayerViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
+    <div class="col-md-12">
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        <div class="card col-md-12">
+            <div class="card-header text-left">
+                Filter Games
+            </div>
+            <form>
+                <div class="card-body form-group row col-md-12">
+                    <div class="col-md-12">
+                        <label class="col-md-2">
+                            Game Date
+                        </label>
+                        <input type="text" id="datepicker" />
+                        <span class="fa fa-calendar-alt fa-cal"></span>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="col-md-2">
+                            Days Before
+                        </label>
+                        <input type="text" id="daysBefore" class="numeric" />
+                    </div>
+                </div>
+            </form>
+            <div class="card-footer">
+                <input type="button" value="Search" id="GetGames" />
+            </div>
+        </div>
+        <div id="draggable" class="ui-widget-content">
+        </div>
+        <div id="droppable" class="ui-widget-content">
+        </div>
 
-    <div class="card col-md-12">
-        <div class="card-header text-left">
-            Filter Games
-        </div>        
-        <div class="card-body row col-md-12">
-            <div class="col-md-12">
-                <label>
-                    Game Date
-                </label>               
-                <div class="input-group date" data-provide="datepicker">
-                    <input type="text" class="form-control">
-                    <div class="input-group-addon">
-                        <span class="glyphicon glyphicon-th"></span>
+        <div class="card row">
+            <div class="contianer col-md-12">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading bg-light-color" style="width:1000px;">
+                            <div class="panel-body no-padding" style="width:1000px;">
+                                <table id="jqGrid" style="width:1000px;"></table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="card-footer">
-            <input type="button" value="Search" id="GetGames"/>
-        </div>
+        <div id="groups">
+            <h1 class="ui-widget-header">Grouping</h1>
+            <div class="ui-widget-content">
+                <ol>
+                    <li class="placeholder">Drop headers here</li>
+                </ol>
+            </div>
+        </div><table id="grid"></table>
+        <div id="pager"></div>
+
+
     </div>
-</div>
 
 <script>
-    $(function() {
-        $('.date').datepicker();
+    $(function () {
+        aggregrateColumns = ["Name", "Position", "GameDate", "Team", "Opposition", "Home", "MinutesPlayed", "FieldGoal", "FieldGoalAttempted", "FieldGoalPercentage",
+            "ThreePointer", "ThreePointerAttempted", "ThreePointerPercentage", "FreeThrow", "FreeThrowAttempted", "FreeThrowPercentage", "OffensiveRebound",
+            "DefensiveRebound", "TotalRebound", "Assists", "Steals", "Blocks", "TurnOvers", "PersonalFouls", "PointsScored"];
+
+        $('#datepicker').datepicker();
+        $(".fa-cal").on("click", function () {
+            $("#datepicker").datepicker("show");
+        })
+
+
+        function GetGameResults() {
+            var params = {};
+            params["date"] = $("#datepicker").val();
+            params["daysBefore"] = $("#daysBefore").val()
+            $.ajax({
+                url: "/Home/GetGameResults",
+                type: "POST",
+                data: params,
+                success: function (data) {
+                    datGlobal = data;
+                    //d3.csv(JSON.parse(data), DrawGraph(JSON.parse(data)));
+                },
+                error: function () {
+                    alert("Error")
+                }
+            });
+        }
+
+        $("#GetGames").on("click", function () {
+            GetGameResults();
+        });
+
+        //function DrawGraph(data) {
+        //    tabulate(data, aggregrateColumns);
+        //    function newRowsAggregrate(data, column) {
+        //        var combined = data;
+
+        //        combined = d3.nest().key(
+        //            function (d) {
+        //                keys = ""
+        //                for (x in column) {
+        //                    keys = keys + ':' + d[column[x]];
+        //                };
+        //                return keys;
+        //            }
+        //        ).rollup(function (d) {
+        //            return d3.sum(d, function (g) { return g.Count; });
+        //        }).entries(combined)
+        //            .map(function (d) {
+        //                return {
+        //                    "Keys": d.key, 'Values': d.values
+        //                }
+        //            });
+
+        //        newMappedData = [];
+        //        $.each(combined, function (key, data) {
+        //            newValue = []
+        //            newValue["SiteName"] = combined[key].Keys;
+
+        //            if ("object" === typeof (data.Values)) {
+        //                $.each(data.Keys, function (each, data) {
+        //                    newValue["WaitlistCategoryCD"] = data.key;
+        //                    newValue["Count"] = data.Values;
+        //                });
+        //            }
+        //            else {
+        //                var listValues = newValue["SiteName"].split(':');
+        //                newValue["SiteName"] = listValues[1];
+        //                for (var i = 2; i < listValues.length; i++) {
+        //                    newValue[aggregrateColumns[i - 1]] = listValues[i];
+        //                }
+
+        //                newValue["Count"] = data.Values;
+        //            }
+        //            newMappedData.push(newValue);
+        //        });
+
+        //        tabulate(newMappedData, column);
+        //    };
+
+        //    newRowsAggregrate(data, aggregrateColumns);
+        //}
+
+
+        var tabulate = function (data, columns) {
+            $("#jqGrid").clearGridData();
+            console.log(data);
+
+            $("#jqGrid").jqGrid('setGridParam', { data: data });
+            $("#jqGrid").trigger("reloadGrid");
+
+            var Columnmodel = [
+                { name: 'Name', index: 'Name', width: 100, align: 'center', editable: false },
+                { name: 'Position', index: 'Position', width: 100, align: 'center', editable: false },
+                { name: 'GameDate', index: 'GameDate', width: 100, align: 'center', editable: false, formatter: "date" },
+                { name: 'Team', index: 'Team', width: 100, align: 'center', editable: false },
+            ];
+
+            $("#jqGrid").jqGrid({
+                colModel: Columnmodel,
+                pager: '#grdEmail',
+                datatype: "jsonstring",
+                datastr: data,
+                jsonReader: { repeatitems: false },
+                rowNum: 2,
+                subGrid: false,
+                viewrecords: true,
+                height: "auto",
+                ignoreCase: true
+            });
+        };
+
+        GetGameResults();
+
+        var $grid = $("#grid");
+        var mydata = [
+            { id: "1", invdate: "2010-05-24", name: "test", note: "note", tax: "10.00", total: "2111.00" },
+            { id: "2", invdate: "2010-05-25", name: "test2", note: "note2", tax: "20.00", total: "320.00" },
+            { id: "3", invdate: "2007-09-01", name: "test3", note: "note3", tax: "30.00", total: "430.00" },
+            { id: "4", invdate: "2007-10-04", name: "test", note: "note", tax: "10.00", total: "210.00" },
+            { id: "5", invdate: "2007-10-05", name: "test2", note: "note2", tax: "20.00", total: "320.00" },
+            { id: "6", invdate: "2007-09-06", name: "test3", note: "note3", tax: "30.00", total: "430.00" },
+            { id: "7", invdate: "2007-10-04", name: "test", note: "note", tax: "10.00", total: "210.00" },
+            { id: "8", invdate: "2007-10-03", name: "test2", note: "note2", amount: "300.00", tax: "21.00", total: "320.00" },
+            { id: "9", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "11", invdate: "2007-10-01", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "12", invdate: "2007-10-02", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "13", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "14", invdate: "2007-10-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "15", invdate: "2007-10-05", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "16", invdate: "2007-09-06", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "17", invdate: "2007-10-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "18", invdate: "2007-10-03", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "19", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "21", invdate: "2007-10-01", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "22", invdate: "2007-10-02", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "23", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "24", invdate: "2007-10-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "25", invdate: "2007-10-05", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "26", invdate: "2007-09-06", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" },
+            { id: "27", invdate: "2007-10-04", name: "test", note: "note", amount: "200.00", tax: "10.00", total: "210.00" },
+            { id: "28", invdate: "2007-10-03", name: "test2", note: "note2", amount: "300.00", tax: "20.00", total: "320.00" },
+            { id: "29", invdate: "2007-09-01", name: "test3", note: "note3", amount: "400.00", tax: "30.00", total: "430.00" }
+        ],
+            getColumnHeaderByName = function (colName) {
+                var $self = $(this),
+                    colNames = $self.jqGrid("getGridParam", "colNames"),
+                    colModel = $self.jqGrid("getGridParam", "colModel"),
+                    cColumns = colModel.length,
+                    iCol;
+                for (iCol = 0; iCol < cColumns; iCol++) {
+                    if (colModel[iCol].name === colName) {
+                        return colNames[iCol];
+                    }
+                }
+            },
+            customFormatDisplayField = function (displayValue, value, colModel, index, grp) {
+                return getColumnHeaderByName.call(this, colModel.name) + ": " + displayValue;
+            },
+            generateGroupingOptions = function (groupingCount) {
+                var i, arr = [];
+                for (i = 0; i < groupingCount; i++) {
+                    arr.push(customFormatDisplayField);
+                }
+                return {
+                    formatDisplayField: arr
+                };
+            },
+            getArrayOfNamesOfGroupingColumns = function () {
+                return $('#groups ol li:not(.placeholder)')
+                    .map(function () {
+                        return $(this).attr('data-column');
+                    }).get()
+            };
+
+        $grid.jqGrid({
+            data: mydata,
+            datatype: "local",
+            height: 'auto',
+            rowNum: 30,
+            rowList: [10, 20, 30],
+            colNames: ['Inv No', 'Date', 'Client', 'Amount', 'Tax', 'Total', 'Notes'],
+            colModel: [
+                { name: 'id', key: true, width: 60, sorttype: 'int' },
+                { name: 'invdate', width: 90, sorttype: 'date', formatter: 'date' },
+                { name: 'name', width: 100 },
+                { name: 'amount', width: 80, align: 'right', sorttype: 'float', formatter: 'number' },
+                { name: 'tax', width: 80, align: 'right', sorttype: 'float' },
+                { name: 'total', width: 80, align: 'right', sorttype: 'float' },
+                { name: 'note', width: 150, sortable: false }
+            ],
+            pager: '#pager',
+            viewrecords: true,
+            sortname: 'name',
+            gridview: true,
+            caption: 'jqGrid dynamic drag-n-drop grouping'
+        });
+
+        $('tr.ui-jqgrid-labels th div').draggable({
+            appendTo: 'body',
+            helper: 'clone'
+        });
+
+        $('#groups ol').droppable({
+            activeClass: 'ui-state-default',
+            hoverClass: 'ui-state-hover',
+            accept: ':not(.ui-sortable-helper)',
+            drop: function (event, ui) {
+                var $this = $(this), groupingNames;
+                $this.find('.placeholder').remove();
+                var groupingColumn = $('<li></li>').attr('data-column', ui.draggable.attr('id').replace('jqgh_' + $grid[0].id + '_', ''));
+                $('<span class="ui-icon ui-icon-close"></span>').click(function () {
+                    var namesOfGroupingColumns;
+                    $(this).parent().remove();
+                    $grid.jqGrid('groupingRemove');
+                    namesOfGroupingColumns = getArrayOfNamesOfGroupingColumns();
+                    $grid.jqGrid('groupingGroupBy', namesOfGroupingColumns);
+                    if (namesOfGroupingColumns.length === 0) {
+                        $('<li class="placeholder">Drop headers here</li>').appendTo($this);
+                    }
+                }).appendTo(groupingColumn);
+                groupingColumn.append(ui.draggable.text());
+                groupingColumn.appendTo($this);
+                $grid.jqGrid('groupingRemove');
+                groupingNames = getArrayOfNamesOfGroupingColumns();
+                $grid.jqGrid('groupingGroupBy', groupingNames, generateGroupingOptions(groupingNames.length));
+            }
+        }).sortable({
+            items: 'li:not(.placeholder)',
+            sort: function () {
+                $(this).removeClass('ui-state-default');
+            },
+            stop: function () {
+                var groupingNames = getArrayOfNamesOfGroupingColumns();
+                $grid.jqGrid('groupingRemove');
+                $grid.jqGrid('groupingGroupBy', groupingNames, generateGroupingOptions(groupingNames.length));
+            }
+        });
+
     });
 </script>
 
