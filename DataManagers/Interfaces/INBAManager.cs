@@ -17,5 +17,7 @@ namespace DFS.Data.Managers.Interfaces
 
         IEnumerable<NBAPlayerAdvancedStats> GetPlayerAdvancedStatsHistorical(DateTime date, int daysBefore);
 
+        IEnumerable<NBAGames> GetNBAGames(DateTime date);
+
     }
 }

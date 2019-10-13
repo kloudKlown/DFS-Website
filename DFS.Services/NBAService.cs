@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DFS.Common;
 
 namespace DFS.Services.Interfaces
 {
@@ -46,6 +47,26 @@ namespace DFS.Services.Interfaces
             try
             {
                 return NBAManager.GetPlayerStatsHistorical(gameDate, daysBefore).Select(x => x).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public List<NBAGames> GetNBAGames(DateTime date)
+        {
+            try
+            {
+                if (date > Extensions.DateExtensions.DateTimeMinAllowed)
+                {
+                    return NBAManager.GetNBAGames(date).Select(x => x).ToList();
+                }
+                else
+                {
+                    return new List<NBAGames>();
+                }
+                
             }
             catch (Exception e)
             {

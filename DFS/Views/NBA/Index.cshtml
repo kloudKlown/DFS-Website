@@ -5,12 +5,110 @@
     ViewData["Title"] = "Index";
 }
 
-<div>
+<div class="card no-border col-md-12">
+    <div class="card-header">
+        Games Today
+    </div>
+    <div class="card-body form-group row col-md-12">
+        <div class="row col-md-12">
+            <div class="col-md-12">
+                <label class="col-md-4">
+                    Game Date
+                </label>
+                <input type="text" id="datepicker" />
+                <span class="fa fa-calendar-alt fa-cal"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 gamepicker" id="gamesList">
+        <h6 class="text-left">Filter Teams</h6>
+        <div class="cardAll pull-left">
+            <button class="btn-primary">
+                All
+                <i class="fas fa-check"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="card no-border col-md-12">
+    <div class="row">
+        <div class="contianer col-md-12">
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-light-color">
+                        <div class="panel-body no-padding">
+                            <table id="jqGrid"></table>
+                        </div>
+                    </div>
+                </div>
 
+            </div>
+        </div>
+    </div>
 </div>
 
-
 <script>
+    $(function () {
+        var date = $("#datepicker");
+        var gamesList = $("#gamesList");
+
+        date.datepicker();
+        $(".fa-cal").on("click", function () {
+            date.datepicker("show");
+        })
+
+        date.change(function (e) {
+            params = {}
+            params.date = $(this).val()
+
+            $.ajax({
+                url: "/NBA/GetGamesForDate",
+                type: "POST",
+                data: params,
+                success: function (data) {
+                    PopulateGames(JSON.parse(data));
+                },
+                error: function () {
+                }
+            });
+
+        });
+
+        function PopulateGames(data) {
+            gamesList.find('.card').remove()
+            $.each(data, function (i, value) {
+                gamesList.append($("<div class='card'><button class='TeamName'>" + value.HomeTeam + "</button><button class='TeamName'>" + value.AwayTeam + "</button>"));
+            });
+        };
+
+        var tabulate = function (data, columns) {
+            console.log(data);
+            $("#jqGrid").clearGridData();
+
+            $("#jqGrid").jqGrid('setGridParam', { data: data });
+            $("#jqGrid").trigger("reloadGrid");
+
+            var Columnmodel = [
+                { name: 'SiteName', index: 'SiteName', width: 400, align: 'center', editable: false },
+                { name: 'WaitlistCategoryCD', index: 'WaitlistCategoryCD', width: 200, align: 'center', editable: false },
+                { name: 'InterfaceMessageStatusCD', index: 'InterfaceMessageStatusCD', width: 300, align: 'center', editable: false },
+                { name: 'Count', index: 'Count', width: 100, align: 'center', editable: false },
+            ];
+
+            $("#jqGrid").jqGrid({
+                colModel: Columnmodel,
+                pager: '#grdEmail',
+                datatype: "jsonstring",
+                datastr: data,
+                jsonReader: { repeatitems: false },
+                rowNum: 2,
+                subGrid: false,
+                viewrecords: true,
+                height: "auto",
+                ignoreCase: true
+            });
+        };
 
 
+    });
 </script>

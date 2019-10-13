@@ -1,1 +1,51 @@
-﻿
+﻿.no-border {
+    border: none;
+}
+
+.TeamName {
+    background-color: #DDF2F5 !important;
+    padding: 4px;
+    margin: 2px;
+    color: #000000 !important;
+    font-weight: normal;
+    text-align: center;
+    display: inline;
+    white-space: nowrap;
+}
+
+    .TeamName:hover {
+        box-shadow: 2px 2px 6px grey !important;
+    }
+
+
+.gamepicker {
+    text-align: center;
+    margin: 2px;
+    padding: 4px;
+    border: groove;
+    opacity: 0.45;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+    .gamepicker .card {
+        display: inline-block;
+        border: 1px dotted;
+        border-color: #212529;
+        padding: 2px;
+        margin: 4px;
+    }
+
+    .gamepicker .cardAll {
+        display: inline-block;
+        padding: 4px;
+        margin: 2px;
+    }
+
+.pull-left{    
+    float: left !important;
+}
+
+.pull-right {
+    float: right !important;
+}

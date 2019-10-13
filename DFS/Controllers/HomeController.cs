@@ -22,7 +22,8 @@
 
         public IActionResult Index(NBAPlayerViewModel vm)
         {            
-            NBAPlayerViewModel model = new NBAPlayerViewModel();            
+            NBAPlayerViewModel model = new NBAPlayerViewModel();
+            RedirectToAction("/NBA/Index");
             return View(model);
         }
         

@@ -26,6 +26,29 @@ namespace DFS.Data.Managers
             }
         }
 
+        public IEnumerable<NBAGames> GetNBAGames(DateTime date)
+        {
+            List<NBAGames> games = new List<NBAGames>();
+            using (IDbConnection connection = GetConnection(NBADatabase))
+            {
+                var query = connection.Query<dynamic>("usp_GetGamesForDate",
+                    new
+                    {
+                        date_ = date
+                    }, commandType: CommandType.StoredProcedure);
+
+                foreach (var item in query)
+                {
+                    games.Add(new NBAGames
+                    {
+                        HomeTeam = new NBATeam(item.HomeTeam),
+                        AwayTeam = new NBATeam(item.AwayTeam)
+                    });
+                }
+            }
+            return games;
+        }
+
         public IEnumerable<NBAPlayerAdvancedStats> GetPlayerAdvancedStatsHistorical(DateTime date, int daysBefore)
         {
             throw new NotImplementedException();

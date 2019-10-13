@@ -5,3 +5,10 @@ CREATE NONCLUSTERED INDEX CIX_NBAShotChart_PlayerTeam_GameDate
 ON [dbo].[NBAShotChart] ([PlayerTeam],[GameDate])
 INCLUDE ([PlayerName],[Shot],[ShotZone],[ShotDistanceX],[ShotDistanceY])
 GO
+
+DROP INDEX IF EXISTS CIX_NBA_PlayerLog_Date ON NBA_PlayerLog
+GO 
+
+CREATE NONCLUSTERED INDEX CIX_NBA_PlayerLog_Date
+ON [dbo].[NBA_PlayerLog] ([Date])
+GO

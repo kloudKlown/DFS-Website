@@ -13,6 +13,8 @@ namespace DFS.Services.Interfaces
 
         List<NBAPlayerStats> GetPlayerStatsHistorical(DateTime gameDate, int daysBefore);
 
+        List<NBAGames> GetNBAGames(DateTime date);
+
     }
 
 }
