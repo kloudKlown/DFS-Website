@@ -55,7 +55,7 @@ namespace DFS.Entities
 
         public double Fouls { get; set; }
 
-        public double PointsScored { get; set; }
+        public double Points { get; set; }
 
     }
 }

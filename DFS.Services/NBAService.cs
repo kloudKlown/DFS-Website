@@ -73,5 +73,25 @@ namespace DFS.Services.Interfaces
                 throw e;
             }
         }
+
+        public List<NBAPlayerStats> GetGameStatsByDate(DateTime date, string teamName, string oppositionName)
+        {
+            try
+            {
+                if (date > Extensions.DateExtensions.DateTimeMinAllowed)
+                {
+                    return NBAManager.GetGameStatsByDate(date, teamName, oppositionName).Select(x => x).ToList();
+                }
+                else
+                {
+                    return new List<NBAPlayerStats>();
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

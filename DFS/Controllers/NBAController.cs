@@ -19,6 +19,7 @@
 
         public IActionResult Index()
         {
+            //var result = NBAService.GetGameStatsByDate(new DateTime(2018, 11,10), "TOR", "BOS");
             return View();
         }
 
@@ -45,5 +46,30 @@
 
             return Json(JsonConvert.SerializeObject(nbaGames));
         }
+
+
+        [HttpPost]
+        public IActionResult GetGameStatsByDate(DateTime date, string team, string opp)
+        {
+            List<NBAPlayerViewModel> nbaGames = new List<NBAPlayerViewModel>();
+
+            if (date < Extensions.DateExtensions.DateTimeMinAllowed)
+            {
+                return Json(new { });
+            }
+
+            var result = NBAService.GetGameStatsByDate(date, team, opp);
+
+            if (result != null && result.Count > 0)
+            {
+                foreach (var item in result)
+                {
+                    nbaGames.Add(new NBAPlayerViewModel(item));
+                }
+            }
+
+            return Json(JsonConvert.SerializeObject(nbaGames));
+        }
+
     }
 }

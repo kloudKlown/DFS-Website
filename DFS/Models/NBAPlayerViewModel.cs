@@ -14,17 +14,46 @@ namespace DFS.UI.Models
 
         }
 
-        public string Player { get; set; }
-
-        public DateTime GameDate { get; set; }
+        public NBAPlayerViewModel(NBAPlayerStats item)
+        {
+            Name = item.Name;
+            Position = item.Position;
+            Height = item.Height;
+            Weight = item.Weight;
+            GameDate = item.GameDate;
+            Team = item.Team.Name;
+            MinutesPlayed = item.MinutesPlayed;
+            Usage = item.Usage;
+            DefensiveRating = item.DefensiveRating;
+            OffensiveRating = item.OffensiveRating;
+            FieldGoal = item.FieldGoal;
+            FieldGoalAttempted = item.FieldGoalAttempted;
+            ThreePointer = item.ThreePointer;
+            ThreePointerAttempted = item.ThreePointerAttempted;
+            FreeThrow = item.FreeThrow;
+            OffensiveRebound = item.OffensiveRebound;
+            DefensiveRebound = item.DefensiveRebound;
+            TotalRebound = item.TotalRebound;
+            TotalReboundPercentage = item.TotalReboundPercentage;
+            Assists = item.Assists;
+            Steals = item.Steals;
+            Blocks = item.Blocks;
+            Turnovers = item.Turnovers;
+            Points = item.Points;
+            Fouls = item.Fouls;
+        }
 
         public string Team { get; set; }
 
-        public string Opposition { get; set; }
+        public string Position { get; set; }
 
-        public bool Home { get; set; }
+        public string Name { get; set; }
 
-        public int WinLoss { get; set; }
+        public int Weight { get; set; }
+
+        public int Height { get; set; }
+
+        public DateTime GameDate { get; set; }
 
         public TimeSpan MinutesPlayed { get; set; }
 
@@ -32,19 +61,19 @@ namespace DFS.UI.Models
 
         public double FieldGoalAttempted { get; set; }
 
-        public double FieldGoalPercentage { get; set; }
+        public double Usage { get; set; }
 
         public double ThreePointer { get; set; }
 
         public double ThreePointerAttempted { get; set; }
 
-        public double ThreePointerPercentage { get; set; }
+        public double DefensiveRating { get; set; }
 
         public double FreeThrow { get; set; }
 
-        public double FreeThrowAttempted { get; set; }
+        public double TotalReboundPercentage { get; set; }
 
-        public double FreeThrowPercentage { get; set; }
+        public double OffensiveRating { get; set; }
 
         public double OffensiveRebound { get; set; }
 
@@ -58,10 +87,10 @@ namespace DFS.UI.Models
 
         public double Blocks { get; set; }
 
-        public double TurnOvers { get; set; }
+        public double Turnovers { get; set; }
 
-        public double PersonalFouls { get; set; }
-
-        public double PointsScored { get; set; }
+        public double Fouls { get; set; }
+        
+        public double Points { get; set; }
     }
 }
