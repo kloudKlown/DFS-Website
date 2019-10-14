@@ -40,3 +40,4 @@ D:\DFS Website\DFS\DFS\bin\Debug\netcoreapp2.2\DFS.Common.pdb
 D:\DFS Website\DFS\DFS\bin\Debug\netcoreapp2.2\DFS.Entities.pdb
 D:\DFS Website\DFS\DFS\obj\Debug\netcoreapp2.2\Razor\Views\NBA\Index.g.cshtml.cs
 D:\DFS Website\DFS\DFS\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_HeaderPartial.g.cshtml.cs
+D:\DFS Website\DFS\DFS\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_NBACourtPartial.g.cshtml.cs
