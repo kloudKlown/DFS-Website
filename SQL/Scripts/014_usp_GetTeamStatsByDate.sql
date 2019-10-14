@@ -1,4 +1,4 @@
- EXEC usp_GetTeamStatsByDate @date_ = '2018-12-10', @teamName_ = 'NOP', @oppName_ = 'BOS'
+ -- EXEC usp_GetTeamStatsByDate @date_ = '2018-12-10', @teamName_ = 'NOP', @oppName_ = 'BOS'
 DROP PROCEDURE IF EXISTS usp_GetTeamStatsByDate
 GO
 
@@ -32,7 +32,9 @@ BEGIN
 		AVG(FT) 'Free Throws',		
 		AVG(BLK) 'Blocks',
 		AVG(STL) 'Steals',
-		AVG(PTS) 'Points'
+		AVG(PTS) 'Points',
+		AVG(PF) 'Fouls',
+		AVG(TOV) 'Turnover'
 	FROM
 		NBA_PlayerLog PL INNER JOIN NBA_Player P ON P.PlayerName = PL.PlayerName	
 		INNER JOIN NBA_PlayerLog_Advanced PLA ON PLA.PlayerName = PL.PlayerName AND PLA.[Date] = PL.[Date]
@@ -63,7 +65,10 @@ BEGIN
 		AVG(FT) 'Free Throws',		
 		AVG(BLK) 'Blocks',
 		AVG(STL) 'Steals',
-		AVG(PTS) 'Points'
+		AVG(PTS) 'Points',
+		AVG(PF) 'Fouls',
+		AVG(TOV) 'Turnover'
+
 	FROM
 		NBA_PlayerLog PL INNER JOIN NBA_Player P ON P.PlayerName = PL.PlayerName	
 		INNER JOIN NBA_PlayerLog_Advanced PLA ON PLA.PlayerName = PL.PlayerName AND PLA.[Date] = PL.[Date]

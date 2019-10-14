@@ -11,18 +11,13 @@ namespace DFS.Entities
             base()
         {
             Team = new NBATeam();
-            Opposition = new NBATeam();
         }
 
         public DateTime GameDate { get; set; }
 
         public NBATeam Team { get; set; }
 
-        public NBATeam Opposition { get; set; }
-
-        public bool Home { get; set; }
-
-        public int WinLoss { get; set; }
+        public bool Home { get; set; }        
 
         public TimeSpan MinutesPlayed { get; set; }
 
@@ -30,19 +25,19 @@ namespace DFS.Entities
 
         public double FieldGoalAttempted { get; set; }
 
-        public double FieldGoalPercentage { get; set; }
+        public double Usage { get; set; }
 
         public double ThreePointer { get; set; }
 
         public double ThreePointerAttempted { get; set; }
 
-        public double ThreePointerPercentage { get; set; }
+        public double DefensiveRating { get; set; }
 
         public double FreeThrow { get; set; }
 
-        public double FreeThrowAttempted { get; set; }
+        public double TotalReboundPercentage { get; set; }
 
-        public double FreeThrowPercentage { get; set; }
+        public double OffensiveRating { get; set; }
 
         public double OffensiveRebound { get; set; }
 
@@ -56,9 +51,9 @@ namespace DFS.Entities
 
         public double Blocks { get; set; }
 
-        public double TurnOvers { get; set; }
+        public double Turnovers { get; set; }
 
-        public double PersonalFouls { get; set; }
+        public double Fouls { get; set; }
 
         public double PointsScored { get; set; }
 

@@ -19,5 +19,7 @@ namespace DFS.Data.Managers.Interfaces
 
         IEnumerable<NBAGames> GetNBAGames(DateTime date);
 
+        IEnumerable<NBAPlayerStats> GetGameStatsByDate(DateTime date, string teamName, string oppositionName);
+
     }
 }

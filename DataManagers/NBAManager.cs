@@ -25,7 +25,7 @@ namespace DFS.Data.Managers
                 return connection.Query<NBAPlayers>("usp_GetAllPlayers", commandType: CommandType.StoredProcedure);
             }
         }
-
+        
         public IEnumerable<NBAGames> GetNBAGames(DateTime date)
         {
             List<NBAGames> games = new List<NBAGames>();
@@ -99,6 +99,29 @@ namespace DFS.Data.Managers
             }
         }
 
+
+        public IEnumerable<NBAPlayerStats> GetGameStatsByDate(DateTime date, string teamName, string oppositionName)
+        {
+            List<NBAPlayerStats> result = new List<NBAPlayerStats>();
+            using (IDbConnection connection = GetConnection(NBADatabase))
+            {
+                var queryResult = connection.Query("usp_GetTeamStatsByDate",
+                    new
+                    {                        
+                        gameDate_ = date,
+                        teamName_ = teamName,
+                        oppName_ = oppositionName
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+                foreach (var item in queryResult)
+                {
+                    result.Add(new NBATeamPlayers(item.Name, item.Position, item.Height, item.Weight, item.Team, item.GameDate));
+                }
+
+                return result;
+            }
+        }
 
 
         #region Private Helpers

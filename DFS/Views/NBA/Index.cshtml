@@ -32,16 +32,12 @@
 </div>
 <div class="card no-border col-md-12">
     <div class="row">
+        <div class="card-header">
+            Player Stats
+        </div>
         <div class="contianer col-md-12">
-            <div class="row">
-                <div class="panel panel-default">
-                    <div class="panel-heading bg-light-color">
-                        <div class="panel-body no-padding">
-                            <table id="jqGrid"></table>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="card-body">
+                <table id="jqGrid"></table>
             </div>
         </div>
     </div>
@@ -51,7 +47,7 @@
     $(function () {
         var date = $("#datepicker");
         var gamesList = $("#gamesList");
-
+        var teamSelect = $(".TeamName");
         date.datepicker();
         $(".fa-cal").on("click", function () {
             date.datepicker("show");
@@ -80,6 +76,23 @@
                 gamesList.append($("<div class='card'><button class='TeamName'>" + value.HomeTeam + "</button><button class='TeamName'>" + value.AwayTeam + "</button>"));
             });
         };
+
+        teamSelect.click(function (e) {
+            console.log($(this).text);
+
+            $.ajax({
+                url: "/NBA/GetGameStatsByDate",
+                type: "POST",
+                data: params,
+                success: function (data) {
+                    tabluate(data);
+                },
+                error: function () {
+
+                }
+            });
+        });
+
 
         var tabulate = function (data, columns) {
             console.log(data);
