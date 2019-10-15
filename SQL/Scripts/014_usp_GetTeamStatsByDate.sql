@@ -41,7 +41,7 @@ BEGIN
 	WHERE PL.[Date] in (SELECT TOP 5 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )					
 	and PL.Tm = @teamName_
 	GROUP BY PL.PlayerName, PL.Tm, PL.PlayerPosition
-	ORDER BY MinutesPlayed DESC
+	ORDER BY Usage DESC
 
 	Select
 		PL.PlayerName, 
@@ -75,6 +75,6 @@ BEGIN
 	WHERE PL.[Date] in (SELECT TOP 5 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )					
 	and PL.Tm = @oppName_
 	GROUP BY PL.PlayerName, PL.Tm, PL.PlayerPosition
-	ORDER BY MinutesPlayed DESC
+	ORDER BY Usage DESC
 
 END

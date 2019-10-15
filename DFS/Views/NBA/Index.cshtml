@@ -30,7 +30,7 @@
         </div>
     </div>
 </div>
-<partial name="_NBACourtPartial"/>
+<partial name="_NBACourtPartial" />
 <div class="card no-border col-md-12">
     <div class="row">
         <div class="card-header">
@@ -47,10 +47,10 @@
 <script>
     $(function () {
         var date = $("#datepicker");
-        var gamesList = $("#gamesList");        
+        var gamesList = $("#gamesList");
         var court = $("#NBACourt");
         var nbaPositions = {}
-        
+
         date.datepicker();
         $(".fa-cal").on("click", function () {
             date.datepicker("show");
@@ -85,16 +85,17 @@
             params = {};
             params.date = date.val();
             params.team = $(this).text();
-            params.opp = $(this).parent().text().replace($(this).text(), "");           
+            params.opp = $(this).parent().text().replace($(this).text(), "");
 
             $.ajax({
                 url: "/NBA/GetGameStatsByDate",
                 type: "POST",
                 data: params,
                 success: function (data) {
-                    var jsonData = JSON.parse(data)                    
+                    var jsonData = JSON.parse(data);
+                    clearChartDetials();
                     tabulate(jsonData);
-                    fillChartDetails(jsonData)
+                    fillChartDetails(jsonData);
                 },
                 error: function () {
 
@@ -153,7 +154,7 @@
 
 
         var fillChartDetails = function (data) {
-            var primaryTeam = data[0].Team;            
+            var primaryTeam = data[0].Team;
             var id = 1;
             nbaPositions = {};
 
@@ -161,11 +162,11 @@
                 var tableColumns = ["Min", "Def", "Off", "Usa", "Eff"]
 
                 if (value.Team === primaryTeam) {
-                    if (String(nbaPositions[value.Position]) === "undefined") {                        
+                    if (String(nbaPositions[value.Position]) === "undefined") {
                         nbaPositions[value.Position] = value.Name;
 
                         // Set Player Name
-                        court.find("#" + value.Position + "_" + String(id) + "_L").text(value.Name + "(" + String(value.Height) + ")" );
+                        court.find("#" + value.Position + "_" + String(id) + "_L").text(value.Name + "(" + String(value.Height) + ")");
 
                         // Set values in the court tables
                         $.each(tableColumns, function (t, v) {
@@ -179,14 +180,34 @@
                         court.find("#" + tableColumns[3]).text(value.Usage);
                         court.find("#" + tableColumns[4]).text(value.Points);
                     }
-                    
+
                 }
                 else {
                     nbaPositions = {};
                     id = 2;
-                    primaryTeam = value.Team;          
+                    primaryTeam = value.Team;
                 }
             });
         };
+
+
+        var clearChartDetials = function () {
+            var tableColumns = ["Min", "Def", "Off", "Usa", "Eff"];
+            var positions = ["PG", "SG", "SF", "PF", "C"];
+            var idList = [];
+
+            $.each(tableColumns, function (i, tblV) {
+                $.each(positions, function (i, data) {
+                    // Player table Reset
+                    idList = idList.concat("[id^=" + data + "_1_" + tblV + "]");
+                    idList = idList.concat("[id^=" + data + "_2_" + tblV + "]");
+                    // PlayerName Reset
+                    idList = idList.concat("[id^=" + data + "_1_L]");
+                    idList = idList.concat("[id^=" + data + "_2_L]");
+                });
+            });
+
+            court.find(String(idList)).text("")
+        }
     });
 </script>
