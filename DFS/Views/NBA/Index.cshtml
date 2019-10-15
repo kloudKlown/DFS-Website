@@ -30,7 +30,7 @@
         </div>
     </div>
 </div>
-<partial name="_NBACourtPartial" />
+<partial name="_NBACourtPartial"/>
 <div class="card no-border col-md-12">
     <div class="row">
         <div class="card-header">
@@ -48,7 +48,9 @@
     $(function () {
         var date = $("#datepicker");
         var gamesList = $("#gamesList");        
-
+        var court = $("#NBACourt");
+        var nbaPositions = {}
+        
         date.datepicker();
         $(".fa-cal").on("click", function () {
             date.datepicker("show");
@@ -90,8 +92,9 @@
                 type: "POST",
                 data: params,
                 success: function (data) {
-                    console.log(data);
-                    tabulate(JSON.parse(data));
+                    var jsonData = JSON.parse(data)                    
+                    tabulate(jsonData);
+                    fillChartDetails(jsonData)
                 },
                 error: function () {
 
@@ -149,5 +152,41 @@
         };
 
 
+        var fillChartDetails = function (data) {
+            var primaryTeam = data[0].Team;            
+            var id = 1;
+            nbaPositions = {};
+
+            $.each(data, function (i, value) {
+                var tableColumns = ["Min", "Def", "Off", "Usa", "Eff"]
+
+                if (value.Team === primaryTeam) {
+                    if (String(nbaPositions[value.Position]) === "undefined") {                        
+                        nbaPositions[value.Position] = value.Name;
+
+                        // Set Player Name
+                        court.find("#" + value.Position + "_" + String(id) + "_L").text(value.Name + "(" + String(value.Height) + ")" );
+
+                        // Set values in the court tables
+                        $.each(tableColumns, function (t, v) {
+                            tableColumns[t] = value.Position + "_" + String(id) + "_" + v;
+                        });
+
+                        // Set Player Details
+                        court.find("#" + tableColumns[0]).text(value.MinutesPlayed);
+                        court.find("#" + tableColumns[1]).text(value.DefensiveRating);
+                        court.find("#" + tableColumns[2]).text(value.OffensiveRating);
+                        court.find("#" + tableColumns[3]).text(value.Usage);
+                        court.find("#" + tableColumns[4]).text(value.Points);
+                    }
+                    
+                }
+                else {
+                    nbaPositions = {};
+                    id = 2;
+                    primaryTeam = value.Team;          
+                }
+            });
+        };
     });
 </script>
