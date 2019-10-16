@@ -18,8 +18,7 @@
         }
 
         public IActionResult Index()
-        {
-            //var result = NBAService.GetGameStatsByDate(new DateTime(2018, 11,10), "TOR", "BOS");
+        {            
             return View();
         }
 
