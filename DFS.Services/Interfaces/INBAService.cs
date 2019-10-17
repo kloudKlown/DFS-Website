@@ -7,11 +7,11 @@ namespace DFS.Services.Interfaces
 {
     public interface INBAService
     {
-        List<NBAPlayers> GetAllPlayers();
+        //List<NBAPlayers> GetAllPlayers();
 
-        List<NBATeamPlayers> GetNBATeamPlayersForDate(DateTime gameDate);
+        List<NBATeamPlayers> GetPlayersByDateAndTeam(DateTime gameDate, string teamName, string oppositionName);
 
-        List<NBAPlayerStats> GetPlayerStatsHistorical(DateTime gameDate, int daysBefore);
+        //List<NBAPlayerStats> GetPlayerStatsHistorical(DateTime gameDate, int daysBefore);
 
         List<NBAGames> GetNBAGames(DateTime date);
 

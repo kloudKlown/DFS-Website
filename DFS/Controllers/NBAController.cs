@@ -9,6 +9,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
     using DFS.Common;
+    using DFS.Entities;
 
     public class NBAController : BaseController
     {
@@ -50,7 +51,8 @@
         [HttpPost]
         public IActionResult GetGameStatsByDate(DateTime date, string team, string opp)
         {
-            List<NBAPlayerViewModel> nbaGames = new List<NBAPlayerViewModel>();
+            List<NBAPlayerViewModel> nbaGamesActivePlayers = new List<NBAPlayerViewModel>();
+            List<NBAPlayerViewModel> nbaGamesinActivePlayers = new List<NBAPlayerViewModel>();
 
             if (date < Extensions.DateExtensions.DateTimeMinAllowed)
             {
@@ -63,12 +65,42 @@
             {
                 foreach (var item in result)
                 {
-                    nbaGames.Add(new NBAPlayerViewModel(item));
+                    nbaGamesActivePlayers.Add(new NBAPlayerViewModel(item));
                 }
             }
 
-            return Json(JsonConvert.SerializeObject(nbaGames));
+            List<NBATeamPlayers> playersResult = NBAService.GetPlayersByDateAndTeam(date, team, opp);
+
+            // Balance the player minutes depending on game's lineup            
+            var sortedPlayers = MinuteBalancer(nbaGamesActivePlayers, playersResult);
+            nbaGamesActivePlayers = sortedPlayers.active;
+            nbaGamesinActivePlayers = sortedPlayers.inactive;
+
+            return Json(JsonConvert.SerializeObject(nbaGamesActivePlayers));
         }
+
+        #region Private Helpers
+
+        private (List<NBAPlayerViewModel> active, List<NBAPlayerViewModel> inactive) MinuteBalancer(List<NBAPlayerViewModel> playerViewModel, List<NBATeamPlayers> playerList)
+        {
+            List<NBAPlayerViewModel> inactiveList = new List<NBAPlayerViewModel>();
+            List<NBAPlayerViewModel> activeList = new List<NBAPlayerViewModel>();
+
+            inactiveList.AddRange(from NBAPlayerViewModel player in playerViewModel
+                                  where !playerList.Any(x => x.Player.Name == player.Name && x.Team.Name == player.Team)
+                                  select player);
+
+            activeList.AddRange(from NBAPlayerViewModel player in playerViewModel
+                                  where playerList.Any(x => x.Player.Name == player.Name && x.Team.Name == player.Team)
+                                  select player);
+
+
+
+            return (active: activeList, inactive: inactiveList);
+        }
+
+
+        #endregion
 
     }
 }

@@ -43,7 +43,7 @@ SELECT
 	UnknownX,
 	UnknownY
 FROM 
-	NBATableData NBA
+	NBA_PlayerLog NBA
 	INNER JOIN NBAReferenceToShotChartMap Ref ON Ref.NBARef_PlayerName = NBA.PlayerName
 	INNER JOIN NBAShotChart Shot  ON Ref.ShotChart_PlayerName = Shot.PlayerName and Shot.GameDate = NBA.Date
 GO

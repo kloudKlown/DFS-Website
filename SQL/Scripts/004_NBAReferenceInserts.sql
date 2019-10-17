@@ -1,14 +1,14 @@
 DELETE FROM NBAReferenceToShotChartMap;
 
---Select 
---	Distinct Shot.PlayerName, NBARef.PlayerName From NBAShotChart Shot
---LEFT JOIN
---	NBATableData NBARef 
---ON
---	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(NBARef.PlayerName, '-', ''), '''',''), '.', ''),'Jr',''), 'III',''),'IV', '') =
---	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr',''), 'III',''),'IV', '')
---WHERE 
---	NBARef.PlayerName is NULL;
+Select 
+	Distinct Shot.PlayerName, NBARef.PlayerName From NBAShotChart Shot
+LEFT JOIN
+	NBA_PlayerLog NBARef 
+ON
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(NBARef.PlayerName, '-', ''), '''',''), '.', ''),'Jr',''), 'III',''),'IV', '') =
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr',''), 'III',''),'IV', '')
+WHERE 
+	NBARef.PlayerName is NULL;
 
 --SELECT DISTINCT PlayerName FROM NBATableData where PlayerName like '%Edwards%'
 

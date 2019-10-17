@@ -5,15 +5,15 @@ VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFS.UI", "DFS\DFS.UI.csproj", "{C181F3B2-40D7-4467-8753-CC688127319D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFS.Data.Managers", "DataManagers\DFS.Data.Managers.csproj", "{89074F71-FECA-4587-8A49-023D3CAB7905}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFS.Data.Managers", "DataManagers\DFS.Data.Managers.csproj", "{89074F71-FECA-4587-8A49-023D3CAB7905}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFS.Services", "DFS.Services\DFS.Services.csproj", "{8EDA6388-6F20-4D60-B86B-BF3E81524F42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFS.Services", "DFS.Services\DFS.Services.csproj", "{8EDA6388-6F20-4D60-B86B-BF3E81524F42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFS.Entities", "DFS.Entities\DFS.Entities.csproj", "{C5E6B4D8-DC18-45DF-9E94-6DEB8736D0BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFS.Entities", "DFS.Entities\DFS.Entities.csproj", "{C5E6B4D8-DC18-45DF-9E94-6DEB8736D0BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFS.Common", "DFS.Constants\DFS.Common.csproj", "{CA4CEB87-85E9-4F3F-B498-B8A8B7D58EA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFS.Common", "DFS.Constants\DFS.Common.csproj", "{CA4CEB87-85E9-4F3F-B498-B8A8B7D58EA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFS.Data", "DFS.Data\DFS.Data.csproj", "{E35C79A0-0F81-4907-819B-0A83C6C74D7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFS.Data", "DFS.Data\DFS.Data.csproj", "{E35C79A0-0F81-4907-819B-0A83C6C74D7C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

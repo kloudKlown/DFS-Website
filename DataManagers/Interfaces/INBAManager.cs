@@ -11,7 +11,7 @@ namespace DFS.Data.Managers.Interfaces
 
         IEnumerable<NBATeam> GetAllNBATeams();
 
-        IEnumerable<NBATeamPlayers> GetTeamPlayersByDate(DateTime date);
+        IEnumerable<NBATeamPlayers> GetPlayersByDateAndTeam(DateTime date, string team, string opp);
 
         IEnumerable<NBAPlayerStats> GetPlayerStatsHistorical(DateTime date, int daysBefore);
 
@@ -20,8 +20,6 @@ namespace DFS.Data.Managers.Interfaces
         IEnumerable<NBAGames> GetNBAGames(DateTime date);
 
         IEnumerable<NBAPlayerStats> GetGameStatsByDate(DateTime date, string teamName, string oppositionName);
-
-        IEnumerable<NBATeamPlayers> GetGameDayPlayers(DateTime date);
-
+        
     }
 }

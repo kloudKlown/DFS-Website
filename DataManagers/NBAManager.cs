@@ -77,16 +77,17 @@ namespace DFS.Data.Managers
             }
         }
 
-        public IEnumerable<NBATeamPlayers> GetTeamPlayersByDate(DateTime date)
+        public IEnumerable<NBATeamPlayers> GetPlayersByDateAndTeam(DateTime date, string team, string opp)
         {
             List<NBATeamPlayers> result = new List<NBATeamPlayers>();
             using (IDbConnection connection = GetConnection(NBADatabase))
             {
-                var queryResult = connection.Query("usp_GetTeamPlayersByDate",
+                var queryResult = connection.Query("usp_GetPlayersForDate",
                     new
-                    {
-                        // TODO: Fix this with DBNull value instead
-                        gameDate_ = date.Year < 2016 ? null : date.ToShortDateString()
+                    {                        
+                        date_ = date,
+                        teamName_ = team,
+                        oppName_ = opp
                     },
                     commandType: CommandType.StoredProcedure);
 
@@ -129,7 +130,6 @@ namespace DFS.Data.Managers
                 return result;
             }
         }
-
 
         #region Private Helpers
 

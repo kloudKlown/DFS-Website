@@ -18,11 +18,23 @@ namespace DFS.Services.Interfaces
             NBAManager = new NBAManager();
         }
 
-        public List<NBAPlayers> GetAllPlayers()
+        //public List<NBAPlayers> GetAllPlayers()
+        //{
+        //    try
+        //    {
+        //        return NBAManager.GetAllPlayers().Select(x => x).ToList();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw e;
+        //    }
+        //}
+
+        public List<NBATeamPlayers> GetPlayersByDateAndTeam(DateTime gameDate, string teamName, string oppositionName)
         {
             try
             {
-                return NBAManager.GetAllPlayers().Select(x => x).ToList();
+                return NBAManager.GetPlayersByDateAndTeam(gameDate, teamName, oppositionName).Select(x => x).ToList();
             }
             catch (Exception e)
             {
@@ -30,29 +42,17 @@ namespace DFS.Services.Interfaces
             }
         }
 
-        public List<NBATeamPlayers> GetNBATeamPlayersForDate(DateTime gameDate)
-        {
-            try
-            {
-                return NBAManager.GetTeamPlayersByDate(gameDate).Select(x => x).ToList();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
-        public List<NBAPlayerStats> GetPlayerStatsHistorical(DateTime gameDate, int daysBefore)
-        {
-            try
-            {
-                return NBAManager.GetPlayerStatsHistorical(gameDate, daysBefore).Select(x => x).ToList();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
+        //public List<NBAPlayerStats> GetPlayerStatsHistorical(DateTime gameDate, int daysBefore)
+        //{
+        //    try
+        //    {
+        //        return NBAManager.GetPlayerStatsHistorical(gameDate, daysBefore).Select(x => x).ToList();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw e;
+        //    }
+        //}
 
         public List<NBAGames> GetNBAGames(DateTime date)
         {
