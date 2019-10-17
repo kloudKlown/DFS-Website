@@ -11,19 +11,26 @@ CREATE PROCEDURE usp_GetPlayersForDate
 )
 AS
 BEGIN
-	
 	SELECT
-		N.PlayerName [Name],
-		Position,
-		Height,
-		[Weight],
-		P.Tm Team,
-		P.[date] GameDate
-	FROM
-		NBA_Player N (NOLOCK)
-		INNER JOIN NBA_PlayerLog P ON P.PlayerName = N.PlayerName
-	WHERE 
-		[Date] = @date_
-		AND (Tm = @teamName_ or Tm = @oppName_)
+			DISTINCT
+			N.PlayerName [Name],
+			CASE
+				WHEN FL.Salary IS NULL
+					THEN P.PlayerPosition			
+				WHEN FL.Salary IS NOT NULL
+					THEN FL.Salary
+			END Position,
+			Height,
+			[Weight],
+			P.Tm Team,
+			P.[date] GameDate
+		FROM
+			NBA_Player N (NOLOCK)
+			INNER JOIN NBA_PlayerLog P ON P.PlayerName = N.PlayerName
+			LEFT JOIN NBAReferenceToDraftKings DK ON DK.DK_PlayerName = P.PlayerName
+			LEFT JOIN NBA_FantasyLabs FL ON FL.Player_Name = DK.DK_PlayerName AND FL_DateTime =  @date_
+		WHERE 
+			P.[Date] = @date_
+			AND (Tm = @teamName_ or Tm = @oppName_)
 	ORDER BY Tm ASC
 END

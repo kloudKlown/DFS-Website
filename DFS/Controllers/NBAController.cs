@@ -91,14 +91,11 @@
                                   select player);
 
             activeList.AddRange(from NBAPlayerViewModel player in playerViewModel
-                                  where playerList.Any(x => x.Player.Name == player.Name && x.Team.Name == player.Team)
-                                  select player);
-
-
+                                where playerList.Any(x => x.Player.Name == player.Name && x.Team.Name == player.Team)
+                                select player.SetMultiPosition(playerList.Find(x => x.Player.Name == player.Name && x.Team.Name == player.Team).Player.Position));
 
             return (active: activeList, inactive: inactiveList);
         }
-
 
         #endregion
 

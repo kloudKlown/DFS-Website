@@ -42,10 +42,12 @@ namespace DFS.UI.Models
             Points = item.Points;
             Fouls = item.Fouls;
         }
-
+        
         public string Team { get; set; }
 
         public string Position { get; set; }
+
+        public string MultiPosition { get; set; }
 
         public string Name { get; set; }
 
@@ -92,5 +94,14 @@ namespace DFS.UI.Models
         public double Fouls { get; set; }
         
         public double Points { get; set; }
+    }
+
+    public static class NBAPlayerViewModelExtend
+    {
+        public static NBAPlayerViewModel SetMultiPosition(this NBAPlayerViewModel models, string position)
+        {
+            models.MultiPosition = position;
+            return models;
+        }
     }
 }

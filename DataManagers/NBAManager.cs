@@ -67,12 +67,6 @@ namespace DFS.Data.Managers
                         daysBefore_ = daysBefore
                     },
                     commandType: CommandType.StoredProcedure);                
-
-                //foreach (var item in queryResult)
-                //{
-                //    result.Add(MapNBAPLayerStats(item));
-                //}
-
                 return result;
             }
         }
