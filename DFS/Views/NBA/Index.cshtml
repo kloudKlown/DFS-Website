@@ -49,6 +49,8 @@
         var date = $("#datepicker");
         var gamesList = $("#gamesList");
         var court = $("#NBACourt");
+        var team1Inactive = $("#T1_InactiveList")
+        var team2Inactive = $("#T2_InactiveList")
         var nbaPositions = {}
 
         date.datepicker();
@@ -74,7 +76,7 @@
         });
 
         function PopulateGames(data) {
-            gamesList.find('.card').remove()
+            gamesList.find('.card').remove();
             $.each(data, function (i, value) {
                 gamesList.append($("<div class='card'><button class='TeamName'>" + value.HomeTeam + "</button><button class='TeamName'>" + value.AwayTeam + "</button>"));
             });
@@ -91,11 +93,11 @@
                 url: "/NBA/GetGameStatsByDate",
                 type: "POST",
                 data: params,
-                success: function (data) {
-                    var jsonData = JSON.parse(data);
+                success: function (data) {                    
                     clearChartDetials();
-                    tabulate(jsonData);
-                    fillChartDetails(jsonData);
+                    tabulate(data.activePlayerList);
+                    fillChartDetails(data.activePlayerList);
+                    fillInactivePlayers(data.inactivePlayersList, params.team);
                 },
                 error: function () {
 
@@ -112,30 +114,30 @@
             $("#jqGrid").trigger("reloadGrid");
 
             var Columnmodel = [
-                { name: 'Name', index: 'Name', width: 150, align: 'center', editable: false },
-                { name: 'Team', index: 'Team', width: 50, align: 'center', editable: false },
-                { name: 'MultiPosition', index: 'MultiPosition', width: 50, align: 'center', editable: false },
-                { name: 'Height', index: 'Height', width: 100, align: 'center', editable: false },
-                { name: 'Weight', index: 'Weight', width: 100, align: 'center', editable: false },
-                { name: 'MinutesPlayed', index: 'MinutesPlayed', width: 100, align: 'center', editable: false },
-                { name: 'FieldGoal', index: 'FieldGoal', width: 20, align: 'center', editable: false },
-                { name: 'FieldGoalAttempted', index: 'FieldGoalAttempted', width: 20, align: 'center', editable: false },
-                { name: 'Usage', index: 'Usage', width: 50, align: 'center', editable: false },
-                { name: 'ThreePointer', index: 'ThreePointer', width: 50, align: 'center', editable: false },
-                { name: 'ThreePointerAttempted', index: 'ThreePointerAttempted', width: 50, align: 'center', editable: false },
-                { name: 'DefensiveRating', index: 'DefensiveRating', width: 50, align: 'center', editable: false },
-                { name: 'OffensiveRating', index: 'OffensiveRating', width: 50, align: 'center', editable: false },
-                { name: 'FreeThrow', index: 'FreeThrow', width: 50, align: 'center', editable: false },
-                { name: 'OffensiveRebound', index: 'OffensiveRebound', width: 50, align: 'center', editable: false },
-                { name: 'DefensiveRebound', index: 'DefensiveRebound', width: 50, align: 'center', editable: false },
-                { name: 'TotalRebound', index: 'TotalRebound', width: 50, align: 'center', editable: false },
-                { name: 'TotalReboundPercentage', index: 'TotalReboundPercentage', width: 50, align: 'center', editable: false },
-                { name: 'Assists', index: 'Assists', width: 50, align: 'center', editable: false },
-                { name: 'Steals', index: 'Steals', width: 50, align: 'center', editable: false },
-                { name: 'Blocks', index: 'Blocks', width: 50, align: 'center', editable: false },
-                { name: 'Turnovers', index: 'Turnovers', width: 50, align: 'center', editable: false },
-                { name: 'Fouls', index: 'Fouls', width: 50, align: 'center', editable: false },
-                { name: 'Points', index: 'Points', width: 50, align: 'center', editable: false }
+                { name: 'name', index: 'Name', width: 150, align: 'center', editable: false },
+                { name: 'team', index: 'Team', width: 50, align: 'center', editable: false },
+                { name: 'multiPosition', index: 'MultiPosition', width: 50, align: 'center', editable: false },
+                { name: 'height', index: 'Height', width: 100, align: 'center', editable: false },
+                { name: 'weight', index: 'Weight', width: 100, align: 'center', editable: false },
+                { name: 'minutesPlayed', index: 'MinutesPlayed', width: 100, align: 'center', editable: false },
+                { name: 'fieldGoal', index: 'FieldGoal', width: 20, align: 'center', editable: false },
+                { name: 'fieldGoalAttempted', index: 'FieldGoalAttempted', width: 20, align: 'center', editable: false },
+                { name: 'usage', index: 'Usage', width: 50, align: 'center', editable: false },
+                { name: 'threePointer', index: 'ThreePointer', width: 50, align: 'center', editable: false },
+                { name: 'threePointerAttempted', index: 'ThreePointerAttempted', width: 50, align: 'center', editable: false },
+                { name: 'defensiveRating', index: 'DefensiveRating', width: 50, align: 'center', editable: false },
+                { name: 'offensiveRating', index: 'OffensiveRating', width: 50, align: 'center', editable: false },
+                { name: 'freeThrow', index: 'FreeThrow', width: 50, align: 'center', editable: false },
+                { name: 'offensiveRebound', index: 'OffensiveRebound', width: 50, align: 'center', editable: false },
+                { name: 'defensiveRebound', index: 'DefensiveRebound', width: 50, align: 'center', editable: false },
+                { name: 'totalRebound', index: 'TotalRebound', width: 50, align: 'center', editable: false },
+                { name: 'totalReboundPercentage', index: 'TotalReboundPercentage', width: 50, align: 'center', editable: false },
+                { name: 'assists', index: 'Assists', width: 50, align: 'center', editable: false },
+                { name: 'steals', index: 'Steals', width: 50, align: 'center', editable: false },
+                { name: 'blocks', index: 'Blocks', width: 50, align: 'center', editable: false },
+                { name: 'turnovers', index: 'Turnovers', width: 50, align: 'center', editable: false },
+                { name: 'fouls', index: 'Fouls', width: 50, align: 'center', editable: false },
+                { name: 'points', index: 'Points', width: 50, align: 'center', editable: false }
             ];
 
             $("#jqGrid").jqGrid({
@@ -154,41 +156,56 @@
 
 
         var fillChartDetails = function (data) {
-            var primaryTeam = data[0].Team;
+            var primaryTeam = data[0].team;
             var id = 1;
             nbaPositions = {};
 
             $.each(data, function (i, value) {
                 var tableColumns = ["Min", "Def", "Off", "Usa", "Eff"]
 
-                if (value.Team === primaryTeam) {
-                    if (String(nbaPositions[value.Position]) === "undefined") {
-                        nbaPositions[value.Position] = value.Name;
+                if (value.team === primaryTeam) {
+                    if (String(nbaPositions[value.position]) === "undefined") {
+                        nbaPositions[value.position] = value.name;
 
                         // Set Player Name
-                        court.find("#" + value.Position + "_" + String(id) + "_L").text(value.Name + "(" + String(value.Height) + ")");
+                        court.find("#" + value.position + "_" + String(id) + "_L").text(value.name + "(" + String(value.height) + ")");
 
                         // Set values in the court tables
                         $.each(tableColumns, function (t, v) {
-                            tableColumns[t] = value.Position + "_" + String(id) + "_" + v;
+                            tableColumns[t] = value.position + "_" + String(id) + "_" + v;
                         });
 
                         // Set Player Details
-                        court.find("#" + tableColumns[0]).text(value.MinutesPlayed);
-                        court.find("#" + tableColumns[1]).text(value.DefensiveRating);
-                        court.find("#" + tableColumns[2]).text(value.OffensiveRating);
-                        court.find("#" + tableColumns[3]).text(value.Usage);
-                        court.find("#" + tableColumns[4]).text(value.Points);
+                        court.find("#" + tableColumns[0]).text(value.minutesPlayed);
+                        court.find("#" + tableColumns[1]).text(value.defensiveRating);
+                        court.find("#" + tableColumns[2]).text(value.offensiveRating);
+                        court.find("#" + tableColumns[3]).text(value.usage);
+                        court.find("#" + tableColumns[4]).text(value.points);
                     }
 
                 }
                 else {
                     nbaPositions = {};
                     id = 2;
-                    primaryTeam = value.Team;
+                    primaryTeam = value.team;
                 }
             });
         };
+
+        fillInactivePlayers = function (data, team) {
+            team1Inactive.find("label").remove();
+            team2Inactive.find("label").remove();
+
+            $.each(data, function (i, value) {
+                var text = $("<label>" + value.name + " " + value.position  + "</label>")
+                if (value.team == team) {
+                    team1Inactive.append(text);
+                }
+                else {
+                    team2Inactive.append(text);
+                }
+            });
+        }
 
 
         var clearChartDetials = function () {
@@ -209,5 +226,6 @@
 
             court.find(String(idList)).text("")
         }
+        clearChartDetials();
     });
 </script>

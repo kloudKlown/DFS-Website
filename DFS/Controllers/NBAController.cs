@@ -76,7 +76,7 @@
             nbaGamesActivePlayers = sortedPlayers.active;
             nbaGamesinActivePlayers = sortedPlayers.inactive;
 
-            return Json(JsonConvert.SerializeObject(nbaGamesActivePlayers));
+            return Json(new { activePlayerList = nbaGamesActivePlayers, inactivePlayersList = nbaGamesinActivePlayers });
         }
 
         #region Private Helpers
