@@ -4,6 +4,8 @@ using System.Text;
 
 namespace DFS.Entities
 {
+    [Serializable]
+
     public class NBAGames : NBATeam
     {
         public NBAGames() : base()

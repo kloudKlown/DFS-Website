@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DFS.UI.Models
 {
+    [Serializable]
     public class NBAPlayerViewModel
     {
 
@@ -21,7 +22,7 @@ namespace DFS.UI.Models
             Height = item.Height;
             Weight = item.Weight;
             GameDate = item.GameDate;
-            Team = item.Team.Name;
+            Team = item.Team.Team;
             MinutesPlayed = item.MinutesPlayed;
             Usage = item.Usage;
             DefensiveRating = item.DefensiveRating;

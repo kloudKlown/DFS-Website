@@ -8,4 +8,10 @@
     <ProjectReference Include="..\DFS.Constants\DFS.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>C:\Users\suhas\Documents\WTISLiveGraphs\WTISLiveGraphs\Bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

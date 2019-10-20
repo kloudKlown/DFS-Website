@@ -15,8 +15,8 @@ namespace DFS.UI.Models
 
         public NBAGamesViewModel(NBAGames games)
         {
-            HomeTeam = games.HomeTeam.Name;
-            AwayTeam = games.AwayTeam.Name;
+            HomeTeam = games.HomeTeam.Team;
+            AwayTeam = games.AwayTeam.Team;
         }
 
         public string HomeTeam { get; set; }

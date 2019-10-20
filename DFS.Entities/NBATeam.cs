@@ -1,20 +1,24 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DFS.Entities
 {
+    [Serializable]
     public class NBATeam
     {
         public NBATeam()
         {
             
         }
-        public NBATeam(string name)
+
+        
+        public NBATeam(string team)
         {
-            Name = name;
+            Team = team;
         }
         
-        public string Name { get; set; }
+        public string Team { get; set; }
     }
 }

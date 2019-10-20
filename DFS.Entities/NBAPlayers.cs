@@ -3,6 +3,8 @@ using DFS.Common;
 
 namespace DFS.Entities
 {
+    [Serializable]
+
     public class NBAPlayers
     {
         public NBAPlayers()

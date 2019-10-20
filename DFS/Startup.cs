@@ -49,6 +49,8 @@ namespace DFS
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            services.AddSession();
             services.AddScoped<IUrlHelper>(x =>
             {
                 var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
@@ -78,6 +80,7 @@ namespace DFS
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

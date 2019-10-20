@@ -5,11 +5,15 @@
     using System.Linq;
     using System.Threading.Tasks;
     using DFS.Services.Interfaces;
+    using DFS.UI.Common.Helpers;
+    using Microsoft.AspNetCore.Http;   
     using Microsoft.AspNetCore.Mvc;
 
     public class BaseController : Controller
     {
         protected INBAService NBAService { get; private set; }
+
+        protected ISession Session => HttpContext.Session;
 
         public BaseController(INBAService nBA)
         {

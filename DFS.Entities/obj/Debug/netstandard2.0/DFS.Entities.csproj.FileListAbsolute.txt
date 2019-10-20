@@ -10,3 +10,5 @@ D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.AssemblyIn
 D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.csproj.CopyComplete
 D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.dll
 D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.pdb
+D:\DFS Website\DFS\DFS.Entities\bin\Debug\netstandard2.0\Newtonsoft.Json.dll
+D:\DFS Website\DFS\DFS.Entities\bin\Debug\netstandard2.0\Newtonsoft.Json.xml

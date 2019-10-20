@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DFS.Entities
 {
+    [Serializable]
     public class NBATeamPlayers
     {
+
         public NBATeamPlayers()
         {
             Player = new NBAPlayers();
