@@ -105,6 +105,7 @@
 
                 return Json(new { data = playerList });
             }
+
             return Json(new { });
         }
 

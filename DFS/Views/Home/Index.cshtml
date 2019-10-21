@@ -75,25 +75,6 @@
             $("#datepicker").datepicker("show");
         })
 
-
-        function GetGameResults() {
-            var params = {};
-            params["date"] = $("#datepicker").val();
-            params["daysBefore"] = $("#daysBefore").val()
-            $.ajax({
-                url: "/Home/GetGameResults",
-                type: "POST",
-                data: params,
-                success: function (data) {
-                    datGlobal = data;
-                    //d3.csv(JSON.parse(data), DrawGraph(JSON.parse(data)));
-                },
-                error: function () {
-                    alert("Error")
-                }
-            });
-        }
-
         $("#GetGames").on("click", function () {
             GetGameResults();
         });

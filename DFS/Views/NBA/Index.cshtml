@@ -109,11 +109,6 @@
 
 
         var tabulate = function () {
-            //console.log(playerData);
-            //$("#jqGrid").clearGridData();
-            //$("#jqGrid").jqGrid('setGridParam', { data: playerData });
-            //$("#jqGrid").trigger("reloadGrid");
-
             var gridColNames = ["Name", "Team", "Pos", "Usage", "Mins", "Def.R", "Off.R", "Height", "FG", "FGA",
                 "3P", "3PA", "FT", "ORB", "DRB", "TRB", "TRB %", "AST", "STL", "BLK", "TOV", "PF", "PTS"]
 
@@ -154,12 +149,9 @@
                 height: "auto",  
                 repeatitems: false,
                 jsonReader: {
-                   root: "data",
-                    repeatitems: false,
+                root: "data",
+                repeatitems: false,
                 },
-                //loadComplete: function () {
-                //    return false;                    
-                //}
             });
             
         };
@@ -174,7 +166,15 @@
                 var tableColumns = ["Min", "Def", "Off", "Usa", "Eff"]
 
                 if (value.team === primaryTeam) {
-                    if (String(nbaPositions[value.position]) === "undefined") {
+                    // Do Nothing
+                }
+                else {
+                    nbaPositions = {};
+                    id = 2;
+                    primaryTeam = value.team;
+                }
+
+                if (String(nbaPositions[value.position]) === "undefined") {
                         nbaPositions[value.position] = value.name;
 
                         // Set Player Name
@@ -191,14 +191,9 @@
                         court.find("#" + tableColumns[2]).text(value.offensiveRating);
                         court.find("#" + tableColumns[3]).text(value.usage);
                         court.find("#" + tableColumns[4]).text(value.points);
-                    }
+                }
 
-                }
-                else {
-                    nbaPositions = {};
-                    id = 2;
-                    primaryTeam = value.team;
-                }
+
             });
         };
 
@@ -240,6 +235,5 @@
 
         date.val("2019-01-11");
         date.trigger("change");
-        //tabulate();
     });
 </script>
