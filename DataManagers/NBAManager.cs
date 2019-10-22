@@ -42,7 +42,10 @@ namespace DFS.Data.Managers
                     games.Add(new NBAGames
                     {
                         HomeTeam = new NBATeam(item.HomeTeam),
-                        AwayTeam = new NBATeam(item.AwayTeam)
+                        AwayTeam = new NBATeam(item.AwayTeam),
+                        OverUnder = item.OverUnder,
+                        Line = item.Line,
+                        Favourite = item.Favourite
                     });
                 }
             }

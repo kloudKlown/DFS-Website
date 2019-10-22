@@ -13,9 +13,9 @@ YEAR = [2018,2019]
 positionHeaders = {}
 connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NBA;""Trusted_Connection=yes;")
 cursor = connection.cursor()
-cursor.execute('Delete from NBA_PlayerLog;')
+cursor.execute("Delete from NBA_PlayerLog Where [Date] > '2019-10-21';")
 cursor.commit()
-cursor.execute('Delete from NBA_PlayerLog_Advanced;')
+cursor.execute("Delete from NBA_PlayerLog_Advanced Where [Date] > '2019-10-21';")
 cursor.commit()
 
 PlayerList = {}

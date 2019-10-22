@@ -12,13 +12,15 @@ AS
 BEGIN
 	Select
 		DISTINCT
-		Tm HomeTeam,		
-		Opp AwayTeam
+		Team HomeTeam,
+		Opp AwayTeam,
+		OU OverUnder,
+		Line,
+		FV Favourite
 	FROM
-		NBA_PlayerLog
+		NBA_Games
 	WHERE
-		[Date] = @date_
-		and blank <> '@'
+		GameDate = @date_		
 END
 
 

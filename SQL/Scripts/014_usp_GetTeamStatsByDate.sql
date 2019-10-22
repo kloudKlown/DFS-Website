@@ -1,4 +1,4 @@
- -- EXEC usp_GetTeamStatsByDate @date_ = '2018-11-18', @teamName_ = 'PHI', @oppName_ = 'BRK'
+ -- EXEC usp_GetTeamStatsByDate @date_ = '2019-10-17', @teamName_ = 'MIA', @oppName_ = 'ORL'
 DROP PROCEDURE IF EXISTS usp_GetTeamStatsByDate
 GO
 
@@ -11,6 +11,7 @@ CREATE PROCEDURE usp_GetTeamStatsByDate
 AS
 BEGIN
 	Select
+		DISTINCT
 		PL.PlayerName, 
 		PL.Tm Team,		
 		PL.PlayerPosition,
@@ -44,6 +45,7 @@ BEGIN
 	ORDER BY MinutesPlayed DESC
 
 	Select
+		DISTINCT
 		PL.PlayerName, 
 		PL.Tm Team,		
 		PL.PlayerPosition,

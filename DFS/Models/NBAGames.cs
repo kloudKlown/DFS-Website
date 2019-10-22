@@ -17,11 +17,19 @@ namespace DFS.UI.Models
         {
             HomeTeam = games.HomeTeam.Team;
             AwayTeam = games.AwayTeam.Team;
+            OverUnder = games.OverUnder;
+            Line = games.Line;
+            Favourite = games.Favourite;
         }
 
         public string HomeTeam { get; set; }
 
         public string AwayTeam { get; set; }
 
+        public double OverUnder { get; set; }
+
+        public double Line { get; set; }
+
+        public string Favourite { get; set; }
     }
 }

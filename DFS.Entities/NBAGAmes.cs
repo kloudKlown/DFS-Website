@@ -17,5 +17,11 @@ namespace DFS.Entities
 
         public NBATeam AwayTeam { get; set; }
 
+        public double OverUnder { get; set; }
+
+        public double Line { get; set; }
+
+        public string Favourite { get; set; }
+
     }
 }
