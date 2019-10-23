@@ -17,6 +17,8 @@ namespace DFS.Services.Interfaces
 
         List<NBAPlayerStats> GetGameStatsByDate(DateTime date, string teamName, string oppositionName);
 
+        List<NBAPlayerZoneStats> GetPlayerZoneStats(string playerName);
+
     }
 
 }

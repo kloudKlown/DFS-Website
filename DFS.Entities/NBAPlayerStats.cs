@@ -23,41 +23,41 @@ namespace DFS.Entities
 
         public TimeSpan MinutesPlayed { get; set; }
 
-        public double FieldGoal { get; set; }        
+        public decimal FieldGoal { get; set; }        
 
-        public double FieldGoalAttempted { get; set; }
+        public decimal FieldGoalAttempted { get; set; }
 
-        public double Usage { get; set; }
+        public decimal Usage { get; set; }
 
-        public double ThreePointer { get; set; }
+        public decimal ThreePointer { get; set; }
 
-        public double ThreePointerAttempted { get; set; }
+        public decimal ThreePointerAttempted { get; set; }
 
-        public double DefensiveRating { get; set; }
+        public decimal DefensiveRating { get; set; }
 
-        public double FreeThrow { get; set; }
+        public decimal FreeThrow { get; set; }
 
-        public double TotalReboundPercentage { get; set; }
+        public decimal TotalReboundPercentage { get; set; }
 
-        public double OffensiveRating { get; set; }
+        public decimal OffensiveRating { get; set; }
 
-        public double OffensiveRebound { get; set; }
+        public decimal OffensiveRebound { get; set; }
 
-        public double DefensiveRebound { get; set; }
+        public decimal DefensiveRebound { get; set; }
 
-        public double TotalRebound { get; set; }
+        public decimal TotalRebound { get; set; }
 
-        public double Assists { get; set; }
+        public decimal Assists { get; set; }
 
-        public double Steals { get; set; }
+        public decimal Steals { get; set; }
 
-        public double Blocks { get; set; }
+        public decimal Blocks { get; set; }
 
-        public double Turnovers { get; set; }
+        public decimal Turnovers { get; set; }
 
-        public double Fouls { get; set; }
+        public decimal Fouls { get; set; }
 
-        public double Points { get; set; }
+        public decimal Points { get; set; }
 
     }
 }

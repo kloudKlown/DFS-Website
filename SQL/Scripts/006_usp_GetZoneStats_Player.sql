@@ -1,18 +1,18 @@
--- EXEC usp_GetZoneStats_Player @Team = 'GSW'
+-- EXEC usp_GetZoneStats_Player  @player_ = 'Pascal Siakam'
 
 DROP PROCEDURE IF EXISTS usp_GetZoneStats_Player
 GO
 
 CREATE PROCEDURE usp_GetZoneStats_Player
 (
-	@Team NVARCHAR(5) NULL
+	@player_ NVARCHAR(100) NULL
 )
 AS
 BEGIN
 
 	SELECT 
-	A.GameDate, A.PlayerName, @Team Team,  A.Opp Opp, A.PlayerPosition Position, count(A.Shot) Totals, 
-	A.FreeThrows, A.Zones, A.Shot
+	A.GameDate, A.PlayerName, A.PlayerTeam Team,  A.Opp Opp, A.PlayerPosition Position, CAST(count(A.Shot) as int) Totals, 
+	CAST(A.FreeThrows as int) FreeThrows, A.Zones, A.Shot
 	FROM
 	(
 	Select 
@@ -35,12 +35,12 @@ BEGIN
 	FROM
 		NBAShotChart Shot
 		INNER JOIN NBAReferenceToShotChartMap Ref ON Ref.NBARef_PlayerName = Shot.PlayerName
-		INNER JOIN NBATableData NBA  ON Ref.ShotChart_PlayerName = NBA.PlayerName and Shot.GameDate = NBA.Date
+		INNER JOIN NBA_PlayerLog NBA  ON Ref.ShotChart_PlayerName = NBA.PlayerName and Shot.GameDate = NBA.Date
 	WHERE
-	PlayerTeam = @Team
+	NBA.PlayerName = @player_
 	) A
 	Group BY 
-		A.PlayerName,A.PlayerPosition, A.Shot, A.Zones, A.FreeThrows, A.GameDate, A.Opp
+		A.PlayerName,A.PlayerPosition, A.Shot, A.Zones, A.FreeThrows, A.GameDate, A.PlayerTeam, A.Opp
 	ORDER BY
 		GameDate ASC, Shot ASC, totals DESC, A.PlayerName asc
 END

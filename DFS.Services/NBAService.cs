@@ -42,17 +42,17 @@ namespace DFS.Services.Interfaces
             }
         }
 
-        //public List<NBAPlayerStats> GetPlayerStatsHistorical(DateTime gameDate, int daysBefore)
-        //{
-        //    try
-        //    {
-        //        return NBAManager.GetPlayerStatsHistorical(gameDate, daysBefore).Select(x => x).ToList();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw e;
-        //    }
-        //}
+        public List<NBAPlayerStats> GetPlayerStatsHistorical(DateTime gameDate, int daysBefore)
+        {
+            try
+            {
+                return NBAManager.GetPlayerStatsHistorical(gameDate, daysBefore).Select(x => x).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
         public List<NBAGames> GetNBAGames(DateTime date)
         {
@@ -85,6 +85,26 @@ namespace DFS.Services.Interfaces
                 else
                 {
                     return new List<NBAPlayerStats>();
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public List<NBAPlayerZoneStats> GetPlayerZoneStats(string playerName)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(playerName))
+                {
+                    return NBAManager.GetPlayerZoneStats(playerName).Select(x => x).ToList();
+                }
+                else
+                {
+                    return new List<NBAPlayerZoneStats>();
                 }
 
             }

@@ -1,5 +1,5 @@
 
--- EXEC usp_GetPlayersForDate @date_ = '2018-12-12', @teamName_ = 'PHI', @oppName_ = 'BRK'
+-- EXEC usp_GetPlayersForDate @date_ = '2019-1-24', @teamName_ = 'NOP', @oppName_ = 'TOR'
 DROP PROCEDURE IF EXISTS usp_GetPlayersForDate
 GO
 
@@ -22,15 +22,15 @@ BEGIN
 			END Position,
 			Height,
 			[Weight],
-			P.Tm Team,
-			P.[date] GameDate
+			Team,
+			FL_DateTime GameDate
 		FROM
 			NBA_Player N (NOLOCK)
+			INNER JOIN NBAReferenceToDraftKings DK ON DK.DK_PlayerName = N.PlayerName
+			INNER JOIN NBA_FantasyLabs FL ON FL.Player_Name = DK.DK_PlayerName AND FL_DateTime =  @date_
 			INNER JOIN NBA_PlayerLog P ON P.PlayerName = N.PlayerName
-			LEFT JOIN NBAReferenceToDraftKings DK ON DK.DK_PlayerName = P.PlayerName
-			LEFT JOIN NBA_FantasyLabs FL ON FL.Player_Name = DK.DK_PlayerName AND FL_DateTime =  @date_
 		WHERE 
-			P.[Date] = @date_
-			AND (Tm = @teamName_ or Tm = @oppName_)
-	ORDER BY Tm ASC
+			FL.FL_DateTime = @date_
+			AND (Team = @teamName_ or Team = @oppName_)
+	ORDER BY Team ASC
 END

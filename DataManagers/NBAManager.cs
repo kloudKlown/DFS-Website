@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using static Dapper.SqlMapper;
 
 namespace DFS.Data.Managers
 {
@@ -103,14 +104,31 @@ namespace DFS.Data.Managers
             List<NBAPlayerStats> result = new List<NBAPlayerStats>();
             using (IDbConnection connection = GetConnection(NBADatabase))
             {
-                var queryResult = connection.QueryMultiple("usp_GetTeamStatsByDate",
-                    new
-                    {                        
-                        date_ = date,
-                        teamName_ = teamName,
-                        oppName_ = oppositionName
-                    },
-                    commandType: CommandType.StoredProcedure);
+                GridReader queryResult;
+
+                if (date.Date < DateTime.Now.Date.AddDays(-2))
+                {
+                    queryResult = connection.QueryMultiple("usp_GetTeamStatsByDate",
+                        new
+                        {
+                            date_ = date,
+                            teamName_ = teamName,
+                            oppName_ = oppositionName
+                        },
+                        commandType: CommandType.StoredProcedure);
+                }
+                else
+                {
+                    queryResult = connection.QueryMultiple("usp_GetTeamStatsCurrent",
+                        new
+                        {
+                            date_ = date,
+                            teamName_ = teamName,
+                            oppName_ = oppositionName
+                        },
+                        commandType: CommandType.StoredProcedure);
+
+                }
 
                 // Result Set Team
                 foreach (var item in queryResult.Read<dynamic>())
@@ -122,6 +140,30 @@ namespace DFS.Data.Managers
                 foreach (var item in queryResult.Read<dynamic>())
                 {
                     result.Add(MapNBAPLayerStats(item));
+                }
+
+                return result;
+            }
+        }
+
+
+        public IEnumerable<NBAPlayerZoneStats> GetPlayerZoneStats(string player)
+        {
+            List<NBAPlayerZoneStats> result = new List<NBAPlayerZoneStats>();
+            using (IDbConnection connection = GetConnection(NBADatabase))
+            {
+                var queryResult = connection.Query("usp_GetZoneStats_Player",
+                        new
+                        {
+                            @player_ = player
+                        },
+                        commandType: CommandType.StoredProcedure);
+
+        
+                // Result Set Team
+                foreach (var item in queryResult)
+                {
+                    result.Add(MapNBAPlayerZoneStats(item));
                 }
 
                 return result;
@@ -160,7 +202,21 @@ namespace DFS.Data.Managers
                 Fouls = item.Fouls
             };
         }
-
+        
+        private NBAPlayerZoneStats MapNBAPlayerZoneStats(dynamic item)
+        {
+            return new NBAPlayerZoneStats
+            {
+                playerName = item.PlayerName,
+                GameDate = item.GameDate,
+                Opp = new NBATeam(item.Opp),
+                Team = new NBATeam(item.Team),
+                Totals = item.Totals,
+                FreeThrows = item.FreeThrows,
+                Zones = item.Zones,
+                Shot = item.Shot
+            };
+        }
         #endregion
     }
 }

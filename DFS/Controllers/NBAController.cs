@@ -109,6 +109,24 @@
             return Json(new { });
         }
 
+        public IActionResult GetPlayerZones(string name)
+        {
+            var result = NBAService.GetPlayerZoneStats(name);
+            result = result.OrderByDescending(x => x.GameDate).Take(200).ToList();
+            var a = result.GroupBy(x => x.Zones, x => x.Shot);
+
+            var b = a.Select(x => new {
+                ShotType = x.Key,
+                MadeShots = x.ToList().FindAll(v => v == "Made Shot").ToList().Count,
+                TotalShots = x.ToList().Count,
+                ZonePer = (x.ToList().FindAll(v => v == "Made Shot").ToList().Count * 100)  / (x.ToList().Count + 1)
+            }).ToList();
+
+            b = b.OrderByDescending(x => x.TotalShots).ToList();
+            //result = result.GroupBy(x => x.Zones).Select(x => x).ToList();
+            return Json(new { shotZone = JsonConvert.SerializeObject(b) });
+        }
+
         #region Private Helpers
 
         private (List<NBAPlayerViewModel> active, List<NBAPlayerViewModel> inactive) MinuteBalancer(List<NBAPlayerViewModel> playerViewModel, List<NBATeamPlayers> playerList)
