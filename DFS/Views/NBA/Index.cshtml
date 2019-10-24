@@ -36,9 +36,21 @@
 <hr />
 <hr />
 <div id="ZoneChart">
-
+    <div class="card no-border col-md-12">
+        <div class="row">
+            <div class="contianer col-md-12">
+                <div class="card-body">
+                    <table id="playerShotZone"></table>
+                </div>
+                <div id="grdEmail">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="card no-border col-md-12">
+
+
+<div class="card no-border col-md-6">
     <div class="row">
         <div class="card-header">
             Player Stats
@@ -59,9 +71,8 @@
         var team1Inactive = $("#T1_InactiveList")
         var team2Inactive = $("#T2_InactiveList")
         var nbaPositions = {}
-
+        var playerShotZone = $("#playerShotZone");
         var playerName = $(".playerName");
-
 
         date.datepicker();
         $(".fa-cal").on("click", function () {
@@ -92,23 +103,7 @@
             });
         };
 
-        playerName.on("click", function (e) {
-            var params = {};
-            params["name"] = $(e.target).text().split("(")[0];
-            //debugger;
-            $.ajax({
-                url: "/NBA/GetPlayerZones",
-                type: "POST",
-                data: params,
-                success: function (data) {
-                    $("#ZoneChart").text(data.shotZone);
-                },
-                error: function () {
-
-                }
-            });
-        });
-
+        
         gamesList.on("click", '.TeamName', function (e) {
             console.log($(this).text);
             params = {};
@@ -134,13 +129,42 @@
             });
         });
 
+        var tabulateShotZones = function (shotData) {
+            var gridColNames = ["Shot Type", "Shots Made", "Shots Taken", "Percentage"]
+
+            $("#playerShotZone").jqGrid('setGridParam',
+                {
+                    data: shotData
+                })
+                .trigger("reloadGrid");
+
+            var Columnmodel = [
+                { name: 'ShotType', index: 'ShotType', width: 150, align: 'center', editable: false },
+                { name: 'MadeShots', index: 'MadeShots', width: 50, align: 'center', editable: false },
+                { name: 'TotalShots', index: 'TotalShots', width: 50, align: 'center', editable: false },
+                { name: 'ZonePer', index: 'ZonePer', width: 50, align: 'center', editable: false, sortable: true }
+            ];
+
+            $("#playerShotZone").jqGrid({
+                colNames: gridColNames,
+                colModel: Columnmodel,                
+                datatype: "local",
+                data: shotData,
+                gridview: true,
+                loadonce: false,
+                rowNum: 100,
+                height: "auto"
+            });
+        }
 
         var tabulate = function () {
             var gridColNames = ["Name", "Team", "Pos", "Usage", "Mins", "Def.R", "Off.R", "Height", "FG", "FGA",
                 "3P", "3PA", "FT", "ORB", "DRB", "TRB", "TRB %", "AST", "STL", "BLK", "TOV", "PF", "PTS"]
 
             var Columnmodel = [
-                { name: 'name', index: 'Name', width: 150, align: 'center', editable: false },
+                {
+                    name: 'name', index: 'Name', width: 150, align: 'center', editable: false, classes: "playerName"
+                },
                 { name: 'team', index: 'Team', width: 50, align: 'center', editable: false },
                 { name: 'multiPosition', index: 'MultiPosition', width: 50, align: 'center', editable: false },
                 { name: 'usage', index: 'Usage', width: 50, align: 'center', editable: false, sortable: true },
@@ -169,7 +193,7 @@
                 url: "/NBA/GetGridData",
                 colNames: gridColNames,
                 colModel: Columnmodel,
-                pager: '#grdEmail',
+                pager: '#shotPager',
                 datatype: "json",
                 gridview: true,
                 loadonce: false,
@@ -183,6 +207,24 @@
             });
 
         };
+
+        playerName.on("click", function (e) {           
+            var params = {};
+            params["name"] = $(e.target).text().split("(")[0];
+
+            //debugger;
+            $.ajax({
+                url: "/NBA/GetPlayerZones",
+                type: "POST",
+                data: params,
+                success: function (data) {
+                    tabulateShotZones(JSON.parse(data.shotZone));
+                },
+                error: function () {
+
+                }
+            });
+        });
 
 
         var fillChartDetails = function (data) {
@@ -263,5 +305,56 @@
 
         date.val("2019-01-11");
         date.trigger("change");
+    });
+
+    $(document).ajaxStop(function () {
+        var playerName = $(".playerName");
+
+        playerName.on("click", function (e) {           
+            var params = {};
+            params["name"] = $(e.target).text().split("(")[0];
+
+            //debugger;
+            $.ajax({
+                url: "/NBA/GetPlayerZones",
+                type: "POST",
+                data: params,
+                success: function (data) {
+                    tabulateShotZones(JSON.parse(data.shotZone));
+                },
+                error: function () {
+
+                }
+            });
+        });
+
+        
+        var tabulateShotZones = function (shotData) {
+            var gridColNames = ["Shot Type", "Shots Made", "Shots Taken", "Percentage"]
+
+            $("#playerShotZone").jqGrid('setGridParam',
+                {
+                    data: shotData
+                })
+                .trigger("reloadGrid");
+
+            var Columnmodel = [
+                { name: 'ShotType', index: 'ShotType', width: 150, align: 'center', editable: false },
+                { name: 'MadeShots', index: 'MadeShots', width: 50, align: 'center', editable: false },
+                { name: 'TotalShots', index: 'TotalShots', width: 50, align: 'center', editable: false },
+                { name: 'ZonePer', index: 'ZonePer', width: 50, align: 'center', editable: false, sortable: true }
+            ];
+
+            $("#playerShotZone").jqGrid({
+                colNames: gridColNames,
+                colModel: Columnmodel,
+                datatype: "local",
+                data: shotData,
+                gridview: true,
+                loadonce: false,
+                rowNum: 100,
+                height: "auto"
+            });
+        };
     });
 </script>

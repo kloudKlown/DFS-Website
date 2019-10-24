@@ -12,3 +12,11 @@ GO
 CREATE NONCLUSTERED INDEX CIX_NBA_PlayerLog_Date
 ON [dbo].[NBA_PlayerLog] ([Date])
 GO
+
+
+DROP INDEX IF EXISTS CIX_NBA_FantasyLabs_Team_DateTime ON [NBA_FantasyLabs]
+GO 
+
+CREATE NONCLUSTERED INDEX CIX_NBA_FantasyLabs_Team_DateTime
+ON [dbo].[NBA_FantasyLabs] ([Team],[FL_DateTime])
+INCLUDE ([Player_Name])

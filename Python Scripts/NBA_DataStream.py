@@ -9,7 +9,7 @@ import time
 import datetime
 import pyodbc
 
-YEAR = [2018,2019] 
+YEAR = [2020] 
 positionHeaders = {}
 connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NBA;""Trusted_Connection=yes;")
 cursor = connection.cursor()

@@ -83,7 +83,7 @@ namespace DFS.Data.Managers
                 var queryResult = connection.Query("usp_GetPlayersForDate",
                     new
                     {                        
-                        date_ = date,
+                        date_ = date.Date,
                         teamName_ = team,
                         oppName_ = opp
                     },

@@ -111,20 +111,21 @@
 
         public IActionResult GetPlayerZones(string name)
         {
-            var result = NBAService.GetPlayerZoneStats(name);
-            result = result.OrderByDescending(x => x.GameDate).Take(200).ToList();
-            var a = result.GroupBy(x => x.Zones, x => x.Shot);
+            var zones = NBAService.GetPlayerZoneStats(name);
+            zones = zones.OrderByDescending(x => x.GameDate).Take(200).ToList();
+            var groupedR = zones.GroupBy(x => x.Zones, x => x.Shot);
 
-            var b = a.Select(x => new {
+            var result = groupedR.Select(x => new {
                 ShotType = x.Key,
                 MadeShots = x.ToList().FindAll(v => v == "Made Shot").ToList().Count,
                 TotalShots = x.ToList().Count,
                 ZonePer = (x.ToList().FindAll(v => v == "Made Shot").ToList().Count * 100)  / (x.ToList().Count + 1)
             }).ToList();
 
-            b = b.OrderByDescending(x => x.TotalShots).ToList();
-            //result = result.GroupBy(x => x.Zones).Select(x => x).ToList();
-            return Json(new { shotZone = JsonConvert.SerializeObject(b) });
+            result = result.OrderByDescending(x => x.TotalShots).ToList();
+
+
+            return Json(new { shotZone = JsonConvert.SerializeObject(result) });
         }
 
         #region Private Helpers
