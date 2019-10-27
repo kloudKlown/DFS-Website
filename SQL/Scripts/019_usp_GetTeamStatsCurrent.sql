@@ -1,4 +1,4 @@
- -- EXEC usp_GetTeamStatsCurrent @date_ = '2019-10-23', @teamName_ = 'BRK', @oppName_ = 'MIN'
+ -- EXEC usp_GetTeamStatsCurrent @date_ = '2019-10-24', @teamName_ = 'ATL', @oppName_ = 'DET'
 DROP PROCEDURE IF EXISTS usp_GetTeamStatsCurrent
 GO
 
@@ -15,7 +15,7 @@ BEGIN
 		DISTINCT
 			PL.PlayerName, 
 			@teamName_ Team,		
-			PL.PlayerPosition,
+			N.Position PlayerPosition,
 			AVG(N.Height) Height,
 			AVG(N.[Weight]) [Weight],
 			TIMEFROMPARTS(0, ROUND(AVG(PL.MP/60), 0, 0), (AVG(CAST(PL.MP as INT)) - ROUND(AVG(CAST(PL.MP as INT))/60, 0, 0)*60), 0, 0) MinutesPlayed,
@@ -46,14 +46,14 @@ BEGIN
 		FL_DateTime = @date_
 		AND	PL.[Date] in (SELECT DISTINCT TOP 60 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )					
 		AND FL.Team = @teamName_
-		GROUP BY PL.PlayerName, PL.PlayerPosition
+		GROUP BY PL.PlayerName, N.Position
 		ORDER BY MinutesPlayed DESC
 
 	SELECT
 		DISTINCT
 			PL.PlayerName, 
 			@oppName_ Team,		
-			PL.PlayerPosition,
+			N.Position PlayerPosition,
 			AVG(N.Height) Height,
 			AVG(N.[Weight]) [Weight],
 			TIMEFROMPARTS(0, ROUND(AVG(PL.MP/60), 0, 0), (AVG(CAST(PL.MP as INT)) - ROUND(AVG(CAST(PL.MP as INT))/60, 0, 0)*60), 0, 0) MinutesPlayed,
@@ -84,7 +84,7 @@ BEGIN
 		FL_DateTime = @date_
 		AND	PL.[Date] in (SELECT DISTINCT TOP 60 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )					
 		AND FL.Team = @oppName_
-		GROUP BY PL.PlayerName, PL.PlayerPosition
+		GROUP BY PL.PlayerName, N.Position
 		ORDER BY MinutesPlayed DESC
 
 END
