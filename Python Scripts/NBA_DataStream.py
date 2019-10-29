@@ -134,7 +134,8 @@ def ExtractPlayersFromRoster(teamURL, teamName, year, connection, cursor):
             player = player.text
         if len(position) > 0 and len(player) > 0:
             #player = ClearSpecialCharacters(player, True)
-            player = re.sub('[^a-zA-Z0-9@\n\.\s]', '', player)    
+            player = player.replace("(TW)", "")
+            player = re.sub('[^a-zA-Z0-9@\n\.\s]', '', player)                
             player = PlayerUnicodeConversion(player)
             ExtractPlayersData(player, position, playerLink, year, connection, cursor)
             ExtractPlayersAdvancedData(player, position, playerLink, year, connection, cursor)

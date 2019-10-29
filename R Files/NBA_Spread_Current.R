@@ -233,6 +233,19 @@ for (player in allPlayers) {
 OffensiveStatsNew[is.na(OffensiveStatsNew)] = 0
 OffensiveStatsNew[is.null(OffensiveStatsNew)] = 0
 
+OffensiveStatsNew$X = 0
+DefensiveStatsNew$X = 0
+
+
+DefensiveStats = rbind(DefensiveStatsNew, DefensiveStats)
+OffensiveStats = rbind(OffensiveStatsNew, OffensiveStats)
+
+
+DefensiveStats[is.na(DefensiveStats)] = 0
+DefensiveStats[is.null(DefensiveStats)] = 0
+
+OffensiveStats[is.na(OffensiveStats)] = 0
+OffensiveStats[is.null(OffensiveStats)] = 0
 
 ###### Today's games ####################
 ###### Today's games ########################## Today's games ####################
