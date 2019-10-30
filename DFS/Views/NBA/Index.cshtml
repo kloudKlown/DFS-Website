@@ -50,13 +50,10 @@
 </div>
 
 
-<div class="card no-border col-md-6">
+<div class="card no-border col-md-12">
     <div class="row">
-        <div class="card-header">
-            Player Stats
-        </div>
         <div class="contianer col-md-12">
-            <div class="card-body">
+            <div class="card-body-jqgrid">
                 <table id="jqGrid"></table>
             </div>
         </div>
@@ -159,7 +156,7 @@
 
         var tabulate = function () {
             var gridColNames = ["Name", "Team", "Pos", "Usage", "Mins", "Def.R", "Off.R", "Height", "FG", "FGA",
-                "3P", "3PA", "FT", "ORB", "DRB", "TRB", "TRB %", "AST", "STL", "BLK", "TOV", "PF", "PTS"]
+                "3P", "3PA", "FT", "ORB", "DRB", "TRB", "AST", "STL", "BLK", "TOV", "PF", "PTS"]
 
             var Columnmodel = [
                 {
@@ -180,7 +177,7 @@
                 { name: 'offensiveRebound', index: 'OffensiveRebound', width: 50, align: 'center', editable: false },
                 { name: 'defensiveRebound', index: 'DefensiveRebound', width: 50, align: 'center', editable: false },
                 { name: 'totalRebound', index: 'TotalRebound', width: 50, align: 'center', editable: false, sortable: true },
-                { name: 'totalReboundPercentage', index: 'TotalReboundPercentage', width: 50, align: 'center', editable: false, sortable: true },
+                //{ name: 'totalReboundPercentage', index: 'TotalReboundPercentage', width: 50, align: 'center', editable: false, sortable: true },
                 { name: 'assists', index: 'Assists', width: 50, align: 'center', editable: false, sortable: true },
                 { name: 'steals', index: 'Steals', width: 50, align: 'center', editable: false, sortable: true },
                 { name: 'blocks', index: 'Blocks', width: 50, align: 'center', editable: false, sortable: true },
@@ -199,6 +196,8 @@
                 loadonce: false,
                 rowNum: 100,
                 height: "auto",
+                shrinkToFit: false,
+                autowidth: true,
                 repeatitems: false,
                 jsonReader: {
                     root: "data",
@@ -303,7 +302,7 @@
         }
         clearChartDetials();
 
-        date.val("2019-01-11");
+        date.val(new Date().toLocaleDateString());
         date.trigger("change");
     });
 

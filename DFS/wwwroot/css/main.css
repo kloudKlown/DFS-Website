@@ -1,4 +1,14 @@
-﻿.no-border {
+﻿
+/*
+    Jqgird CSS
+*/
+@import "UI/jqgrid.css";
+
+.card-body-jqgrid{
+    border: 1px beige groove;
+}
+
+.no-border {
     border: none;
 }
 

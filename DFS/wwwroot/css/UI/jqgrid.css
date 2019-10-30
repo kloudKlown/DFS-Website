@@ -1,0 +1,19 @@
+﻿/*
+    JQGrid CSS
+*/
+.ui-jqgrid .ui-jqgrid-hdiv {
+    background-color: #cce6ff;
+}
+
+.ui-jqgrid-sortable {
+    background-color: #cce6ff;
+    height: 25px;
+    font-size: 12pt;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+.ui-row-ltr{
+    font-size: small;
+    border: 1px black solid;
+}
