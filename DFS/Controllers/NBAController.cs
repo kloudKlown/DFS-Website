@@ -85,7 +85,7 @@
         }
 
         //[HttpPost]
-        public IActionResult GetGridData(string sidx, string sord, int page, int rows, bool _search, string filters)
+        public IActionResult GetGridData(string sidx, string sord, int page, int rows, bool _search, string filters, string name, string team)
         {
             if (HttpContext.Session.GetString("ActivePlayersList") != null)
             {
@@ -101,6 +101,16 @@
                     {
                         playerList = playerList.OrderByDescending(x => x.GetType().GetProperty(sidx).GetValue(x, null)).ToList();
                     }
+                }
+
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    playerList = playerList.FindAll(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
+                }
+
+                if (!string.IsNullOrWhiteSpace(team))
+                {
+                    playerList = playerList.FindAll(x => x.Team.ToLower().Contains(team.ToLower())).ToList();
                 }
 
                 return Json(new { data = playerList });

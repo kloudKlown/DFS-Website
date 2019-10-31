@@ -61,3 +61,4 @@ INSERT INTO NBAReferenceToDraftKings VALUES ('Nickeil AlexanderWalker', 'N. Alex
 INSERT INTO NBAReferenceToDraftKings VALUES ('Nicolxc3xb2 Melli', 'Nicolo Melli');
 INSERT INTO NBAReferenceToDraftKings VALUES ('Zion Williamson', 'Zion Williamson');
 INSERT INTO NBAReferenceToDraftKings VALUES ('Kristaps Porzingis', 'K. Porzingis');
+INSERT INTO NBAReferenceToDraftKings VALUES ('KarlAnthony Towns', 'K. Towns');

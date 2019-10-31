@@ -26,7 +26,7 @@ BEGIN
 			FL_DateTime GameDate
 		FROM
 			NBA_Player N (NOLOCK)
-			INNER JOIN NBAReferenceToDraftKings DK ON DK.DK_PlayerName = N.PlayerName
+			INNER JOIN NBAReferenceToDraftKings DK ON DK.NBARef_PlayerName = N.PlayerName
 			INNER JOIN NBA_FantasyLabs FL ON FL.Player_Name = DK.DK_PlayerName AND FL_DateTime =  @date_
 			INNER JOIN NBA_PlayerLog P ON P.PlayerName = N.PlayerName
 		WHERE 

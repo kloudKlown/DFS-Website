@@ -1,8 +1,8 @@
 DELETE FROM NBAReferenceToShotChartMap;
 
 Select 
-	Distinct Shot.PlayerName, NBARef.PlayerName From NBAShotChart Shot
-LEFT JOIN
+	Distinct Shot.PlayerName Shots, NBARef.PlayerName Ref From NBAShotChart Shot
+INNER JOIN
 	NBA_PlayerLog NBARef 
 ON
 	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(NBARef.PlayerName, '-', ''), '''',''), '.', ''),'Jr',''), 'III',''),'IV', '') =
@@ -10,14 +10,14 @@ ON
 WHERE 
 	NBARef.PlayerName is NULL;
 
---SELECT DISTINCT PlayerName FROM NBATableData where PlayerName like '%Edwards%'
+-- SELECT DISTINCT PlayerName FROM NBA_PlayerLog where PlayerName like '%Reddish%'
 
 INSERT INTO NBAReferenceToShotChartMap
 SELECT
 	Distinct Shot.PlayerName, 
 	NBARef.PlayerName 
 From 
-	NBAShotChart Shot INNER JOIN NBATableData NBARef  ON 
+	NBAShotChart Shot INNER JOIN NBA_PlayerLog NBARef  ON 
 REPLACE(REPLACE(REPLACE(REPLACE(NBARef.PlayerName, '-', ''), '''',''), '.', ''),'Jr','') = 
 REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr','')
 
@@ -30,5 +30,4 @@ INSERT INTO NBAReferenceToShotChartMap values
 ('Jakob Poeltl', 'Jakob Poltl'),
 ('Gary Payton II', 'Gary Payton'),
 ('Juancho Hernangomez', 'Juan Hernangomez'),
-('Dairis Bertans','Davis Bertans'),
-('Vince Edwards', 'Vincent Edwards')
+('Vince Edwards', 'Vincent Edwards');
