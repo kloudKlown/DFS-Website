@@ -28,5 +28,13 @@ namespace DFS.Entities
 
         public DateTime GameDate { get; set; }
 
+        public decimal Predicted { get; set; }
+
+        public string Salary { get; set; }
+
+        public decimal SalaryDifference { get; set; }
+
+        public decimal Actual { get; set; }
+
     }
 }

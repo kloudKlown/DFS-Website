@@ -155,7 +155,7 @@
         }
 
         var tabulate = function () {
-            var gridColNames = ["Name", "Team", "Pos", "Usage", "Mins", "Def.R", "Off.R", "Height", "FG", "FGA",
+            var gridColNames = ["Name", "Team", "Pos", "Predicted", "Salary", "Diff", "Actual", "Usage", "Mins", "Def.R", "Off.R", "Height", "FG", "FGA",
                 "3P", "3PA", "FT",
                 //"ORB", "DRB",
                 "TRB", "AST", "STL", "BLK",
@@ -164,10 +164,14 @@
 
             var Columnmodel = [
                 {
-                    name: 'name', index: 'Name', width: 150, align: 'center', editable: false, classes: "playerName"
+                    name: 'name', index: 'Name', width: 150, align: 'left', editable: false, classes: "playerName"
                 },
                 { name: 'team', index: 'Team', width: 50, align: 'center', editable: false },
                 { name: 'multiPosition', index: 'MultiPosition', width: 50, align: 'center', editable: false },
+                { name: 'predicted', index: 'predicted', width: 70, align: 'center', editable: false, sortable: true, search: false },
+                { name: 'salary', index: 'salary', width: 70, align: 'center', editable: false, sortable: true, search: false },
+                { name: 'salaryDifference', index: 'salaryDifference', width: 70, align: 'center', editable: false, sortable: true, search: false },
+                { name: 'actual', index: 'actual', width: 50, align: 'center', editable: false, sortable: true, search:false },
                 { name: 'usage', index: 'Usage', width: 50, align: 'center', editable: false, sortable: true, search:false },
                 { name: 'minutesPlayed', index: 'MinutesPlayed', width: 100, align: 'center', editable: false, sortable: true, search:false },
                 { name: 'defensiveRating', index: 'DefensiveRating', width: 50, align: 'center', editable: false, sortable: true, search:false },

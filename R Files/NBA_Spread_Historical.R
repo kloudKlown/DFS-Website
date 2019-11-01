@@ -258,7 +258,7 @@ dbSendQuery(con, "DELETE FROM NBA_DK_Prediction")
 
 
 
-for (variable in c(3:25)) {
+for (variable in c(3:365)) {
   DateCheck =   as.Date("2019-10-23") - variable
   allPlayers = unique(CombinedStats$PlayerName)
   

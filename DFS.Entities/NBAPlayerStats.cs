@@ -58,6 +58,5 @@ namespace DFS.Entities
         public decimal Fouls { get; set; }
 
         public decimal Points { get; set; }
-
     }
 }

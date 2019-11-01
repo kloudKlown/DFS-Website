@@ -95,13 +95,25 @@ namespace DFS.UI.Models
         public decimal Fouls { get; set; }
         
         public decimal Points { get; set; }
+
+        public decimal Predicted { get; set; }
+
+        public string Salary { get; set; }
+
+        public decimal SalaryDifference { get; set; }
+
+        public decimal Actual { get; set; }
     }
 
     public static class NBAPlayerViewModelExtend
     {
-        public static NBAPlayerViewModel SetMultiPosition(this NBAPlayerViewModel models, string position)
+        public static NBAPlayerViewModel SetMultiPosition(this NBAPlayerViewModel models, NBATeamPlayers player)
         {
-            models.MultiPosition = position;
+            models.MultiPosition = player.Player.Position;
+            models.Predicted = player.Predicted;
+            models.Salary = player.Salary;
+            models.SalaryDifference = player.SalaryDifference;
+            models.Actual = player.Actual;
             return models;
         }
     }

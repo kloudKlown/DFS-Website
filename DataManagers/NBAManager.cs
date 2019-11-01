@@ -91,9 +91,9 @@ namespace DFS.Data.Managers
 
                 foreach (var item in queryResult)
                 {
-                    result.Add(new NBATeamPlayers(item.Name, item.Position, item.Height, item.Weight, item.Team, item.GameDate));
+                    result.Add(MapNBASelectedTeamPlayers(item));
                 }
-
+                
                 return result;
             }
         }
@@ -200,7 +200,7 @@ namespace DFS.Data.Managers
                 Turnovers = item.Turnover,
                 Points = item.Points,
                 Fouls = item.Fouls
-            };
+        };
         }
         
         private NBAPlayerZoneStats MapNBAPlayerZoneStats(dynamic item)
@@ -215,6 +215,20 @@ namespace DFS.Data.Managers
                 FreeThrows = item.FreeThrows,
                 Zones = item.Zones,
                 Shot = item.Shot
+            };
+        }
+
+        private NBATeamPlayers MapNBASelectedTeamPlayers(dynamic item)
+        {
+            return new NBATeamPlayers
+            {
+                Player = new NBAPlayers(item.Name, item.Position, item.Height, item.Weight),
+                GameDate = item.GameDate,
+                Team = new NBATeam(item.Team),
+                Predicted = item.Predicted,
+                Salary = item.ActualSalary,
+                SalaryDifference = item.SalaryDiff,
+                Actual = item.Actual
             };
         }
         #endregion

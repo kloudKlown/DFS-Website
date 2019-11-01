@@ -90,8 +90,8 @@
             if (HttpContext.Session.GetString("ActivePlayersList") != null)
             {
                 List<NBAPlayerViewModel> playerList = Session.GetObject<List<NBAPlayerViewModel>>("ActivePlayersList");
-
-                if(sidx != null)
+                sidx = char.ToUpper(sidx[0]) + sidx.Substring(1);
+                if (sidx != null)
                 {
                     if (sord == "asc")
                     {
@@ -151,7 +151,7 @@
 
             activeList.AddRange(from NBAPlayerViewModel player in playerViewModel
                                 where playerList.Any(x => x.Player.Name == player.Name && x.Team.Team == player.Team)
-                                select player.SetMultiPosition(playerList.Find(x => x.Player.Name == player.Name && x.Team.Team == player.Team).Player.Position));
+                                select player.SetMultiPosition(playerList.Find(x => x.Player.Name == player.Name && x.Team.Team == player.Team) ));
 
             return (active: activeList, inactive: inactiveList);
         }
