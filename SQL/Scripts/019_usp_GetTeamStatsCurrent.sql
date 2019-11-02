@@ -1,4 +1,4 @@
- -- EXEC usp_GetTeamStatsCurrent @date_ = '2019-10-24', @teamName_ = 'ATL', @oppName_ = 'DET'
+ -- EXEC usp_GetTeamStatsCurrent @date_ = '2019-11-02', @teamName_ = 'CHO', @oppName_ = 'DET'
 DROP PROCEDURE IF EXISTS usp_GetTeamStatsCurrent
 GO
 
@@ -15,7 +15,7 @@ BEGIN
 		DISTINCT
 			PL.PlayerName, 
 			@teamName_ Team,		
-			N.Position PlayerPosition,
+			FI.PlayerPosition,
 			AVG(N.Height) Height,
 			AVG(N.[Weight]) [Weight],
 			TIMEFROMPARTS(0, ROUND(AVG(PL.MP/60), 0, 0), (AVG(CAST(PL.MP as INT)) - ROUND(AVG(CAST(PL.MP as INT))/60, 0, 0)*60), 0, 0) MinutesPlayed,
@@ -42,18 +42,20 @@ BEGIN
 		INNER JOIN NBA_PlayerLog PL ON PL.PlayerName = DK.NBARef_PlayerName
 		INNER JOIN NBA_PlayerLog_Advanced PLA ON PLA.PlayerName = PL.PlayerName
 		INNER JOIN NBA_Player N ON N.PlayerName = PLA.PlayerName
+		INNER JOIN NBA_PlayerLog_Advanced FI ON Fi.PlayerName = PL.PlayerName
 	WHERE
 		FL_DateTime = @date_
 		AND	PL.[Date] in (SELECT DISTINCT TOP 60 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )					
+		AND FI.[Date] in (SELECT DISTINCT TOP 1 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )
 		AND FL.Team = @teamName_
-		GROUP BY PL.PlayerName, N.Position
+		GROUP BY PL.PlayerName, FI.PlayerPosition
 		ORDER BY MinutesPlayed DESC
 
 	SELECT
 		DISTINCT
 			PL.PlayerName, 
 			@oppName_ Team,		
-			N.Position PlayerPosition,
+			FI.PlayerPosition,
 			AVG(N.Height) Height,
 			AVG(N.[Weight]) [Weight],
 			TIMEFROMPARTS(0, ROUND(AVG(PL.MP/60), 0, 0), (AVG(CAST(PL.MP as INT)) - ROUND(AVG(CAST(PL.MP as INT))/60, 0, 0)*60), 0, 0) MinutesPlayed,
@@ -80,11 +82,13 @@ BEGIN
 		INNER JOIN NBA_PlayerLog PL ON PL.PlayerName = DK.NBARef_PlayerName
 		INNER JOIN NBA_PlayerLog_Advanced PLA ON PLA.PlayerName = PL.PlayerName
 		INNER JOIN NBA_Player N ON N.PlayerName = PLA.PlayerName
+		INNER JOIN NBA_PlayerLog_Advanced FI ON FI.PlayerName = PL.PlayerName
 	WHERE
 		FL_DateTime = @date_
 		AND	PL.[Date] in (SELECT DISTINCT TOP 60 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )					
+		AND FI.[Date] in (SELECT DISTINCT TOP 1 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )
 		AND FL.Team = @oppName_
-		GROUP BY PL.PlayerName, N.Position
+		GROUP BY PL.PlayerName, FI.PlayerPosition
 		ORDER BY MinutesPlayed DESC
 
 END

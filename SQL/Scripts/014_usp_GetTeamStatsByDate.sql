@@ -41,7 +41,7 @@ BEGIN
 		CAST(AVG(TOV) AS NUMERIC(8,2)) 'Turnover'
 	FROM
 		NBA_PlayerLog PL INNER JOIN NBA_Player P ON P.PlayerName = PL.PlayerName	
-		INNER JOIN NBA_PlayerLog_Advanced PLA ON PLA.PlayerName = PL.PlayerName AND PLA.[Date] = PL.[Date]
+		INNER JOIN NBA_PlayerLog_Advanced PLA ON PLA.PlayerName = PL.PlayerName AND PLA.[Date] = PL.[Date]		
 	WHERE 
 		PL.[Date] in (SELECT TOP 5 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )					
 		and PL.Tm = @teamName_

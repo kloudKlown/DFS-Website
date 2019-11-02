@@ -90,9 +90,10 @@
             if (HttpContext.Session.GetString("ActivePlayersList") != null)
             {
                 List<NBAPlayerViewModel> playerList = Session.GetObject<List<NBAPlayerViewModel>>("ActivePlayersList");
-                sidx = char.ToUpper(sidx[0]) + sidx.Substring(1);
+                
                 if (sidx != null)
                 {
+                    sidx = char.ToUpper(sidx[0]) + sidx.Substring(1);
                     if (sord == "asc")
                     {
                         playerList = playerList.OrderBy(x => x.GetType().GetProperty(sidx).GetValue(x, null)).ToList();
