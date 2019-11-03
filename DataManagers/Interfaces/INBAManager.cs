@@ -22,6 +22,8 @@ namespace DFS.Data.Managers.Interfaces
         IEnumerable<NBAPlayerStats> GetGameStatsByDate(DateTime date, string teamName, string oppositionName);
 
         IEnumerable<NBAPlayerZoneStats> GetPlayerZoneStats(string player);
-        
+
+        IEnumerable<NBAPlayerZoneStats> GetPlayerZoneStats(string team);
+
     }
 }

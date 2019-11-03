@@ -51,7 +51,6 @@
             return Json(JsonConvert.SerializeObject(nbaGames));
         }
 
-
         [HttpPost]
         public IActionResult GetGameStatsByDate(DateTime date, string team, string opp)
         {
@@ -123,14 +122,35 @@
         public IActionResult GetPlayerZones(string name)
         {
             var zones = NBAService.GetPlayerZoneStats(name);
-            zones = zones.OrderByDescending(x => x.GameDate).Take(200).ToList();
+            zones = zones.OrderByDescending(x => x.GameDate).Take(50).ToList();
             var groupedR = zones.GroupBy(x => x.Zones, x => x.Shot);
 
             var result = groupedR.Select(x => new {
+                Player = name,
                 ShotType = x.Key,
                 MadeShots = x.ToList().FindAll(v => v == "Made Shot").ToList().Count,
                 TotalShots = x.ToList().Count,
                 ZonePer = (x.ToList().FindAll(v => v == "Made Shot").ToList().Count * 100)  / (x.ToList().Count + 1)
+            }).ToList();
+
+            result = result.OrderByDescending(x => x.TotalShots).ToList();
+
+
+            return Json(new { shotZone = JsonConvert.SerializeObject(result) });
+        }
+
+        public IActionResult GetTeamZones(List<string> nameList, string team)
+        {
+            var zones = NBAService.GetPlayerZoneStats(string.Join(",", nameList));
+            zones = zones.OrderByDescending(x => x.GameDate).Take(300).ToList();
+            var groupedR = zones.GroupBy(x => x.Zones, x => x.Shot);
+
+            var result = groupedR.Select(x => new {
+                Team = team,
+                ShotType = x.Key,
+                MadeShots = x.ToList().FindAll(v => v == "Made Shot").ToList().Count,
+                TotalShots = x.ToList().Count,
+                ZonePer = (x.ToList().FindAll(v => v == "Made Shot").ToList().Count * 100) / (x.ToList().Count + 1)
             }).ToList();
 
             result = result.OrderByDescending(x => x.TotalShots).ToList();

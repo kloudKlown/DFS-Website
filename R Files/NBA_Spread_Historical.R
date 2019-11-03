@@ -167,8 +167,8 @@ for (player in allPlayers) {
                               & as.Date(NBAAllData$Date) > (as.Date(DateLevels[date]) - 300)
     )  
     subsetPlayerData = subsetPlayerData[order(subsetPlayerData$Date , decreasing = TRUE ),]
-    if(nrow(subsetPlayerData) > 50){
-      subsetPlayerData = subsetPlayerData[0:50,]
+    if(nrow(subsetPlayerData) > 10){
+      subsetPlayerData = subsetPlayerData[0:10,]
     }
     
     currentGame = subset(NBAAllData, NBAAllData$PlayerName == player 
@@ -233,7 +233,7 @@ OffensiveStats = read.csv('OffensiveStats_All.csv')
 DefensiveStats = read.csv('DefensiveStats_All.csv')
 
 ## varclus Batters
-spearmanP = varclus(as.matrix(CombinedStats[,c("FG.x","ThreeP.x",
+spearmanP = varclus(as.matrix(CombinedStats[,c("FG.x","ThreeP.x","MP",
                                                "FT.x",
                                                "TRB.x","STL.x","TOV.x","PF.x",
                                                "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
@@ -254,12 +254,10 @@ write.csv(CombinedStats, file = "CombinedStats.csv")
 
 
 allPlayers = unique(CombinedStats$PlayerName)
-dbSendQuery(con, "DELETE FROM NBA_DK_Prediction")
-
 
 
 for (variable in c(3:365)) {
-  DateCheck =   as.Date("2019-10-23") - variable
+  DateCheck =   as.Date("2019-11-02") - variable
   allPlayers = unique(CombinedStats$PlayerName)
   
   Results = data.frame( RFPred = numeric(), player = factor(), position = factor(), salary = numeric(), 
@@ -294,7 +292,7 @@ for (variable in c(3:365)) {
       next;
     }
     
-    rf = randomForest(Data_Cleaned_Train[,c("FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
+    rf = randomForest(Data_Cleaned_Train[,c("MP","FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
                                             "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
                                             "STLPer.x","BLKPer.x","TOVPer.x","USGPer.x","ORTGPer.x","DRTGPer.x",
                                             "ThreeP.y","FT.y","AST.y","STL.y",
@@ -303,7 +301,7 @@ for (variable in c(3:365)) {
                                             "TRBOpp","ASTOpp","STLOpp","TOVOpp" )], 
                       y = Data_Cleaned_Train[,c("DKP")], ntree=50 ,type='regression')
     
-    RFPred = predict( rf,  Data_Cleaned_Test[,c("FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
+    RFPred = predict( rf,  Data_Cleaned_Test[,c("MP","FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
                                                 "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
                                                 "STLPer.x","BLKPer.x","TOVPer.x","USGPer.x","ORTGPer.x","DRTGPer.x",
                                                 "ThreeP.y","FT.y","AST.y","STL.y",
@@ -311,7 +309,7 @@ for (variable in c(3:365)) {
                                                 "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp","ThreePAOpp","FTAOpp",
                                                 "TRBOpp","ASTOpp","STLOpp","TOVOpp")] ,type = c("response") )
 
-    rfTP = randomForest(Data_Cleaned_Train[,c("FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
+    rfTP = randomForest(Data_Cleaned_Train[,c("MP","FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
                                             "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
                                             "STLPer.x","BLKPer.x","TOVPer.x","USGPer.x","ORTGPer.x","DRTGPer.x",
                                             "ThreeP.y","FT.y","AST.y","STL.y",
@@ -320,7 +318,7 @@ for (variable in c(3:365)) {
                                             "TRBOpp","ASTOpp","STLOpp","TOVOpp" )], 
                       y = Data_Cleaned_Train[,c("TotalPoints")], ntree=50 ,type='regression')
     
-    RFPredTP = predict( rfTP,  Data_Cleaned_Test[,c("FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
+    RFPredTP = predict( rfTP,  Data_Cleaned_Test[,c("MP","FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
                                                 "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
                                                 "STLPer.x","BLKPer.x","TOVPer.x","USGPer.x","ORTGPer.x","DRTGPer.x",
                                                 "ThreeP.y","FT.y","AST.y","STL.y",

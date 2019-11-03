@@ -4,8 +4,17 @@
 */
 @import "UI/jqgrid.css";
 
+.noNewLine{
+    white-space: nowrap;
+    display: inline-block;
+}
+
 .card-body-jqgrid{
     border: 1px beige groove;
+}
+
+.no-padding{
+    padding: 1px;
 }
 
 .no-border {

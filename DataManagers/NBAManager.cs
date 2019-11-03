@@ -170,6 +170,30 @@ namespace DFS.Data.Managers
             }
         }
 
+
+        public IEnumerable<NBAPlayerZoneStats> GetTeamZoneStats(string player)
+        {
+            List<NBAPlayerZoneStats> result = new List<NBAPlayerZoneStats>();
+            using (IDbConnection connection = GetConnection(NBADatabase))
+            {
+                var queryResult = connection.Query("usp_GetZoneStats_Team",
+                        new
+                        {
+                            @player_ = player
+                        },
+                        commandType: CommandType.StoredProcedure);
+
+
+                // Result Set Team
+                foreach (var item in queryResult)
+                {
+                    result.Add(MapNBAPlayerZoneStats(item));
+                }
+
+                return result;
+            }
+        }
+
         #region Private Helpers
 
         private NBAPlayerStats MapNBAPLayerStats(dynamic item)
