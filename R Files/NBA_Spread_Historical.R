@@ -28,7 +28,7 @@ NBAAllData = NBATableData
 ############### Team Defensive stats ######################
 ######################################################
 DefensiveStats = data.frame(matrix(ncol = 38))
-colnames(DefensiveStats) = c("Tm","PlayerPosition" ,"Date","FG","FGA","ThreeP","ThreePA",
+colnames(DefensiveStats) = c("Tm","Pos" ,"Date","FG","FGA","ThreeP","ThreePA",
                              "FT","FTA","ORB","DRB","TRB","AST",
                              "STL","BLK","TOV","PF", "PTS", "TSPer","eFGPer","ORBPer",
                              "DRBPer","TRBPer","ASTPer","STLPer","BLKPer","TOVPer","USGPer","ORTGPer","DRTGPer",
@@ -132,7 +132,7 @@ write.csv(DefensiveStats, file = "DefensiveStats_All.csv")
 ######################################################
 ######### Offensive Stats
 OffensiveStats = data.frame(matrix(ncol=38))
-colnames(OffensiveStats) = c("PlayerName", "Tm", "PlayerPosition" , "Date", "Opp",  "TotalPoints","DKP",
+colnames(OffensiveStats) = c("PlayerName", "Tm", "Pos" , "Date", "Opp",  "TotalPoints","DKP",
                              "Home","MP",
                              "FG","FGA","ThreeP","ThreePA","FT","FTA","ORB","DRB",
                              "TRB","AST","STL","BLK","TOV","PF","TSPer","eFGPer","ORBPer",
@@ -180,7 +180,7 @@ for (player in allPlayers) {
     
     temp$Date = DateLevels[date]
     temp$PlayerName = player
-    temp$PlayerPosition = as.character(subsetPlayerData$Position[1])
+    temp$Pos = as.character(subsetPlayerData$Position[1])
     temp$Tm = as.character(subsetPlayerData$Team[1])
     temp$Opp = as.character(currentGame$Opp[1])     
     temp$MP = mean(as.numeric(subsetPlayerData$MP))/60
@@ -247,7 +247,7 @@ plot(spearmanP)
 abline(h=0.3)
 
 ################## Results ###############################
-CombinedStats = merge(x = OffensiveStats, y = DefensiveStats, by.x = c("Date", "PlayerPosition", "Tm"), 
+CombinedStats = merge(x = OffensiveStats, y = DefensiveStats, by.x = c("Date", "Pos", "Tm"), 
                       by.y = c("Date", "Pos", "Tm") )
 
 write.csv(CombinedStats, file = "CombinedStats.csv")

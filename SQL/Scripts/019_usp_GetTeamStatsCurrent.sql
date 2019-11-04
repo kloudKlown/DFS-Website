@@ -1,4 +1,4 @@
- -- EXEC usp_GetTeamStatsCurrent @date_ = '2019-11-02', @teamName_ = 'CHO', @oppName_ = 'DET'
+ -- EXEC usp_GetTeamStatsCurrent @date_ = '2019-11-3', @teamName_ = 'SAS', @oppName_ = 'TOR'
 DROP PROCEDURE IF EXISTS usp_GetTeamStatsCurrent
 GO
 
@@ -46,7 +46,7 @@ BEGIN
 	WHERE
 		FL_DateTime = @date_
 		AND	PL.[Date] in (SELECT DISTINCT TOP 60 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )					
-		AND FI.[Date] in (SELECT DISTINCT TOP 1 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )
+		AND FI.[Date] in (SELECT DISTINCT TOP 5 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )
 		AND FL.Team = @teamName_
 		GROUP BY PL.PlayerName, FI.PlayerPosition
 		ORDER BY MinutesPlayed DESC
@@ -86,7 +86,7 @@ BEGIN
 	WHERE
 		FL_DateTime = @date_
 		AND	PL.[Date] in (SELECT DISTINCT TOP 60 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )					
-		AND FI.[Date] in (SELECT DISTINCT TOP 1 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )
+		AND FI.[Date] in (SELECT DISTINCT TOP 5 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )
 		AND FL.Team = @oppName_
 		GROUP BY PL.PlayerName, FI.PlayerPosition
 		ORDER BY MinutesPlayed DESC

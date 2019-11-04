@@ -122,10 +122,10 @@
                     clearChartDetials();
                     $("#jqGrid").trigger("reloadGrid");
 
-                    tabulate();
+                    mainGrid();
                     FillChartDetails(data.activePlayerList);
                     FillInactivePlayers(data.inactivePlayersList, params.team);
-                    GetTeamZoneData(data.activePlayerList, params.team);
+                    GetTeamZoneData(data.activePlayerList, params.team, params.opp);
                 },
                 error: function () {
 
@@ -133,10 +133,11 @@
             });
         });
 
-        var GetTeamZoneData = function (playerList, team) {
+        var GetTeamZoneData = function (playerList, team, opp) {
             var params = {};
             params.nameList = [];
             params.team = team;
+            params.opp = opp;
 
             $.each(playerList, function (i, d) {
                 if (d.team == team) {
@@ -145,7 +146,7 @@
             });
 
             $.ajax({
-                url: "/NBA/GetTeamZones",
+                url: "/NBA/GetPlayerListZones",
                 type: "POST",
                 data: params,
                 success: function (data) {
@@ -186,7 +187,7 @@
             });
         }
 
-        var tabulate = function () {
+        var mainGrid = function () {
             var gridColNames = ["Name", "Team", "Pos", "Predicted", "Salary", "Diff", "Actual", "Usage", "Mins", "Def.R", "Off.R", "Height", "FG", "FGA",
                 "3P", "3PA", "FT",
                 //"ORB", "DRB",
@@ -271,7 +272,7 @@
                 type: "POST",
                 data: params,
                 success: function (data) {
-                    tabulateShotZones(JSON.parse(data.shotZone), params["name"]);
+                    tabulateShotZones(JSON.parse(data.shotZone));
                 },
                 error: function () {
 
@@ -401,7 +402,7 @@
                 type: "POST",
                 data: params,
                 success: function (data) {
-                    tabulateShotZones(JSON.parse(data.shotZone), params["name"]);
+                    tabulateShotZones(JSON.parse(data.shotZone));
                 },
                 error: function () {
 

@@ -113,5 +113,25 @@ namespace DFS.Services.Interfaces
                 throw e;
             }
         }
+
+        public List<NBAPlayerZoneStats> GetTeamZoneStats(string team)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(team))
+                {
+                    return NBAManager.GetTeamZoneStats(team).Select(x => x).ToList();
+                }
+                else
+                {
+                    return new List<NBAPlayerZoneStats>();
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

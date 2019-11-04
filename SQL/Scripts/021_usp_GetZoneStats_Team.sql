@@ -1,11 +1,11 @@
--- EXEC usp_GetZoneStats_Player  @player_ = 'P.J. Tucker'
+-- EXEC usp_GetZoneStats_Team  @team_ = 'LAL'
 
-DROP PROCEDURE IF EXISTS usp_GetZoneStats_Player
+DROP PROCEDURE IF EXISTS usp_GetZoneStats_Team
 GO
 
-CREATE PROCEDURE usp_GetZoneStats_Player
+CREATE PROCEDURE usp_GetZoneStats_Team
 (
-	@player_ NVARCHAR(100) NULL
+	@team_ NVARCHAR(100) NULL
 )
 AS
 BEGIN
@@ -55,7 +55,7 @@ BEGIN
 		INNER JOIN NBAReferenceToShotChartMap Ref ON Ref.ShotChart_PlayerName = Shot.PlayerName
 		INNER JOIN NBA_PlayerLog NBA  ON Ref.NBARef_PlayerName = NBA.PlayerName and Shot.GameDate = NBA.[Date]
 	WHERE
-	NBA.PlayerName in ( Select  value from  STRING_SPLIT(@player_, ',') )
+	NBA.Opp = @team_
 	) A
 	Group BY 
 		A.PlayerName,A.PlayerPosition, A.Shot, A.Zones, A.FreeThrows, A.GameDate, A.PlayerTeam, A.Opp

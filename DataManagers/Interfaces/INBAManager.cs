@@ -23,7 +23,7 @@ namespace DFS.Data.Managers.Interfaces
 
         IEnumerable<NBAPlayerZoneStats> GetPlayerZoneStats(string player);
 
-        IEnumerable<NBAPlayerZoneStats> GetPlayerZoneStats(string team);
+        IEnumerable<NBAPlayerZoneStats> GetTeamZoneStats(string team);
 
     }
 }

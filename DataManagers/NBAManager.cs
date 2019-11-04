@@ -179,7 +179,7 @@ namespace DFS.Data.Managers
                 var queryResult = connection.Query("usp_GetZoneStats_Team",
                         new
                         {
-                            @player_ = player
+                            @team_ = player
                         },
                         commandType: CommandType.StoredProcedure);
 

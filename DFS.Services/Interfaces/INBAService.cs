@@ -19,6 +19,8 @@ namespace DFS.Services.Interfaces
 
         List<NBAPlayerZoneStats> GetPlayerZoneStats(string playerName);
 
+        List<NBAPlayerZoneStats> GetTeamZoneStats(string team);
+
     }
 
 }
