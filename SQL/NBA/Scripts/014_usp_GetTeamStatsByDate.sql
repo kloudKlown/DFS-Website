@@ -1,4 +1,4 @@
- -- EXEC usp_GetTeamStatsByDate @date_ = '2019-10-22', @teamName_ = 'NOP', @oppName_ = 'TOR'
+ -- EXEC usp_GetTeamStatsByDate @date_ = '2019-11-3', @teamName_ = 'SAS', @oppName_ = 'TOR'
 DROP PROCEDURE IF EXISTS usp_GetTeamStatsByDate
 GO
 

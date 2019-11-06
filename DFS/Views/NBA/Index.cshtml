@@ -6,18 +6,16 @@
 }
 
 <div class="card no-border col-md-12">
-    <div class="card-header">
-        Games Today
+    <div class="card-header text-white bg-dark">
+        <h4>Player Projections</h4>
     </div>
-    <div class="card-body form-group row col-md-12">
-        <div class="row col-md-12">
-            <div class="col-md-12">
-                <label class="col-md-4">
-                    Game Date
-                </label>
-                <input type="text" id="datepicker" />
-                <span class="fa fa-calendar-alt fa-cal"></span>
-            </div>
+    <div class="card-body form-group row col-md-6">
+        <div class="col-md-12">
+            <label class="col-md-3">
+                Game Date
+            </label>
+            <input type="text" id="datepicker" />
+            <span class="fa fa-calendar-alt fa-cal"></span>
         </div>
     </div>
     <div class="col-md-12 gamepicker" id="gamesList">
@@ -32,26 +30,19 @@
 </div>
 
 <partial name="_NBACourtPartial" />
-
-<hr />
-<hr />
-
-<div id="ZoneChart" class="noNewLine no-padding">
+<br />
+<div id="ZoneChart" class="col-md-12 noNewLine no-padding">
     <div class="card no-border col-md-6 noNewLine no-padding">
-        <div class="col-md-6">
-            <div class="col-md-12">
-                <div class="card-body">
-                    <table id="playerShotZone"></table>
-                </div>
+        <div class="col-md-12">
+            <div class="card-body-jqgrid col-md-12">
+                <table id="playerShotZone"></table>
             </div>
         </div>
     </div>
     <div class="card no-border col-md-6 noNewLine no-padding">
-        <div class="col-md-6">
-            <div class="col-md-12">
-                <div class="card-body">
-                    <table id="playerTeamZone"></table>
-                </div>
+        <div class="col-md-12">
+            <div class="card-body-jqgrid col-md-12">
+                <table id="playerTeamZone"></table>
             </div>
         </div>
     </div>
@@ -68,6 +59,64 @@
 </div>
 
 <script>
+    var gridPlayerCoulmns = [
+                { name: 'Player', index: 'Player', width: 150, align: 'left', editable: false },
+                { name: 'ShotType', index: 'ShotType', width: 100, align: 'right', editable: false },
+                { name: 'MadeShots', index: 'MadeShots', width: 100, align: 'right', editable: false },
+                { name: 'TotalShots', index: 'TotalShots', width: 100, align: 'right', editable: false },
+                { name: 'ZonePer', index: 'ZonePer', width: 100, align: 'right', editable: false, sortable: true }
+            ];
+    var gridPlayerCoulmnNames = ["Player", "Shot Type", "Shots Made", "Shots Taken", "Percentage"];
+    var gridTeamColumnNames = ["Team", "Shot Type", "Shots Made", "Shots Taken", "Percentage"];
+    var gridTeamColumn = [
+                { name: 'Team', index: 'Team', width: 50, align: 'left', editable: false },
+                { name: 'ShotType', index: 'ShotType', width: 100, align: 'right', editable: false },
+                { name: 'MadeShots', index: 'MadeShots', width: 100, align: 'right', editable: false },
+                { name: 'TotalShots', index: 'TotalShots', width: 100, align: 'right', editable: false },
+                { name: 'ZonePer', index: 'ZonePer', width: 100, align: 'right', editable: false, sortable: true }
+            ];
+    var playerStatColumnNames = ["Name", "Team", "Pos", "Proj", "Salary", "Diff", "Actual", "Usage", "Mins", "Def.R", "Off.R", "Height", "FG", "FGA",
+                "3P", "3PA", "FT",
+                //"ORB", "DRB",
+                "TRB", "AST", "STL", "BLK",
+                //"TOV", "PF",
+                "PTS"]
+
+    var playerStatColumn = [
+                {
+                    name: 'name', index: 'Name', width: 180, align: 'left', editable: false, classes: "playerName"
+                },
+                { name: 'team', index: 'Team', width: 50, align: 'right', editable: false },
+                { name: 'multiPosition', index: 'MultiPosition', width: 50, align: 'right', editable: false },
+                { name: 'predicted', index: 'predicted', width: 70, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'salary', index: 'salary', width: 70, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'salaryDifference', index: 'salaryDifference', width: 70, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'actual', index: 'actual', width: 50, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'usage', index: 'Usage', width: 80, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'minutesPlayed', index: 'MinutesPlayed', width: 100, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'defensiveRating', index: 'DefensiveRating', width: 80, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'offensiveRating', index: 'OffensiveRating', width: 80, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'height', index: 'Height', width: 80, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'fieldGoal', index: 'FieldGoal', width: 50, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'fieldGoalAttempted', index: 'FieldGoalAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'threePointer', index: 'ThreePointer', width: 50, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'threePointerAttempted', index: 'ThreePointerAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'freeThrow', index: 'FreeThrow', width: 50, align: 'right', editable: false, sortable: true, search: false },
+                //{ name: 'offensiveRebound', index: 'OffensiveRebound', width: 50, align: 'center', editable: false },
+                //{ name: 'defensiveRebound', index: 'DefensiveRebound', width: 50, align: 'center', editable: false },
+                { name: 'totalRebound', index: 'TotalRebound', width: 50, align: 'right', editable: false, sortable: true, search: false },
+                //{ name: 'totalReboundPercentage', index: 'TotalReboundPercentage', width: 50, align: 'center', editable: false, sortable: true },
+                { name: 'assists', index: 'Assists', width: 50, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'steals', index: 'Steals', width: 50, align: 'right', editable: false, sortable: true, search: false },
+                { name: 'blocks', index: 'Blocks', width: 50, align: 'right', editable: false, sortable: true, search: false },
+                //{ name: 'turnovers', index: 'Turnovers', width: 50, align: 'center', editable: false, sortable: true },
+                //{ name: 'fouls', index: 'Fouls', width: 50, align: 'center', editable: false, sortable: true },
+                { name: 'points', index: 'Points', width: 50, align: 'right', editable: false, sortable: true, search: false }
+            ];
+
+
+
+
     $(function () {
         var date = $("#datepicker");
         var gamesList = $("#gamesList");
@@ -158,75 +207,7 @@
             });
         }
 
-        var tabulateShotZones = function (shotData) {
-          var gridColNames = ["Player", "Shot Type", "Shots Made", "Shots Taken", "Percentage"]
-
-            $("#playerShotZone").jqGrid('setGridParam',
-                {
-                    data: shotData
-                })
-                .trigger("reloadGrid");
-
-            var Columnmodel = [
-                { name: 'Player', index: 'Player', width: 100, align: 'center', editable: false },
-                { name: 'ShotType', index: 'ShotType', width: 150, align: 'left', editable: false },
-                { name: 'MadeShots', index: 'MadeShots', width: 100, align: 'right', editable: false },
-                { name: 'TotalShots', index: 'TotalShots', width: 100, align: 'right', editable: false },
-                { name: 'ZonePer', index: 'ZonePer', width: 100, align: 'right', editable: false, sortable: true }
-            ];
-
-            $("#playerShotZone").jqGrid({
-                colNames: gridColNames,
-                colModel: Columnmodel,
-                datatype: "local",
-                data: shotData,
-                gridview: true,
-                loadonce: false,
-                rowNum: 100,
-                height: "auto"
-            });
-        }
-
         var mainGrid = function () {
-            var gridColNames = ["Name", "Team", "Pos", "Predicted", "Salary", "Diff", "Actual", "Usage", "Mins", "Def.R", "Off.R", "Height", "FG", "FGA",
-                "3P", "3PA", "FT",
-                //"ORB", "DRB",
-                "TRB", "AST", "STL", "BLK",
-                //"TOV", "PF",
-                "PTS"]
-
-            var Columnmodel = [
-                {
-                    name: 'name', index: 'Name', width: 150, align: 'left', editable: false, classes: "playerName"
-                },
-                { name: 'team', index: 'Team', width: 50, align: 'center', editable: false },
-                { name: 'multiPosition', index: 'MultiPosition', width: 50, align: 'center', editable: false },
-                { name: 'predicted', index: 'predicted', width: 70, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'salary', index: 'salary', width: 70, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'salaryDifference', index: 'salaryDifference', width: 70, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'actual', index: 'actual', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'usage', index: 'Usage', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'minutesPlayed', index: 'MinutesPlayed', width: 100, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'defensiveRating', index: 'DefensiveRating', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'offensiveRating', index: 'OffensiveRating', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'height', index: 'Height', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'fieldGoal', index: 'FieldGoal', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'fieldGoalAttempted', index: 'FieldGoalAttempted', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'threePointer', index: 'ThreePointer', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'threePointerAttempted', index: 'ThreePointerAttempted', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'freeThrow', index: 'FreeThrow', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                //{ name: 'offensiveRebound', index: 'OffensiveRebound', width: 50, align: 'center', editable: false },
-                //{ name: 'defensiveRebound', index: 'DefensiveRebound', width: 50, align: 'center', editable: false },
-                { name: 'totalRebound', index: 'TotalRebound', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                //{ name: 'totalReboundPercentage', index: 'TotalReboundPercentage', width: 50, align: 'center', editable: false, sortable: true },
-                { name: 'assists', index: 'Assists', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'steals', index: 'Steals', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                { name: 'blocks', index: 'Blocks', width: 50, align: 'center', editable: false, sortable: true, search: false },
-                //{ name: 'turnovers', index: 'Turnovers', width: 50, align: 'center', editable: false, sortable: true },
-                //{ name: 'fouls', index: 'Fouls', width: 50, align: 'center', editable: false, sortable: true },
-                { name: 'points', index: 'Points', width: 50, align: 'center', editable: false, sortable: true, search: false }
-            ];
-
             $("#jqGrid").jqGrid({
                 prmNames: {
                     _search: true,
@@ -241,8 +222,8 @@
                     team: function () { return $("#gs_jqGrid_team").val() },
                 },
                 url: "/NBA/GetGridData",
-                colNames: gridColNames,
-                colModel: Columnmodel,
+                colNames: playerStatColumnNames,
+                colModel: playerStatColumn,
                 pager: '#shotPager',
                 datatype: "json",
                 gridview: true,
@@ -336,25 +317,10 @@
         }
 
         var tabulateTeamShotZones = function (shotData) {
-            var gridColNames = ["Team", "Shot Type", "Shots Made", "Shots Taken", "Percentage"]
-
-            $("#playerTeamZone").jqGrid('setGridParam',
-                {
-                    data: shotData
-                })
-                .trigger("reloadGrid");
-
-            var Columnmodel = [
-                { name: 'Team', index: 'Team', width: 50, align: 'left', editable: false },
-                { name: 'ShotType', index: 'ShotType', width: 150, align: 'left', editable: false },
-                { name: 'MadeShots', index: 'MadeShots', width: 100, align: 'right', editable: false },
-                { name: 'TotalShots', index: 'TotalShots', width: 100, align: 'right', editable: false },
-                { name: 'ZonePer', index: 'ZonePer', width: 100, align: 'right', editable: false, sortable: true }
-            ];
 
             $("#playerTeamZone").jqGrid({
-                colNames: gridColNames,
-                colModel: Columnmodel,
+                colNames: gridTeamColumnNames,
+                colModel: gridTeamColumn,
                 datatype: "local",
                 data: shotData,
                 gridview: true,
@@ -362,6 +328,12 @@
                 rowNum: 100,
                 height: "auto"
             });
+
+            $("#playerTeamZone").jqGrid('setGridParam',
+                {
+                    data: shotData
+                })
+                .trigger("reloadGrid");
         };
 
         var clearChartDetials = function () {
@@ -382,6 +354,25 @@
 
             court.find(String(idList)).text("")
         }
+        
+        var tabulateShotZones = function (shotData) {
+            $("#playerShotZone").jqGrid('GridUnload');
+            $("#playerShotZone").jqGrid('setGridParam', {
+                data: shotData
+            }).trigger("reloadGrid");
+
+            $("#playerShotZone").jqGrid({
+                colNames: gridPlayerCoulmnNames,
+                colModel: gridPlayerCoulmns,
+                datatype: "local",
+                data: shotData,
+                gridview: true,
+                loadonce: false,
+                rowNum: 100,
+                height: "auto"
+            });
+        }
+
         clearChartDetials();
 
         date.val(new Date().toLocaleDateString());
@@ -391,7 +382,6 @@
     // For players spawned in grid after ajaxStop rebind playerName action
     $(document).ajaxStop(function () {
         var playerName = $(".playerName");
-
         playerName.on("click", function (e) {
             var params = {};
             params["name"] = $(e.target).text().split("(")[0];
@@ -411,26 +401,15 @@
         });
 
 
-        var tabulateShotZones = function (shotData) {
-            var gridColNames = ["Player", "Shot Type", "Shots Made", "Shots Taken", "Percentage"]
-
-            $("#playerShotZone").jqGrid('setGridParam',
-                {
-                    data: shotData
-                })
-                .trigger("reloadGrid");
-
-            var Columnmodel = [
-                { name: 'Player', index: 'Player', width: 100, align: 'center', editable: false },
-                { name: 'ShotType', index: 'ShotType', width: 150, align: 'left', editable: false },
-                { name: 'MadeShots', index: 'MadeShots', width: 100, align: 'right', editable: false },
-                { name: 'TotalShots', index: 'TotalShots', width: 100, align: 'right', editable: false },
-                { name: 'ZonePer', index: 'ZonePer', width: 100, align: 'right', editable: false, sortable: true }
-            ];
+        var tabulateShotZones = function (shotData) {            
+            $("#playerShotZone").jqGrid('GridUnload');
+            $("#playerShotZone").jqGrid('setGridParam', {
+                data: shotData
+            }).trigger("reloadGrid");
 
             $("#playerShotZone").jqGrid({
-                colNames: gridColNames,
-                colModel: Columnmodel,
+                colNames: gridPlayerCoulmnNames,
+                colModel: gridPlayerCoulmns,
                 datatype: "local",
                 data: shotData,
                 gridview: true,

@@ -4,13 +4,16 @@
 */
 @import "UI/jqgrid.css";
 
+
+
 .noNewLine{
     white-space: nowrap;
     display: inline-block;
 }
 
 .card-body-jqgrid{
-    border: 1px beige groove;
+    margin-top: 5px;
+    margin-bottom: 2px;
 }
 
 .no-padding{
@@ -84,16 +87,19 @@
 .NBACourt {
     background: url('../images/NBA Court.jpg') no-repeat center;
     background-position: center;
+    background-color: #B6BABA;
     background-size: cover;
     height: 600px;
     background-size: 65% 100%;
     margin: 0px;
+    padding: 20px;
     text-align: center;
-}
+    box-shadow: inset 0 0 0 11px white;
+}   
     .NBACourt .playerBox {
         border: 2px groove;
         width: 80%;
-        height: 80%;
+        height: 85%;
         position: relative;
         background-color: #e4e4e4;
     }
@@ -113,6 +119,63 @@
         right: -15%;
     }
 
+
 /*
-    Player Table
+    Body
 */
+
+body {
+    background-color: #C9DAF7;
+}
+
+.card-header {
+    margin-top: 10px;
+    border-radius: 2px !important;
+}
+
+
+/*
+    Header
+*/
+.navigationHeader {
+    background-color: #508FBB !important;
+    font-weight: bolder;
+    font-size: large;
+}
+
+.text-dark{
+    color: white !important;
+}
+/*
+    Container
+*/
+.container {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 940px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 1120px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 1360px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1440px;
+    }
+}
+

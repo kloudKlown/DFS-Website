@@ -1,8 +1,16 @@
 ﻿/*
     JQGrid CSS
 */
+
+.ui-jqgrid {
+    border: 3px #999e91 groove !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .ui-jqgrid .ui-jqgrid-hdiv {
-    background-color: #cce6ff;
+    padding: 5px;
+    background-color: #cce6ff;    
 }
 
 .ui-jqgrid-sortable {
@@ -14,6 +22,6 @@
 }
 
 .ui-row-ltr{
-    font-size: small;
+    font-size: 15px;
     border: 1px black solid;
 }
