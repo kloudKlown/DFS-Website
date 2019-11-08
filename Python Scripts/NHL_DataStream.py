@@ -9,13 +9,14 @@ import time
 import datetime
 import pyodbc
 
-YEAR = [2018, 2019,2020] 
+YEAR = [2019,2020] 
 positionHeaders = {}
 connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NHL;""Trusted_Connection=yes;")
 cursor = connection.cursor()
 cursor.execute("Delete from NHL_PlayerLog Where [GameDate] > '2017-10-01';")
 cursor.commit()
-
+cursor.execute("Delete from NHL_PlayerLog_Goalie Where [GameDate] > '2017-10-01';")
+cursor.commit()
 PlayerList = {}
 cursor.execute('Select PlayerName from NHL_Player')
 for each in cursor.fetchall():
@@ -91,8 +92,14 @@ def ExtractPlayersFromRoster(teamURL, teamName, year, connection, cursor):
             player = player.replace("(TW)", "")
             player = re.sub('[^a-zA-Z0-9@\n\.\s]', '', player)                
             player = PlayerUnicodeConversion(player)
+            if (re.match(".*C.*",position)):
+                position = "C"                                
+            if (re.match(".*W.*",position)):
+                position = "F"
             if (position != "G"):
-                ExtractPlayersData(player, position, playerLink, year, connection, cursor)
+                ExtractPlayersData(player, position, playerLink, year, connection, cursor)                
+            else:
+                ExtractPlayersDataGoalie(player, position, playerLink, year, connection, cursor)
 
 def ExtractPlayersData(player, playerPosition, playerLink, year, connection, cursor):
     playerLink = playerLink.split('.')[0]    
@@ -190,6 +197,111 @@ def ExtractPlayersData(player, playerPosition, playerLink, year, connection, cur
             playerDataTuple[25] = minField
             cursor.execute(playerInsertData, tuple(playerDataTuple))
             cursor.commit()            
+            playerDataTuple = []    
+            count += 1
+        else:
+            playerDataTuple = []
+            count += 1
+
+    return 0
+
+def ExtractPlayersDataGoalie(player, playerPosition, playerLink, year, connection, cursor):
+    playerLink = playerLink.split('.')[0]    
+    if "anderju01" in str(playerLink):        
+        return
+    playerLink = playerLink.replace('\'', '')
+    
+    playerLink = playerLink.replace('\\', '')
+    playerGameLog = 'https://www.hockey-reference.com' + playerLink + '/gamelog/' + str(year) +'/'        
+    print(playerGameLog)
+    playerGameLog = subprocess.check_output(['curl' , playerGameLog], shell = True)
+    soup = BeautifulSoup(playerGameLog[10000:], features='html.parser')
+    playerGameLogData = soup.find('table', {'id': 'gamelog'}) 
+
+    if (playerGameLogData == None):
+        return 0
+    WH = soup.find("span", {'itemprop' : 'weight'})
+
+    if (WH != None):
+        height, weight = str(WH.next_sibling).split(',')        
+        height = re.sub('[^a-zA-Z0-9@\n\.\s]', '', height).replace('cm', '')
+        weight = re.sub('[^a-zA-Z0-9@\n\.\s]', '', weight).replace('kg', '')
+        try:
+            if(PlayerList[player] == 1):                
+                pass
+        except KeyError as e:
+            playerInsert = ("INSERT INTO NHL_Player VALUES (?, ?, ?, ?)")
+            playerData = [player, playerPosition, int(height), int(weight)]
+            cursor.execute(playerInsert, tuple(playerData))            
+            cursor.commit()
+            PlayerList[player] = 1
+            pass        
+
+    # Header information for the tables    
+    playerGameLogDataHeader = playerGameLogData.find('thead')
+    header = {}
+    p = inflect.engine()
+
+    # Header Main
+    headerMain = []
+    joinedHaders =  str(','.join(headerMain))
+    joinedHaders = joinedHaders.replace('blank,Opp,','blank,Opp,blank2,')    
+    positionHeaders[playerPosition] = joinedHaders
+    count = 0
+
+    ### DB connection and cleanup    
+    playerInsertData = ("INSERT INTO NHL_PlayerLog_Goalie VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+    playerDataTuple = []
+
+    # Body of the Gamelog
+    playerGameLogDataBody = playerGameLogData.find('tbody')
+    for eachTD in playerGameLogDataBody.findAll('tr'):        
+        playerDataTuple.append(player)
+        playerDataTuple.append(playerPosition)
+        playerDataTuple.append(count)
+
+        for each in eachTD.findAll('td'):            
+            playerDataTuple.append(ClearSpecialCharacters(each.text, False))        
+        
+        if (len(playerDataTuple) > 15 ):
+            dateField = str(playerDataTuple[3])
+            dateField = dateField[0:4] + "-" + dateField[4:6] + "-" + dateField[6:8]
+            playerDataTuple[3] = dateField
+            i = 0
+            
+            ## Convert to int fields
+            for i in range(11, 14):
+                if (playerDataTuple[i] != ""):
+                    playerDataTuple[i] = int(playerDataTuple[i])
+                else:
+                    playerDataTuple[i] = 0            
+
+            ## Convert to int fields
+            for i in range(15, 17):
+                if (playerDataTuple[i] != ""):
+                    playerDataTuple[i] = int(playerDataTuple[i])
+                else:
+                    playerDataTuple[i] = 0            
+
+
+            if (playerDataTuple[14] != ""):
+                playerDataTuple[14] = float(playerDataTuple[14])
+            else:
+                playerDataTuple[14] = 0
+
+
+
+
+            ## Minute Second field ( 25th field)
+            minField = str(playerDataTuple[17])                        
+            if (len(minField) == 4 ):
+                minField = int(minField[0:2])*60 + int(minField[2:4])
+            else:
+                if (len(minField) == 3 ):
+                    minField = int(minField[0])*60 + int(minField[0:2])                     
+            playerDataTuple[17] = minField
+            cursor.execute(playerInsertData, tuple(playerDataTuple))
+            cursor.commit()
             playerDataTuple = []    
             count += 1
         else:

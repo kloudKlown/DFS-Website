@@ -10,7 +10,7 @@ library(varhandle)
 library(tidyr)
 require(devtools)
 # library(mxnet)
-setwd("D:/NBA")
+setwd("D:/DFS Website/DFS/R Files")
 source('NBA_getDBData.R')
 
 NBATableData = NBATableData[,c("PlayerName","Position","Date","Team","blank","Opp","blank2","MP",
