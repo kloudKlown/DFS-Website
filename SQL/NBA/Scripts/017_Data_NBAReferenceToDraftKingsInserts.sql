@@ -62,3 +62,26 @@ INSERT INTO NBAReferenceToDraftKings VALUES ('Nicolxc3xb2 Melli', 'Nicolo Melli'
 INSERT INTO NBAReferenceToDraftKings VALUES ('Zion Williamson', 'Zion Williamson');
 INSERT INTO NBAReferenceToDraftKings VALUES ('Kristaps Porzingis', 'K. Porzingis');
 INSERT INTO NBAReferenceToDraftKings VALUES ('KarlAnthony Towns', 'K. Towns');
+ INSERT INTO NBAReferenceToDraftKings VALUES ('Chris Clemons  ', 'Chris Clemons');
+ INSERT INTO NBAReferenceToDraftKings VALUES ('Chris Silva  ', 'Chris Silva');
+ INSERT INTO NBAReferenceToDraftKings VALUES ('Johnathan Williams  ', 'J. Williams');
+ INSERT INTO NBAReferenceToDraftKings VALUES ('Jordan McLaughlin  ', 'Jordan McLaughlin');
+ INSERT INTO NBAReferenceToDraftKings VALUES ('Kevin Porter Jr.', 'Kevin Porter Jr');
+ INSERT INTO NBAReferenceToDraftKings VALUES ('Ky Bowman  ', 'Ky Bowman');
+ INSERT INTO NBAReferenceToDraftKings VALUES ('Michael Porter Jr.', 'Michael Porter');
+ INSERT INTO NBAReferenceToDraftKings VALUES ('Nene Hilario', 'Nene');
+
+
+
+/*
+	Find Differences
+*/
+
+--WITH DK_Unmatched AS(
+--Select DISTINCT FL.Player_Name From NBA_FantasyLabs FL LEFT JOIN
+--[NBAReferenceToDraftKings] DK ON FL.Player_Name = DK.DK_PlayerName
+--WHERE DK.DK_PlayerName is NULL
+--)
+
+--Select DISTINCT Player_Name, PL.PlayerName From NBA_PlayerLog PL
+--RIGHT JOIN DK_Unmatched DK ON PL.PlayerName = DK.Player_Name

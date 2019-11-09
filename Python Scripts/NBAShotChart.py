@@ -2,19 +2,12 @@
 
 import sys
 import re
-import scrapy
-from scrapy import Request
-from scrapy.spiders.crawl import CrawlSpider, Rule
-from scrapy.linkextractors import LinkExtractor
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-from selenium.webdriver.common.keys import Keys
 import pyodbc
 import hashlib
 import time 
 import json
+from seleniumwire import webdriver 
 
 team = { 
         "Atlanta Hawks" : "ATL",
@@ -50,33 +43,42 @@ team = {
 }
 
 def main():
-    co = Options()
-    driver = webdriver.Chrome( options = co, executable_path = r"D:\\DFS Website\\DFS\\Python Scripts\\chromedriver.exe")
+    driver = webdriver.Chrome( executable_path = r"D:\\DFS Website\\DFS\\Python Scripts\\chromedriver.exe")
     driver.get("https://stats.nba.com/players/list/")
-    time.sleep(5)
+    time.sleep(5)    
     html = driver.page_source
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, features="html.parser")
     positions = {}
     hrefs = soup.findAll("li", {"class" : "players-list__name"})    
+    TotalCount = len(hrefs)
+    scrapped = 1
     for href in hrefs:        
-        if "href=" in str(href.find('a')) and re.match("/player/.*", href.find('a')["href"]):            
+        if "href=" in str(href.find('a')) and re.match("/player/.*", href.find('a')["href"]):                        
             id = str(href.find('a')['href'])
-            id = id.split('/')[-2]            
+            id = id.split('/')[-2]                    
             if ( len(id) > 3 ):
-                href = "https://stats.nba.com/stats/shotchartdetail?AheadBehind=&CFID=33&CFPARAMS=2019-20&ClutchTime=&Conference=&ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&Division=&EndPeriod=10&EndRange=28800&GROUP_ID=&GameEventID=&GameID=&GameSegment=&GroupID=&GroupMode=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&Month=0&OnOff=&OpponentTeamID=0&Outcome=&PORound=0&Period=0&PlayerID=" + id + "&PlayerID1=&PlayerID2=&PlayerID3=&PlayerID4=&PlayerID5=&PlayerPosition=&PointDiff=&Position=&RangeType=0&RookieYear=&Season=2019-20&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StartPeriod=1&StartRange=0&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsPlayerID1=&VsPlayerID2=&VsPlayerID3=&VsPlayerID4=&VsPlayerID5=&VsTeamID="
+                href = "https://stats.nba.com/events/?flag=3&CFID=33&CFPARAMS=2019-20&PlayerID=" + id  + "&ContextMeasure=FGA&Season=2019-20&section=player&sct=plot"
                 driver.get(href)
                 time.sleep(3)
-                soup = BeautifulSoup(driver.page_source)
-                body = soup.find("body").text                
-                dict_from_json = json.loads(body)                
+                pageData = ""
+                for request in driver.requests:
+                    if request.response and re.match(".*stats.nba.com/stats/shotchartdetail.*", request.path):
+                        pageData = request.response.body
+                if(pageData == ""):
+                    continue
+                #soup = BeautifulSoup(pageData, features="html.parser")
+                #body = soup.find("body").text                
+                dict_from_json = json.loads(pageData)                
                 body = dict_from_json["resultSets"][0]["rowSet"]                
                 ### DB connection and cleanup
                 connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NBA;""Trusted_Connection=yes;")
                 cursor = connection.cursor()                
                 shotData = []                
                 playerShot = ("INSERT INTO [NBAShotChart] VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
-                for bodyDetails in body:
-                    print(body[0])
+                for bodyDetails in body:                    
+                    print("crawling ", href)                
+                    print("Completed = ", scrapped, "Out of ", TotalCount)
+                    scrapped = scrapped + 1
                     playerTeam = team[bodyDetails[6]]
                     bodyDetails[6] = str(playerTeam)
                     cursor.execute(playerShot, tuple(bodyDetails))                

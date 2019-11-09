@@ -45,8 +45,8 @@ BEGIN
 		INNER JOIN NBA_PlayerLog_Advanced FI ON Fi.PlayerName = PL.PlayerName
 	WHERE
 		FL_DateTime = @date_
-		AND	PL.[Date] in (SELECT DISTINCT TOP 60 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )					
-		AND FI.[Date] in (SELECT DISTINCT TOP 5 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )
+		AND	PL.[Date] in (SELECT DISTINCT TOP 10 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )					
+		AND FI.[Date] in (SELECT DISTINCT TOP 6 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )
 		AND FL.Team = @teamName_
 		GROUP BY PL.PlayerName, FI.PlayerPosition
 		ORDER BY MinutesPlayed DESC
@@ -85,8 +85,8 @@ BEGIN
 		INNER JOIN NBA_PlayerLog_Advanced FI ON FI.PlayerName = PL.PlayerName
 	WHERE
 		FL_DateTime = @date_
-		AND	PL.[Date] in (SELECT DISTINCT TOP 60 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )					
-		AND FI.[Date] in (SELECT DISTINCT TOP 5 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )
+		AND	PL.[Date] in (SELECT DISTINCT TOP 10 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )					
+		AND FI.[Date] in (SELECT DISTINCT TOP 6 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )
 		AND FL.Team = @oppName_
 		GROUP BY PL.PlayerName, FI.PlayerPosition
 		ORDER BY MinutesPlayed DESC

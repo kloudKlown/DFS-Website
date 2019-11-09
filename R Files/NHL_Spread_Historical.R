@@ -161,7 +161,7 @@ for (player in allPlayers) {
     temp = OffensiveStatsNHL[1,]
     subsetPlayerData = subset(NHLTableData, NHLTableData$PlayerName == player 
                               & as.Date(NHLTableData$GameDate) < as.Date(DateLevels[date]) 
-                              & as.Date(NHLTableData$GameDate) > (as.Date(DateLevels[date]) - 300)
+                              & as.Date(NHLTableData$GameDate) > (as.Date(DateLevels[date]) - 30)
     )  
     subsetPlayerData = subsetPlayerData[order(subsetPlayerData$GameDate , decreasing = TRUE ),]
     if(nrow(subsetPlayerData) > 10){
@@ -200,7 +200,7 @@ for (player in allPlayers) {
     
     currentOppPlayers = subset(NHLTableData, NHLTableData$PlayerName %in% currentOppPlayers 
                                & as.Date(NHLTableData$GameDate) < as.Date(DateLevels[date])
-                               & as.Date(NHLTableData$GameDate) > (as.Date(DateLevels[date]) - 300))
+                               & as.Date(NHLTableData$GameDate) > (as.Date(DateLevels[date]) - 15))
     
     currentOppPlayers = currentOppPlayers[order(currentOppPlayers$GameDate , decreasing = TRUE ),]
     if(nrow(currentOppPlayers) > 100){
