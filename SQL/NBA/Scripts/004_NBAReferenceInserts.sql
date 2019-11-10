@@ -5,8 +5,8 @@ Select
 INNER JOIN
 	NBA_PlayerLog NBARef 
 ON
-	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(NBARef.PlayerName, '-', ''), '''',''), '.', ''),'Jr',''), 'III',''),'IV', '') =
-	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr',''), 'III',''),'IV', '')
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr',''), 'III',''),'IV', ''), ' ', ''),'III','')=
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr',''), 'III',''),'IV', ''), ' ', ''),'III','')
 WHERE 
 	NBARef.PlayerName is NULL;
 
@@ -18,8 +18,8 @@ SELECT
 	NBARef.PlayerName 
 From 
 	NBAShotChart Shot INNER JOIN NBA_PlayerLog NBARef  ON 
-REPLACE(REPLACE(REPLACE(REPLACE(NBARef.PlayerName, '-', ''), '''',''), '.', ''),'Jr','') = 
-REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr','')
+REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(NBARef.PlayerName, '-', ''), '''',''), '.', ''),'Jr',''), 'III',''),'IV', ''), ' ', ''),'II','') = 
+REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr',''), 'III',''),'IV', ''), ' ', ''),'III','')
 
 INSERT INTO NBAReferenceToShotChartMap values
 ('Luka Doncic','Luka Donic'),
@@ -30,4 +30,14 @@ INSERT INTO NBAReferenceToShotChartMap values
 ('Jakob Poeltl', 'Jakob Poltl'),
 ('Gary Payton II', 'Gary Payton'),
 ('Juancho Hernangomez', 'Juan Hernangomez'),
-('Vince Edwards', 'Vincent Edwards');
+('Vince Edwards', 'Vincent Edwards'),
+('Joel Embiid', 'Joel Embiid'),
+('Vincent Edwards', 'Vinc Edwards');
+
+
+
+--Select DISTINCT 
+--	SH.PlayerName, DK.ShotChart_PlayerName FROM NBAShotChart SH
+--	LEFT JOIN NBAReferenceToShotChartMap DK ON SH.PlayerName = DK.ShotChart_PlayerName
+--WHERE
+--	DK.ShotChart_PlayerName IS NULL
