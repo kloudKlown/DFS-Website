@@ -130,8 +130,6 @@ for (eachTeam in Teams) {
     
   }
 }
-
-
 write.csv(DefensiveStatsNHL, file = "DefensiveStatsNHL_All.csv")
 
 ######################################################
@@ -351,4 +349,117 @@ for (player in allPlayers) {
 GoalieStatsNHL[is.na(GoalieStatsNHL)] = 0
 GoalieStatsNHL[is.null(GoalieStatsNHL)] = 0
 write.csv(GoalieStatsNHL, file = "GoalieStatsNHL_All.csv")
+
+
+################## Prediction
+################## Results ###############################
+OffensiveStatsNHL = read.csv('OffensiveStatsNHL_All.csv')
+DefensiveStatsNHL = read.csv('DefensiveStatsNHL_All.csv')
+GoalieStatsNHL = read.csv('GoalieStatsNHL_All.csv')
+CombinedStatsNHL = merge(x = OffensiveStatsNHL, y = DefensiveStatsNHL, by.x = c("GameDate", "PlayerPosition", "Opp"), 
+                      by.y = c("GameDate", "PlayerPosition", "Team"))
+CombinedStatsNHL[is.na(CombinedStatsNHL)] = 0
+CombinedStatsNHL[is.null(CombinedStatsNHL)] = 0
+
+CombinedStatsNHL = merge(x = CombinedStatsNHL, y = GoalieStatsNHL, by.x = c("GameDate", "Opp"), 
+                         by.y = c("GameDate", "Team"))
+
+CombinedStatsNHL[is.na(CombinedStatsNHL)] = 0
+CombinedStatsNHL[is.null(CombinedStatsNHL)] = 0
+write.csv(CombinedStatsNHL, file = "CombinedStatsNHL.csv")
+
+
+########## varclus Batters
+spearmanP = varclus(as.matrix(CombinedStatsNHL[,c("MP.x","HW", "Goals.x",  "Assists.x", "Points.x","Penalties.x","ShotsOnGoal.x", 
+                                               "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x", 
+                                               "ShotsOnGoalOpp.x","HitsOpp.x","BlocksOpp.x","Goals.y",  "Assists.y","Points.y", "Penalties.y",  
+                                               "MP.y","Hits.y","Blocks.y","FaceOffPer.y",  "GoalsOpp.y", "AssistsOpp",
+                                               "ShotsOnGoalOpp.y","HitsOpp.y","BlocksOpp.y","GoalsAgainst", "ShotsAgainst",
+                                               "Saves","ShoutOuts", "Hits","Blocks","ShotsOpp","HitsOpp")] ), similarity = "spearman")
+plot(spearmanP)
+abline(h=0.3)
+########## varclus Batters
+
+
+DateCheck = Sys.Date() - 16
+allPlayers = unique(CombinedStatsNHL$PlayerName.x)
+
+Results = data.frame( RFPred = numeric(), player = factor(), position = factor(), salary = numeric(), 
+                      date = factor(), MP = numeric(), team = factor(),
+                      Actual = numeric(), Opp = numeric(), ShotsTaken = numeric(), Goals = numeric())
+
+allPlayers = subset(CombinedStatsNHL, as.Date(CombinedStatsNHL$GameDate) == DateCheck)$PlayerName.x
+
+##############################################################
+################## NHL Results ###############################
+for (player in allPlayers){
+  print(player)
+  Data_Cleaned_Test = subset(CombinedStatsNHL, as.Date(CombinedStatsNHL$GameDate) == as.Date(DateCheck) 
+                             & CombinedStatsNHL$PlayerName.x == as.character(player) )
+  
+  Data_Cleaned_Train = subset(CombinedStatsNHL, as.Date(CombinedStatsNHL$GameDate) < as.Date(DateCheck)
+                              & as.Date(CombinedStatsNHL$GameDate) > (as.Date(DateCheck) - 30)
+                              & CombinedStatsNHL$PlayerName.x == as.character(player) )
+  
+  Actual = subset(NHLTableData, as.Date(NHLTableData$GameDate) == as.Date(DateCheck) 
+                  & NHLTableData$PlayerName == as.character(player) )
+  
+  Actual = Actual[1,]
+  Data_Cleaned_Train[is.na(Data_Cleaned_Train)] = 0
+  Data_Cleaned_Test[is.na(Data_Cleaned_Test)] = 0
+  
+  if (nrow(Data_Cleaned_Train) == 0 | nrow(Data_Cleaned_Test) == 0){
+    next;
+  }
+  
+  rf = randomForest(Data_Cleaned_Train[,c("MP.x","HW.x", "Goals.x",  "Assists.x", "Points.x","Penalties.x","ShotsOnGoal.x", 
+                                          "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x", 
+                                          "ShotsOnGoalOpp.x","HitsOpp.x","BlocksOpp.x","Goals.y",  "Assists.y","Points.y", "Penalties.y",  
+                                          "MP.y","Hits.y","Blocks.y","FaceOffPer.y",  "GoalsOpp.y", "AssistsOpp",
+                                          "ShotsOnGoalOpp.y","HitsOpp.y","BlocksOpp.y","GoalsAgainst", "ShotsAgainst",
+                                          "Saves","ShoutOuts", "Hits","Blocks","ShotsOpp","HitsOpp")], 
+                    y = Data_Cleaned_Train[,c("DKP.x")], ntree=50 ,type='regression')
+  
+  RFPred = predict( rf,  Data_Cleaned_Test[,c("MP.x","HW.x", "Goals.x",  "Assists.x", "Points.x","Penalties.x","ShotsOnGoal.x", 
+                                              "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x", 
+                                              "ShotsOnGoalOpp.x","HitsOpp.x","BlocksOpp.x","Goals.y",  "Assists.y","Points.y", "Penalties.y",  
+                                              "MP.y","Hits.y","Blocks.y","FaceOffPer.y",  "GoalsOpp.y", "AssistsOpp",
+                                              "ShotsOnGoalOpp.y","HitsOpp.y","BlocksOpp.y","GoalsAgainst", "ShotsAgainst",
+                                              "Saves","ShoutOuts", "Hits","Blocks","ShotsOpp","HitsOpp")] ,type = c("response") )
+
+  rfGoals = randomForest(Data_Cleaned_Train[,c("MP.x","HW.x", "Goals.x", "Assists.x", "Points.x","Penalties.x","ShotsOnGoal.x", 
+                                          "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x", 
+                                          "ShotsOnGoalOpp.x","HitsOpp.x","BlocksOpp.x","Goals.y",  "Assists.y","Points.y", "Penalties.y",  
+                                          "MP.y","Hits.y","Blocks.y","FaceOffPer.y",  "GoalsOpp.y", "AssistsOpp",
+                                          "ShotsOnGoalOpp.y","HitsOpp.y","BlocksOpp.y","GoalsAgainst", "ShotsAgainst",
+                                          "Saves","ShoutOuts", "Hits","Blocks","ShotsOpp","HitsOpp")], 
+                    y = Data_Cleaned_Train[,c("TotalGoals")], ntree=50 ,type='regression')
+  
+  RFPredGoals = predict( rfGoals,  Data_Cleaned_Test[,c("MP.x","HW.x", "Goals.x",  "Assists.x", "Points.x","Penalties.x","ShotsOnGoal.x", 
+                                              "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x", 
+                                              "ShotsOnGoalOpp.x","HitsOpp.x","BlocksOpp.x","Goals.y",  "Assists.y","Points.y", "Penalties.y",  
+                                              "MP.y","Hits.y","Blocks.y","FaceOffPer.y",  "GoalsOpp.y", "AssistsOpp",
+                                              "ShotsOnGoalOpp.y","HitsOpp.y","BlocksOpp.y","GoalsAgainst", "ShotsAgainst",
+                                              "Saves","ShoutOuts", "Hits","Blocks","ShotsOpp","HitsOpp")] ,type = c("response") )
+  
+  
+  Prediction2 = as.data.frame(RFPred)
+  Prediction2["player"] = player
+  Prediction2["Goals"] = RFPredGoals
+  Prediction2["position"] = Data_Cleaned_Test$PlayerPosition.x
+  Prediction2["salary"] = Prediction2$RFPred * 1000/2
+  Prediction2["MP"] = Data_Cleaned_Test$MP.x
+  Prediction2["Team"] = Data_Cleaned_Test$Team
+  Prediction2$Actual = Actual$DKP
+  Prediction2["Opp"] = Data_Cleaned_Test$Opp
+  Prediction2["date"] = as.Date(DateCheck)
+  Prediction2["ShotsTaken"] = Data_Cleaned_Test$ShotsOnGoal.x
+ 
+  Results = rbind(Results, Prediction2)
+}
+
+dbWriteTable(con, name = "NHL_DK_Prediction", value = Results, row.names = FALSE, append = TRUE)
+
+
+
 

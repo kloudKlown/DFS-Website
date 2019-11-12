@@ -60,59 +60,70 @@
 
 <script>
     var gridPlayerCoulmns = [
-                { name: 'Player', index: 'Player', width: 150, align: 'left', editable: false },
-                { name: 'ShotType', index: 'ShotType', width: 100, align: 'right', editable: false },
-                { name: 'MadeShots', index: 'MadeShots', width: 100, align: 'right', editable: false },
-                { name: 'TotalShots', index: 'TotalShots', width: 100, align: 'right', editable: false },
-                { name: 'ZonePer', index: 'ZonePer', width: 100, align: 'right', editable: false, sortable: true }
-            ];
+        { name: 'Player', index: 'Player', width: 150, align: 'left', editable: false },
+        { name: 'ShotType', index: 'ShotType', width: 100, align: 'right', editable: false },
+        { name: 'MadeShots', index: 'MadeShots', width: 100, align: 'right', editable: false },
+        { name: 'TotalShots', index: 'TotalShots', width: 100, align: 'right', editable: false },
+        { name: 'ZonePer', index: 'ZonePer', width: 100, align: 'right', editable: false, sortable: true }
+    ];
     var gridPlayerCoulmnNames = ["Player", "Shot Type", "Shots Made", "Shots Taken", "Percentage"];
     var gridTeamColumnNames = ["Team", "Shot Type", "Shots Made", "Shots Taken", "Percentage"];
     var gridTeamColumn = [
-                { name: 'Team', index: 'Team', width: 50, align: 'left', editable: false },
-                { name: 'ShotType', index: 'ShotType', width: 100, align: 'right', editable: false },
-                { name: 'MadeShots', index: 'MadeShots', width: 100, align: 'right', editable: false },
-                { name: 'TotalShots', index: 'TotalShots', width: 100, align: 'right', editable: false },
-                { name: 'ZonePer', index: 'ZonePer', width: 100, align: 'right', editable: false, sortable: true }
-            ];
+        { name: 'Team', index: 'Team', width: 50, align: 'left', editable: false },
+        { name: 'ShotType', index: 'ShotType', width: 100, align: 'right', editable: false },
+        { name: 'MadeShots', index: 'MadeShots', width: 100, align: 'right', editable: false },
+        { name: 'TotalShots', index: 'TotalShots', width: 100, align: 'right', editable: false },
+        { name: 'ZonePer', index: 'ZonePer', width: 100, align: 'right', editable: false, sortable: true }
+    ];
     var playerStatColumnNames = ["Name", "Team", "Pos", "Proj", "Salary", "Diff", "Actual", "Usage", "Mins", "Def.R", "Off.R", "Height", "FG", "FGA",
-                "3P", "3PA", "FT",
-                //"ORB", "DRB",
-                "TRB", "AST", "STL", "BLK",
-                //"TOV", "PF",
-                "PTS"]
+        "3P", "3PA", "FT",
+        //"ORB", "DRB",
+        "TRB", "AST", "STL", "BLK",
+        //"TOV", "PF",
+        "PTS"]
 
     var playerStatColumn = [
-                {
-                    name: 'name', index: 'Name', width: 180, align: 'left', editable: false, classes: "playerName"
-                },
-                { name: 'team', index: 'Team', width: 50, align: 'right', editable: false },
-                { name: 'multiPosition', index: 'MultiPosition', width: 50, align: 'right', editable: false },
-                { name: 'predicted', index: 'predicted', width: 70, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'salary', index: 'salary', width: 70, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'salaryDifference', index: 'salaryDifference', width: 70, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'actual', index: 'actual', width: 50, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'usage', index: 'Usage', width: 80, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'minutesPlayed', index: 'MinutesPlayed', width: 100, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'defensiveRating', index: 'DefensiveRating', width: 80, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'offensiveRating', index: 'OffensiveRating', width: 80, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'height', index: 'Height', width: 80, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'fieldGoal', index: 'FieldGoal', width: 50, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'fieldGoalAttempted', index: 'FieldGoalAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'threePointer', index: 'ThreePointer', width: 50, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'threePointerAttempted', index: 'ThreePointerAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'freeThrow', index: 'FreeThrow', width: 50, align: 'right', editable: false, sortable: true, search: false },
-                //{ name: 'offensiveRebound', index: 'OffensiveRebound', width: 50, align: 'center', editable: false },
-                //{ name: 'defensiveRebound', index: 'DefensiveRebound', width: 50, align: 'center', editable: false },
-                { name: 'totalRebound', index: 'TotalRebound', width: 50, align: 'right', editable: false, sortable: true, search: false },
-                //{ name: 'totalReboundPercentage', index: 'TotalReboundPercentage', width: 50, align: 'center', editable: false, sortable: true },
-                { name: 'assists', index: 'Assists', width: 50, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'steals', index: 'Steals', width: 50, align: 'right', editable: false, sortable: true, search: false },
-                { name: 'blocks', index: 'Blocks', width: 50, align: 'right', editable: false, sortable: true, search: false },
-                //{ name: 'turnovers', index: 'Turnovers', width: 50, align: 'center', editable: false, sortable: true },
-                //{ name: 'fouls', index: 'Fouls', width: 50, align: 'center', editable: false, sortable: true },
-                { name: 'points', index: 'Points', width: 50, align: 'right', editable: false, sortable: true, search: false }
-            ];
+        { name: 'name', index: 'Name', width: 180, align: 'left', editable: false, classes: "playerName" },
+        { name: 'team', index: 'Team', width: 50, align: 'right', editable: false },
+        { name: 'multiPosition', index: 'MultiPosition', width: 50, align: 'right', editable: false },
+        { name: 'predicted', index: 'predicted', width: 70, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'salary', index: 'salary', width: 70, align: 'right', editable: false, sortable: true, search: false },
+        {
+            name: 'salaryDifference', index: 'salaryDifference', width: 70, align: 'right',
+            editable: false, sortable: true, search: false, formatter: function (cellvalue, options, rowObject) {                
+                if (cellvalue < 0) {
+                    var brightnessPer = cellvalue*10 / -rowObject.salary.replace("$","");
+                    return "<div style='color: black; background-color: rgba(250, 120, 107," + brightnessPer  +");' >" + cellvalue + " </div>";
+                }
+                else {
+                    var brightnessPer = cellvalue*10 / rowObject.salary.replace("$","");
+                    return "<div style='color: black; background-color: rgba(32, 179, 52," + brightnessPer  +");' >" + cellvalue + " </div>";
+                }
+                    
+            }
+        },
+        { name: 'actual', index: 'actual', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'usage', index: 'Usage', width: 80, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'minutesPlayed', index: 'MinutesPlayed', width: 100, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'defensiveRating', index: 'DefensiveRating', width: 80, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'offensiveRating', index: 'OffensiveRating', width: 80, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'height', index: 'Height', width: 80, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'fieldGoal', index: 'FieldGoal', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'fieldGoalAttempted', index: 'FieldGoalAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'threePointer', index: 'ThreePointer', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'threePointerAttempted', index: 'ThreePointerAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'freeThrow', index: 'FreeThrow', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        //{ name: 'offensiveRebound', index: 'OffensiveRebound', width: 50, align: 'center', editable: false },
+        //{ name: 'defensiveRebound', index: 'DefensiveRebound', width: 50, align: 'center', editable: false },
+        { name: 'totalRebound', index: 'TotalRebound', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        //{ name: 'totalReboundPercentage', index: 'TotalReboundPercentage', width: 50, align: 'center', editable: false, sortable: true },
+        { name: 'assists', index: 'Assists', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'steals', index: 'Steals', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'blocks', index: 'Blocks', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        //{ name: 'turnovers', index: 'Turnovers', width: 50, align: 'center', editable: false, sortable: true },
+        //{ name: 'fouls', index: 'Fouls', width: 50, align: 'center', editable: false, sortable: true },
+        { name: 'points', index: 'Points', width: 50, align: 'right', editable: false, sortable: true, search: false }
+    ];
 
 
 
@@ -354,7 +365,7 @@
 
             court.find(String(idList)).text("")
         }
-        
+
         var tabulateShotZones = function (shotData) {
             $("#playerShotZone").jqGrid('GridUnload');
             $("#playerShotZone").jqGrid('setGridParam', {
@@ -401,7 +412,7 @@
         });
 
 
-        var tabulateShotZones = function (shotData) {            
+        var tabulateShotZones = function (shotData) {
             $("#playerShotZone").jqGrid('GridUnload');
             $("#playerShotZone").jqGrid('setGridParam', {
                 data: shotData

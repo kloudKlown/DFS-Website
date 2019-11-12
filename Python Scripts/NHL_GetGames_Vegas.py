@@ -58,7 +58,7 @@ def GetVegasOdds(dateYear = datetime(2019, 10, 16)):
     
     cursor.execute("Delete From NHL_Games WHERE GameDate ='" + strDateYear + "';")
     cursor.commit()
-    url = "https://www.vegasinsider.com/NHL/scoreboard/scores.cfm/game_date/" + strDateYear
+    url = "https://www.vegasinsider.com/NHL/scoreboard/" #/scores.cfm/game_date/" + strDateYear
     teamData = subprocess.check_output(['curl', url], shell = True)
     soup = BeautifulSoup(teamData, features='html.parser')
     tds = soup.findAll("td", {"class" : "sportPicksBorder"})    
@@ -96,7 +96,7 @@ def GetVegasOdds(dateYear = datetime(2019, 10, 16)):
 def main(days):
 
     for i in range(0, int(days[0])):
-        dateYear = datetime.today() - timedelta(days = i)  
+        dateYear = datetime.today() + timedelta(days = i)  
         GetVegasOdds(dateYear)
 
 if __name__ == '__main__':
