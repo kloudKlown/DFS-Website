@@ -109,20 +109,20 @@
         { name: 'offensiveRating', index: 'OffensiveRating', width: 80, align: 'right', editable: false, sortable: true, search: false },
         { name: 'height', index: 'Height', width: 80, align: 'right', editable: false, sortable: true, search: false },
         { name: 'fieldGoal', index: 'FieldGoal', width: 50, align: 'right', editable: false, sortable: true, search: false },
-        { name: 'fieldGoalAttempted', index: 'FieldGoalAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'fieldGoalAttempted', index: 'FieldGoalAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false, summaryType: 'sum'},
         { name: 'threePointer', index: 'ThreePointer', width: 50, align: 'right', editable: false, sortable: true, search: false },
-        { name: 'threePointerAttempted', index: 'ThreePointerAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'threePointerAttempted', index: 'ThreePointerAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false, summaryType: 'sum'},
         { name: 'freeThrow', index: 'FreeThrow', width: 50, align: 'right', editable: false, sortable: true, search: false },
         //{ name: 'offensiveRebound', index: 'OffensiveRebound', width: 50, align: 'center', editable: false },
         //{ name: 'defensiveRebound', index: 'DefensiveRebound', width: 50, align: 'center', editable: false },
-        { name: 'totalRebound', index: 'TotalRebound', width: 50, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'totalRebound', index: 'TotalRebound', width: 50, align: 'right', editable: false, sortable: true, search: false, summaryType: 'sum' },
         //{ name: 'totalReboundPercentage', index: 'TotalReboundPercentage', width: 50, align: 'center', editable: false, sortable: true },
         { name: 'assists', index: 'Assists', width: 50, align: 'right', editable: false, sortable: true, search: false },
         { name: 'steals', index: 'Steals', width: 50, align: 'right', editable: false, sortable: true, search: false },
         { name: 'blocks', index: 'Blocks', width: 50, align: 'right', editable: false, sortable: true, search: false },
         //{ name: 'turnovers', index: 'Turnovers', width: 50, align: 'center', editable: false, sortable: true },
         //{ name: 'fouls', index: 'Fouls', width: 50, align: 'center', editable: false, sortable: true },
-        { name: 'points', index: 'Points', width: 50, align: 'right', editable: false, sortable: true, search: false }
+        { name: 'points', index: 'Points', width: 50, align: 'right', editable: false, sortable: true, search: false, summaryType: 'sum'}
     ];
 
 
@@ -248,6 +248,15 @@
                     root: "data",
                     repeatitems: false,
                 },
+                grouping: true,
+                groupingView: {
+                    groupField: ['team'],
+                    groupSummary: [true],
+                    groupText: ["<b>{0}</b>"],
+                    groupColumnShow: [true],
+                    groupCollapse: false,
+                    groupOrder: ['asc']
+                }
             });
             $("#jqGrid").jqGrid('filterToolbar', { stringResult: true, defaultSearch: 'cn' });
 

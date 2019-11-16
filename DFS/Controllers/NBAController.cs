@@ -86,20 +86,21 @@
         //[HttpPost]
         public IActionResult GetGridData(string sidx, string sord, int page, int rows, bool _search, string filters, string name, string team)
         {
+            sidx = sidx.Replace("Team asc, ", "");
             if (HttpContext.Session.GetString("ActivePlayersList") != null)
             {
                 List<NBAPlayerViewModel> playerList = Session.GetObject<List<NBAPlayerViewModel>>("ActivePlayersList");
 
-                if (sidx != null)
+                if (!string.IsNullOrWhiteSpace(sidx))
                 {
                     sidx = char.ToUpper(sidx[0]) + sidx.Substring(1);
                     if (sord == "asc")
                     {
-                        playerList = playerList.OrderBy(x => x.GetType().GetProperty(sidx).GetValue(x, null)).ToList();
+                        playerList = playerList.OrderBy(x => x.GetType().GetProperty(sidx).GetValue(x, null)).ThenBy(x => x.Team).ToList();
                     }
                     else
                     {
-                        playerList = playerList.OrderByDescending(x => x.GetType().GetProperty(sidx).GetValue(x, null)).ToList();
+                        playerList = playerList.OrderByDescending(x => x.GetType().GetProperty(sidx).GetValue(x, null)).ThenBy(x => x.Team).ToList();
                     }
                 }
 
@@ -166,6 +167,7 @@
                 ZonePer = (x.ToList().FindAll(v => v == madeShot).ToList().Count * 100) / (x.ToList().Count + 1)
             }).ToList();
 
+            // Combined Result set. Selected team statistics vs opponent previous history
             var combinedResultSet = playerResultSet.Select(x => new
             {
                 Team = team,
@@ -173,7 +175,9 @@
                 MadeShots = opponentResultSet.Any(o => o.ShotType == x.ShotType) ? $"{x.MadeShots} - {opponentResultSet.Find(o => o.ShotType == x.ShotType).MadeShots}" : $"{x.MadeShots}",
                 TotalShots = opponentResultSet.Any(o => o.ShotType == x.ShotType) ? $"{x.TotalShots} - {opponentResultSet.Find(o => o.ShotType == x.ShotType).TotalShots}" : $"{x.TotalShots}",
                 TotalShotsO = x.TotalShots,
-                ZonePer = (x.MadeShots * 100) / (x.TotalShots + 1)
+                ZonePer = opponentResultSet.Any(o => o.ShotType == x.ShotType) ? 
+                          $"{(x.MadeShots * 100) / (x.TotalShots + 1)} - { Math.Round((float.Parse(opponentResultSet.Find(o => o.ShotType == x.ShotType).MadeShots) * 100) / (opponentResultSet.Find(o => o.ShotType == x.ShotType).TotalShots + 1))  }"
+                          : $"{(x.MadeShots * 100) / (x.TotalShots + 1)}"
             }).ToList();
 
             combinedResultSet = combinedResultSet.OrderByDescending(x => x.TotalShotsO).ToList();

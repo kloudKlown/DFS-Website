@@ -24,4 +24,34 @@ BBSavantPlayer = dbSendQuery(con, paste("Select ",
                     "where FL_DateTime = '", Sys.Date() ,"'"))
 TodaysPlayers = dbFetch(BBSavantPlayer)
 dbClearResult(BBSavantPlayer)
-                             
+
+
+ShotPlayer = dbSendQuery(con, paste("Select * From NBA_Shots_View_All"))
+ShotPlayerLog = dbFetch(ShotPlayer)
+dbClearResult(ShotPlayer)
+rm(ShotPlayer)
+
+ShotTeamPlayer = dbSendQuery(con, paste("Select * From NBA_ShotsTeam_View_All"))
+ShotTeamPlayerLog = dbFetch(ShotTeamPlayer)
+dbClearResult(ShotTeamPlayer)
+rm(ShotTeamPlayer)
+
+
+temp1 = ShotPlayerLog[ShotPlayerLog$`Made Shot` == 1,]
+temp2 = ShotPlayerLog[ShotPlayerLog$`Made Shot` == 0,]
+
+ShotPlayerLog = merge(x = temp1, y = temp2,  by.x = c("GameDate", "PlayerName"), 
+                      by.y = c("GameDate", "PlayerName"))
+rm(temp1)
+rm(temp2)
+
+
+temp1 = ShotTeamPlayerLog[ShotTeamPlayerLog$`Made Shot` == 1,]
+temp2 = ShotTeamPlayerLog[ShotTeamPlayerLog$`Made Shot` == 0,]
+
+ShotTeamPlayerLog = merge(x = temp1, y = temp2,  by.x = c("GameDate", "HomeTeam"), 
+                      by.y = c("GameDate", "HomeTeam"))
+rm(temp1)
+rm(temp2)
+
+

@@ -226,39 +226,187 @@ for (player in allPlayers) {
 OffensiveStats[is.na(OffensiveStats)] = 0
 OffensiveStats[is.null(OffensiveStats)] = 0
 write.csv(OffensiveStats, file = "OffensiveStats_All.csv")
-
-##########################################################
-
 OffensiveStats = read.csv('OffensiveStats_All.csv')
 DefensiveStats = read.csv('DefensiveStats_All.csv')
 
+#######################################################################
+#######################################################################
+################## Player Shot Log ####################################
+
+ShotPlayerLogStats = ShotPlayerLog[0,]
+allPlayers = unique(ShotPlayerLog$PlayerName)
+
+for (player in allPlayers) {
+  
+  ## Get Playerdata
+  subsetPlayerData = subset(ShotPlayerLog, ShotPlayerLog$PlayerName == player) 
+  DefensiveStatsMaxDate = max(as.Date(subset(ShotPlayerLogStats, ShotPlayerLogStats$PlayerName == player)$GameDate ), na.rm =  TRUE)
+  
+  if (nrow(subsetPlayerData) == 0)
+  {
+    next;
+  }
+  
+  DateLevels = as.factor(unique(subsetPlayerData[order(subsetPlayerData$GameDate , decreasing = FALSE ),]$GameDate))
+  
+  DateLevels = DateLevels[as.Date(DateLevels) > DefensiveStatsMaxDate]
+  if (length(DateLevels) == 0){
+    next;
+  }  
+  
+  # Add current Date
+  # DateLevels = factor(c(levels(DateLevels),substring(Sys.time(),0,10)))
+  print(player)
+  ## Iterate over date
+  for (date in 2:length(DateLevels)){
+    # Iterate over each date
+    temp = ShotPlayerLog[1,]
+    subsetPlayerData = subset(ShotPlayerLog, ShotPlayerLog$PlayerName == player 
+                              & as.Date(ShotPlayerLog$GameDate) < as.Date(DateLevels[date]) 
+                              & as.Date(ShotPlayerLog$GameDate) > (as.Date(DateLevels[date]) - 30)
+    )  
+    subsetPlayerData = subsetPlayerData[order(subsetPlayerData$GameDate , decreasing = TRUE ),]
+    if(nrow(subsetPlayerData) > 4){
+      subsetPlayerData = subsetPlayerData[0:4,]
+    }
+    
+    currentGame = subset(ShotPlayerLog, ShotPlayerLog$PlayerName == player 
+                         & as.Date(ShotPlayerLog$GameDate) == as.Date(DateLevels[date])) 
+    
+    if (nrow(currentGame) == 0 ){
+      next
+    }
+    
+    temp$GameDate = DateLevels[date]
+    temp$PlayerName = player
+    
+    #### How good the player is last 30 days
+    for (column in 3:(length(colnames(temp))) ){
+      temp[, colnames(temp)[column]]  = mean(subsetPlayerData[, colnames(temp)[column]])
+    }
+    
+    ShotPlayerLogStats = rbind(temp, ShotPlayerLogStats)
+  }
+  ## Iterate over date
+  
+}
+
+ShotPlayerLogStats[is.na(ShotPlayerLogStats)] = 0
+ShotPlayerLogStats[is.null(ShotPlayerLogStats)] = 0
+
+#######################################################################
+#######################################################################
+################## Team Shot Allowed Log ####################################
+
+ShotTeamLogStats = ShotTeamPlayerLog[0,]
+allPlayers = unique(ShotTeamPlayerLog$HomeTeam)
+
+for (player in allPlayers) {
+  
+  ## Get Playerdata
+  subsetPlayerData = subset(ShotTeamPlayerLog, ShotTeamPlayerLog$HomeTeam == player) 
+  DefensiveStatsMaxDate = max(as.Date(subset(ShotTeamLogStats, ShotTeamLogStats$HomeTeam == player)$GameDate ), na.rm =  TRUE)
+  
+  if (nrow(subsetPlayerData) == 0)
+  {
+    next;
+  }
+  
+  DateLevels = as.factor(unique(subsetPlayerData[order(subsetPlayerData$GameDate , decreasing = FALSE ),]$GameDate))
+  
+  DateLevels = DateLevels[as.Date(DateLevels) > DefensiveStatsMaxDate]
+  if (length(DateLevels) == 0){
+    next;
+  }  
+  
+  # Add current Date
+  # DateLevels = factor(c(levels(DateLevels),substring(Sys.time(),0,10)))
+  print(player)
+  ## Iterate over date
+  for (date in 2:length(DateLevels)){
+    # Iterate over each date
+    temp = ShotTeamPlayerLog[1,]
+    subsetPlayerData = subset(ShotTeamPlayerLog, ShotTeamPlayerLog$HomeTeam == player 
+                              & as.Date(ShotTeamPlayerLog$GameDate) < as.Date(DateLevels[date]) 
+                              & as.Date(ShotTeamPlayerLog$GameDate) > (as.Date(DateLevels[date]) - 30)
+    )  
+    subsetPlayerData = subsetPlayerData[order(subsetPlayerData$GameDate , decreasing = TRUE ),]
+    if(nrow(subsetPlayerData) == 0){
+      next
+    }
+    
+    if(nrow(subsetPlayerData) > 5){
+      subsetPlayerData = subsetPlayerData[0:5,]
+    }
+    
+    subsetPlayerData = aggregate(subsetPlayerData[,3:length(temp)], by = list(subsetPlayerData$HomeTeam, subsetPlayerData$GameDate), FUN = sum, na.rm=TRUE)
+    
+    currentGame = subset(ShotTeamPlayerLog, ShotTeamPlayerLog$HomeTeam == player &
+                           as.Date(ShotTeamPlayerLog$GameDate) == as.Date(DateLevels[date]) ) 
+    
+    if (nrow(currentGame) == 0 ){
+      next
+    }
+    
+    temp$GameDate = DateLevels[date]
+    temp$HomeTeam = player
+    
+    #### How good the player is last 30 days
+    for (column in 3:(length(colnames(temp))) ){
+      temp[, colnames(temp)[column]]  = mean(subsetPlayerData[, colnames(temp)[column]])
+    }
+    
+    ShotTeamLogStats = rbind(temp, ShotTeamLogStats)
+  }
+  ## Iterate over date
+  
+}
+
+ShotTeamLogStats[is.na(ShotTeamLogStats)] = 0
+ShotTeamLogStats[is.null(ShotTeamLogStats)] = 0
+##########################################################
+##########################################################
 ## varclus Batters
-spearmanP = varclus(as.matrix(CombinedStats[,c("FG.x","ThreeP.x","MP",
+spearmanP = varclus(as.matrix(CombinedStatsShots[,c("FG.x","ThreeP.x","MP",
                                                "FT.x",
-                                               "TRB.x","STL.x","TOV.x","PF.x",
+                                               "TRB.x","TOV.x","PF.x",
                                                "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
                                                "STLPer.x","BLKPer.x","TOVPer.x","USGPer.x","ORTGPer.x","DRTGPer.x",
-                                               "ThreeP.y","FT.y","AST.y","STL.y",
-                                               "TOV.y","PF.y","PTS",
-                                               "TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
+                                               "ThreeP.y","FT.y","AST.y",
+                                               "TOV.y","PF.y","PTS","TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
                                                "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp","ThreePAOpp","FTAOpp",
-                                               "TRBOpp","ASTOpp","STLOpp","TOVOpp")] ), similarity = "spearman")
+                                               "TRBOpp","ASTOpp","STLOpp","TOVOpp",
+                                               "R3.x.x", "L3.x.x", "C3.x.x", "IP.x.x", "RC3.x.x", "LC3.x.x", "B3.x.x", "L2.x.x", "R2.x.x", "C2.x.x",
+                                               "R3.y.x", "L3.y.x", "C3.y.x", "IP.y.x", "RC3.y.x", "LC3.y.x", "B3.y.x", "L2.y.x", "R2.y.x", "C2.y.x",
+                                               "R3.x.y", "L3.x.y", "C3.x.y", "IP.x.y", "RC3.x.y", "LC3.x.y", "B3.x.y", "L2.x.y", "R2.x.y", "C2.x.y",
+                                               "R3.y.y", "L3.y.y", "C3.y.y", "IP.y.y", "RC3.y.y", "LC3.y.y", "B3.y.y", "L2.y.y", "R2.y.y", "C2.y.y"                                               
+                                               )] ), similarity = "spearman")
 plot(spearmanP)
 abline(h=0.3)
 
 ################## Results ###############################
-CombinedStats = merge(x = OffensiveStats, y = DefensiveStats, by.x = c("Date", "Pos", "Tm"), 
+
+DefensiveStatsShot = merge(x = DefensiveStats, y = ShotTeamLogStats, by.x = c("Date", "Tm"),
+                       by.y = c("GameDate", "HomeTeam"), all.x = TRUE)
+
+CombinedStats = merge(x = OffensiveStats, y = DefensiveStatsShot, by.x = c("Date", "Pos", "Tm"), 
                       by.y = c("Date", "Pos", "Tm") )
+CombinedStats[is.na(CombinedStats)] = 0
+CombinedStats[is.null(CombinedStats)] = 0
+
+
+CombinedStatsShots = merge(x = CombinedStats, y = ShotPlayerLogStats, by.x = c("Date", "PlayerName"),
+                          by.y = c("GameDate", "PlayerName"), all.x = TRUE)
 
 write.csv(CombinedStats, file = "CombinedStats.csv")
 
 
-allPlayers = unique(CombinedStats$PlayerName)
+allPlayers = unique(CombinedStatsShots$PlayerName)
 
 
 for (variable in c(3:365)) {
-  DateCheck =   as.Date("2019-11-02") - variable
-  allPlayers = unique(CombinedStats$PlayerName)
+  DateCheck =   as.Date("2019-11-12") - variable
+  allPlayers = unique(CombinedStatsShots$PlayerName)
   
   Results = data.frame( RFPred = numeric(), player = factor(), position = factor(), salary = numeric(), 
                         date = factor(),
@@ -268,18 +416,18 @@ for (variable in c(3:365)) {
                         playerList = factor(), TeamScore = numeric(), Actual = numeric(),
                         simpleProjection = numeric(), Opp = numeric())
   
-  allPlayers = subset(CombinedStats, as.Date(CombinedStats$Date) == DateCheck)$PlayerName
+  allPlayers = subset(CombinedStatsShots, as.Date(CombinedStatsShots$Date) == DateCheck)$PlayerName
   
   ##############################################################
   ################## NBA Results ###############################
   for (player in allPlayers){
     print(player)
-    Data_Cleaned_Test = subset(CombinedStats, as.Date(CombinedStats$Date) == as.Date(DateCheck) 
-                               & CombinedStats$PlayerName == as.character(player) )
+    Data_Cleaned_Test = subset(CombinedStatsShots, as.Date(CombinedStatsShots$Date) == as.Date(DateCheck) 
+                               & CombinedStatsShots$PlayerName == as.character(player) )
     
-    Data_Cleaned_Train = subset(CombinedStats, as.Date(CombinedStats$Date) < as.Date(DateCheck)
-                                & as.Date(CombinedStats$Date) > (as.Date(DateCheck) - 300)
-                                & CombinedStats$PlayerName == as.character(player) )
+    Data_Cleaned_Train = subset(CombinedStatsShots, as.Date(CombinedStatsShots$Date) < as.Date(DateCheck)
+                                & as.Date(CombinedStatsShots$Date) > (as.Date(DateCheck) - 300)
+                                & CombinedStatsShots$PlayerName == as.character(player) )
     
     Actual = subset(NBAAllData, as.Date(NBAAllData$Date) == as.Date(DateCheck) 
                     & NBAAllData$PlayerName == as.character(player) )
@@ -298,7 +446,12 @@ for (variable in c(3:365)) {
                                             "ThreeP.y","FT.y","AST.y","STL.y",
                                             "TOV.y","PF.y","PTS", "TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
                                             "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp","ThreePAOpp","FTAOpp",
-                                            "TRBOpp","ASTOpp","STLOpp","TOVOpp" )], 
+                                            "TRBOpp","ASTOpp","STLOpp","TOVOpp",
+                                            "R3.x.x", "L3.x.x", "C3.x.x", "IP.x.x", "RC3.x.x", "LC3.x.x", "B3.x.x", "L2.x.x", "R2.x.x", "C2.x.x",
+                                            "R3.y.x", "L3.y.x", "C3.y.x", "IP.y.x", "RC3.y.x", "LC3.y.x", "B3.y.x", "L2.y.x", "R2.y.x", "C2.y.x",
+                                            "R3.x.y", "L3.x.y", "C3.x.y", "IP.x.y", "RC3.x.y", "LC3.x.y", "B3.x.y", "L2.x.y", "R2.x.y", "C2.x.y",
+                                            "R3.y.y", "L3.y.y", "C3.y.y", "IP.y.y", "RC3.y.y", "LC3.y.y", "B3.y.y", "L2.y.y", "R2.y.y", "C2.y.y"                                               
+                                            )], 
                       y = Data_Cleaned_Train[,c("DKP")], ntree=50 ,type='regression')
     
     RFPred = predict( rf,  Data_Cleaned_Test[,c("MP","FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
@@ -307,7 +460,12 @@ for (variable in c(3:365)) {
                                                 "ThreeP.y","FT.y","AST.y","STL.y",
                                                 "TOV.y","PF.y","PTS","TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
                                                 "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp","ThreePAOpp","FTAOpp",
-                                                "TRBOpp","ASTOpp","STLOpp","TOVOpp")] ,type = c("response") )
+                                                "TRBOpp","ASTOpp","STLOpp","TOVOpp",
+                                                "R3.x.x", "L3.x.x", "C3.x.x", "IP.x.x", "RC3.x.x", "LC3.x.x", "B3.x.x", "L2.x.x", "R2.x.x", "C2.x.x",
+                                                "R3.y.x", "L3.y.x", "C3.y.x", "IP.y.x", "RC3.y.x", "LC3.y.x", "B3.y.x", "L2.y.x", "R2.y.x", "C2.y.x",
+                                                "R3.x.y", "L3.x.y", "C3.x.y", "IP.x.y", "RC3.x.y", "LC3.x.y", "B3.x.y", "L2.x.y", "R2.x.y", "C2.x.y",
+                                                "R3.y.y", "L3.y.y", "C3.y.y", "IP.y.y", "RC3.y.y", "LC3.y.y", "B3.y.y", "L2.y.y", "R2.y.y", "C2.y.y"                                               
+                                                )] ,type = c("response") )
 
     rfTP = randomForest(Data_Cleaned_Train[,c("MP","FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
                                             "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
@@ -315,7 +473,12 @@ for (variable in c(3:365)) {
                                             "ThreeP.y","FT.y","AST.y","STL.y",
                                             "TOV.y","PF.y","PTS", "TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
                                             "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp","ThreePAOpp","FTAOpp",
-                                            "TRBOpp","ASTOpp","STLOpp","TOVOpp" )], 
+                                            "TRBOpp","ASTOpp","STLOpp","TOVOpp",
+                                            "R3.x.x", "L3.x.x", "C3.x.x", "IP.x.x", "RC3.x.x", "LC3.x.x", "B3.x.x", "L2.x.x", "R2.x.x", "C2.x.x",
+                                            "R3.y.x", "L3.y.x", "C3.y.x", "IP.y.x", "RC3.y.x", "LC3.y.x", "B3.y.x", "L2.y.x", "R2.y.x", "C2.y.x",
+                                            "R3.x.y", "L3.x.y", "C3.x.y", "IP.x.y", "RC3.x.y", "LC3.x.y", "B3.x.y", "L2.x.y", "R2.x.y", "C2.x.y",
+                                            "R3.y.y", "L3.y.y", "C3.y.y", "IP.y.y", "RC3.y.y", "LC3.y.y", "B3.y.y", "L2.y.y", "R2.y.y", "C2.y.y"                                               
+                                            )], 
                       y = Data_Cleaned_Train[,c("TotalPoints")], ntree=50 ,type='regression')
     
     RFPredTP = predict( rfTP,  Data_Cleaned_Test[,c("MP","FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
@@ -324,7 +487,12 @@ for (variable in c(3:365)) {
                                                 "ThreeP.y","FT.y","AST.y","STL.y",
                                                 "TOV.y","PF.y","PTS","TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
                                                 "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp","ThreePAOpp","FTAOpp",
-                                                "TRBOpp","ASTOpp","STLOpp","TOVOpp")] ,type = c("response") )
+                                                "TRBOpp","ASTOpp","STLOpp","TOVOpp",
+                                                "R3.x.x", "L3.x.x", "C3.x.x", "IP.x.x", "RC3.x.x", "LC3.x.x", "B3.x.x", "L2.x.x", "R2.x.x", "C2.x.x",
+                                                "R3.y.x", "L3.y.x", "C3.y.x", "IP.y.x", "RC3.y.x", "LC3.y.x", "B3.y.x", "L2.y.x", "R2.y.x", "C2.y.x",
+                                                "R3.x.y", "L3.x.y", "C3.x.y", "IP.x.y", "RC3.x.y", "LC3.x.y", "B3.x.y", "L2.x.y", "R2.x.y", "C2.x.y",
+                                                "R3.y.y", "L3.y.y", "C3.y.y", "IP.y.y", "RC3.y.y", "LC3.y.y", "B3.y.y", "L2.y.y", "R2.y.y", "C2.y.y"                                               
+                                                )] ,type = c("response") )
     
         
     Prediction2 = as.data.frame(RFPred)

@@ -77,13 +77,13 @@ def main():
                 playerShot = ("INSERT INTO [NBAShotChart] VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
                 for bodyDetails in body:                    
                     print("crawling ", href)                
-                    print("Completed = ", scrapped, "Out of ", TotalCount)
-                    scrapped = scrapped + 1
+                    print("Completed = ", scrapped, "Out of ", TotalCount)                    
                     playerTeam = team[bodyDetails[6]]
                     bodyDetails[6] = str(playerTeam)
                     cursor.execute(playerShot, tuple(bodyDetails))                
                     cursor.commit()
             time.sleep(3)
+            scrapped = scrapped + 1
 
 if __name__ == '__main__':
     main()
