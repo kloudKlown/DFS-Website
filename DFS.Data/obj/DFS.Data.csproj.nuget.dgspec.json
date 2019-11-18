@@ -1,21 +1,18 @@
 {
   "format": 1,
   "restore": {
-    "D:\\DFS Website\\DFS\\DFS.Data\\DFS.Data.csproj": {}
+    "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj": {}
   },
   "projects": {
-    "D:\\DFS Website\\DFS\\DFS.Data\\DFS.Data.csproj": {
+    "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DFS Website\\DFS\\DFS.Data\\DFS.Data.csproj",
+        "projectUniqueName": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj",
         "projectName": "DFS.Data",
-        "projectPath": "D:\\DFS Website\\DFS\\DFS.Data\\DFS.Data.csproj",
+        "projectPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj",
         "packagesPath": "C:\\Users\\suhas\\.nuget\\packages\\",
-        "outputPath": "D:\\DFS Website\\DFS\\DFS.Data\\obj\\",
+        "outputPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
           "C:\\Users\\suhas\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -53,10 +50,16 @@
             }
           },
           "imports": [
-            "net461"
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
           ],
           "assetTargetFallback": true,
-          "warn": true
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

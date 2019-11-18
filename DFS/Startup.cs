@@ -44,13 +44,12 @@ namespace DFS
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.None;                
             });
 
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(o => o.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
-            services.AddSession();
+            services.AddSession();            
             services.AddScoped<IUrlHelper>(x =>
             {
                 var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;

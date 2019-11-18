@@ -15,18 +15,18 @@ BEGIN
 			DISTINCT
 			N.PlayerName [Name],
 			CASE
-				WHEN FL.Salary IS NULL
+				WHEN FL.Pos IS NULL
 					THEN P.PlayerPosition			
-				WHEN FL.Salary IS NOT NULL
-					THEN FL.Salary
+				WHEN FL.Pos IS NOT NULL
+					THEN FL.Pos
 			END Position,
 			Height,
 			[Weight],
 			FL.Team,
 			FL_DateTime GameDate,
 			CAST(ISNULL(DKP.RFPred, 0) AS NUMERIC(8,2)) Predicted,
-			FL.Pos ActualSalary,
-			CAST((ISNULL(DKP.Salary, 0) - REPLACE(ISNULL(FL.Pos,0), '$', '')) as int) SalaryDiff,
+			FL.Salary ActualSalary,
+			CAST((ISNULL(DKP.Salary, 0) - REPLACE(ISNULL(FL.Salary,0), '$', '')) as int) SalaryDiff,
 			CAST((ISNULL(DKP.Actual, 0)) AS NUMERIC(8,2))  Actual
 		FROM
 			NBA_Player N (NOLOCK)

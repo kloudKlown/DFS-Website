@@ -16,3 +16,20 @@ D:\DFS Website\DFS\DFS.Services\bin\Debug\netstandard2.0\DFS.Common.dll
 D:\DFS Website\DFS\DFS.Services\bin\Debug\netstandard2.0\DFS.Entities.dll
 D:\DFS Website\DFS\DFS.Services\bin\Debug\netstandard2.0\DFS.Common.pdb
 D:\DFS Website\DFS\DFS.Services\bin\Debug\netstandard2.0\DFS.Entities.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\bin\Debug\netstandard2.0\DFS.Services.deps.json
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\bin\Debug\netstandard2.0\DFS.Services.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\bin\Debug\netstandard2.0\DFS.Services.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\bin\Debug\netstandard2.0\DFS.Common.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\bin\Debug\netstandard2.0\DFS.Data.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\bin\Debug\netstandard2.0\DFS.Data.Managers.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\bin\Debug\netstandard2.0\DFS.Entities.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\bin\Debug\netstandard2.0\DFS.Data.Managers.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\bin\Debug\netstandard2.0\DFS.Data.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\bin\Debug\netstandard2.0\DFS.Common.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\bin\Debug\netstandard2.0\DFS.Entities.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\obj\Debug\netstandard2.0\DFS.Services.csprojAssemblyReference.cache
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\obj\Debug\netstandard2.0\DFS.Services.AssemblyInfoInputs.cache
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\obj\Debug\netstandard2.0\DFS.Services.AssemblyInfo.cs
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\obj\Debug\netstandard2.0\DFS.Services.csproj.CopyComplete
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\obj\Debug\netstandard2.0\DFS.Services.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Services\obj\Debug\netstandard2.0\DFS.Services.pdb

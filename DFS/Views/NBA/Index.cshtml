@@ -104,7 +104,12 @@
         },
         { name: 'actual', index: 'actual', width: 50, align: 'right', editable: false, sortable: true, search: false },
         { name: 'usage', index: 'Usage', width: 80, align: 'right', editable: false, sortable: true, search: false },
-        { name: 'minutesPlayed', index: 'MinutesPlayed', width: 100, align: 'right', editable: false, sortable: true, search: false },
+        {
+            name: 'minutesPlayed', index: 'MinutesPlayed', width: 60, align: 'right', editable: false, sortable: true, search: false,
+            formatter: function (cellvalue, options, rowObject) {
+                return String(cellvalue.minutes)  + ":" + String(cellvalue.seconds);
+            }
+        },
         { name: 'defensiveRating', index: 'DefensiveRating', width: 80, align: 'right', editable: false, sortable: true, search: false },
         { name: 'offensiveRating', index: 'OffensiveRating', width: 80, align: 'right', editable: false, sortable: true, search: false },
         { name: 'height', index: 'Height', width: 80, align: 'right', editable: false, sortable: true, search: false },

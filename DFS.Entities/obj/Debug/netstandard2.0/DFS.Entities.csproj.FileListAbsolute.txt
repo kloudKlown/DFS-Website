@@ -12,3 +12,14 @@ D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.dll
 D:\DFS Website\DFS\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.pdb
 D:\DFS Website\DFS\DFS.Entities\bin\Debug\netstandard2.0\Newtonsoft.Json.dll
 D:\DFS Website\DFS\DFS.Entities\bin\Debug\netstandard2.0\Newtonsoft.Json.xml
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Entities\bin\Debug\netstandard2.0\DFS.Entities.deps.json
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Entities\bin\Debug\netstandard2.0\DFS.Entities.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Entities\bin\Debug\netstandard2.0\DFS.Entities.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Entities\bin\Debug\netstandard2.0\DFS.Common.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Entities\bin\Debug\netstandard2.0\DFS.Common.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.csprojAssemblyReference.cache
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.AssemblyInfoInputs.cache
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.AssemblyInfo.cs
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.csproj.CopyComplete
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Entities\obj\Debug\netstandard2.0\DFS.Entities.pdb

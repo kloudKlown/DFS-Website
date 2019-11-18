@@ -1,5 +1,5 @@
 .vs/
-*.cache
-*.dll
-*.exe
-*.pdb
+**/.cache
+**/.dll
+**/.exe
+**/.pdb

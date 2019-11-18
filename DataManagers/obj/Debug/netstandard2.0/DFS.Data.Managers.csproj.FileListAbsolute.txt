@@ -12,3 +12,16 @@ D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DFS.Common.pdb
 D:\DFS Website\DFS\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.csproj.CopyComplete
 D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DFS.Entities.dll
 D:\DFS Website\DFS\DataManagers\bin\Debug\netstandard2.0\DFS.Entities.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\bin\Debug\netstandard2.0\DFS.Data.Managers.deps.json
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\bin\Debug\netstandard2.0\DFS.Data.Managers.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\bin\Debug\netstandard2.0\DFS.Data.Managers.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\bin\Debug\netstandard2.0\DFS.Common.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\bin\Debug\netstandard2.0\DFS.Entities.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\bin\Debug\netstandard2.0\DFS.Common.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\bin\Debug\netstandard2.0\DFS.Entities.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.csprojAssemblyReference.cache
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.AssemblyInfoInputs.cache
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.AssemblyInfo.cs
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.csproj.CopyComplete
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DataManagers\obj\Debug\netstandard2.0\DFS.Data.Managers.pdb

@@ -7,3 +7,11 @@ D:\DFS Website\DFS\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.AssemblyInf
 D:\DFS Website\DFS\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.AssemblyInfo.cs
 D:\DFS Website\DFS\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.dll
 D:\DFS Website\DFS\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Constants\bin\Debug\netstandard2.0\DFS.Common.deps.json
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Constants\bin\Debug\netstandard2.0\DFS.Common.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Constants\bin\Debug\netstandard2.0\DFS.Common.pdb
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.csprojAssemblyReference.cache
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.AssemblyInfoInputs.cache
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.AssemblyInfo.cs
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.dll
+C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Constants\obj\Debug\netstandard2.0\DFS.Common.pdb

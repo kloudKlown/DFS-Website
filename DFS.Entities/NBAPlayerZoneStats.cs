@@ -1,10 +1,6 @@
 ﻿namespace DFS.Entities
 {
-    using Newtonsoft.Json;
     using System;
-    using System.Collections.Generic;
-    using System.Text;
-
 
     public class NBAPlayerZoneStats
     {

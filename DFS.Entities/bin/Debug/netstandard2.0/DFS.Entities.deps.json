@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETStandard,Version=v2.0/",
-    "signature": "cfe1dc2a80602aef150a12815387068463a61a0d"
+    "signature": ""
   },
   "compilationOptions": {},
   "targets": {
@@ -10,8 +10,7 @@
       "DFS.Entities/1.0.0": {
         "dependencies": {
           "DFS.Common": "1.0.0",
-          "NETStandard.Library": "2.0.3",
-          "Newtonsoft.Json": "11.0.0.0"
+          "NETStandard.Library": "2.0.3"
         },
         "runtime": {
           "DFS.Entities.dll": {}
@@ -26,14 +25,6 @@
       "DFS.Common/1.0.0": {
         "runtime": {
           "DFS.Common.dll": {}
-        }
-      },
-      "Newtonsoft.Json/11.0.0.0": {
-        "runtime": {
-          "Newtonsoft.Json.dll": {
-            "assemblyVersion": "11.0.0.0",
-            "fileVersion": "11.0.1.21818"
-          }
         }
       }
     }
@@ -60,11 +51,6 @@
     },
     "DFS.Common/1.0.0": {
       "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Newtonsoft.Json/11.0.0.0": {
-      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }
