@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import os
 import sys
 import re
 from bs4 import BeautifulSoup
@@ -9,6 +9,8 @@ import time
 import json
 from seleniumwire import webdriver 
 
+dir_path = os.getcwd()
+dir_path = "\\".join(dir_path.split("\\")[0:-1]) + "\\chromedriver.exe"
 team = { 
         "Atlanta Hawks" : "ATL",
             "Boston Celtics" : "BOS",
@@ -43,7 +45,7 @@ team = {
 }
 
 def main():
-    driver = webdriver.Chrome( executable_path = r"D:\\DFS Website\\DFS\\Python Scripts\\chromedriver.exe")
+    driver = webdriver.Chrome( executable_path = dir_path)
     driver.get("https://stats.nba.com/players/list/")
     time.sleep(5)    
     html = driver.page_source
