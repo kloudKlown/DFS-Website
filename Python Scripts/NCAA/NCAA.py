@@ -5,11 +5,15 @@ import subprocess
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 import inflect 
+import pyodbc
 
 YEAR = [2019, 2020] 
 positionHeaders = {}
+connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NBA;""Trusted_Connection=yes;")
+cursor = connection.cursor()
+cursor.execute("Delete from NCAA_PlayerLog Where [Date] > '2019-10-10'")
+cursor.commit()
 
-subprocess.check_output('del D:\\NBA\\TableInsertNCAA.csv', shell = True)
 
 def ClearSpecialCharacters(data, header):
     if header:
@@ -132,41 +136,64 @@ def ExtractPlayersData(player, playerPosition, playerLink, year):
     headerMain[-1] = 'plusMinus'
     headerMain.insert(0, "PlayerPosition")
     headerMain.insert(0, "PlayerName")        
-    # print(headerMain)
-    
     joinedHaders =  str(','.join(headerMain))
+
+    ### DB connection and cleanup
+    playerInsertData = ("INSERT INTO [NCAA_PlayerLog] VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+    playerDataTuple = []
+
     
-    
-    joinedHaders = joinedHaders.replace('Opponent,Type,','Opponent,Type,blank2,')    
-    # print(joinedHaders)
-    # input()
+    joinedHaders = joinedHaders.replace('Opponent,Type,','Opponent,Type,blank2,')
     positionHeaders[playerPosition] = joinedHaders
-    fileToWrite = open('D:\\NBA\\TableInsertNCAA.csv', 'a+')
-    InsertIntoTable =  'INSERT INTO NCAATABLEDATA ('  + str(joinedHaders) + ') VALUES \n'
-    fileToWrite.write(InsertIntoTable) 
     count = 0        
 
     # Body of the Gamelog
     playerGameLogDataBody = playerGameLogData.find('tbody')
     for eachTD in playerGameLogDataBody.findAll('tr'):
-        if count == 0:
-            playerData =  '(\'' + player + '\''  + ',' + '\'' +  playerPosition + '\'' +  ','
-        else:
-            playerData =  ',(\'' + player + '\''  + ',' + '\'' +  playerPosition + '\'' +  ','        
-        playerData = playerData + '\'' + str(count) + '\'' 
+        playerDataTuple.append(player)
+        playerDataTuple.append(playerPosition)
+        playerDataTuple.append(count)
+
+        # if count == 0:
+        #     playerData =  '(\'' + player + '\''  + ',' + '\'' +  playerPosition + '\'' +  ','
+        # else:
+        #     playerData =  ',(\'' + player + '\''  + ',' + '\'' +  playerPosition + '\'' +  ','        
+        # playerData = playerData + '\'' + str(count) + '\'' 
+        
         for each in eachTD.findAll('td'):
-            playerData = playerData + ',' + '\'' + ClearSpecialCharacters(each.text, False) + '\''
+            data = ClearSpecialCharacters(each.text, False)
+            try:
+                data = int(data)
+                playerDataTuple.append(data)
+                continue
+            except:
+                pass
 
-        playerData = playerData + ') \n'                   
+            try:
+                data = float(data)
+                playerDataTuple.append(data)
+                continue
+            except:
+                pass
+            
+            if (len(data) == 0):
+                playerDataTuple.append(0)
+                continue
 
-        if (len(playerData.split(',')) > 15 ):
-            print(playerData)
-            fileToWrite.write(playerData)
-            count += 1
+            playerDataTuple.append(data)
+            #playerData = playerData + ',' + '\'' + ClearSpecialCharacters(each.text, False) + '\''
 
-    # input()
-    fileToWrite.write(';')
-    fileToWrite.close()
+        #playerData = playerData + ') \n'                   
+
+        if (len(playerDataTuple) > 15 ):                
+            dateField = str(playerDataTuple[3])[0:4] + "-" + str(playerDataTuple[3])[4:6] + "-" + str(playerDataTuple[3])[6:8]
+            playerDataTuple[3] = dateField  
+            playerDataTuple[5] = str(playerDataTuple[5])
+            print("playerDataTuple Value = ", playerDataTuple) 
+            cursor.execute(playerInsertData, tuple(playerDataTuple))
+            cursor.commit()                 
+            playerDataTuple = []            
+            count += 1    
     return 0
 
 ExtractTeams()

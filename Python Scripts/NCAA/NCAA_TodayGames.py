@@ -13,9 +13,9 @@ import hashlib
 import time 
 from datetime import datetime
 from bs4 import BeautifulSoup
+
 dir_path = os.getcwd()
 dir_path = "\\".join(dir_path.split("\\")[0:-1]) + "\\chromedriver.exe"
-YEAR = [2018,2019] 
 positionHeaders = {}
 subprocess.check_output('del NCAA_TodayGames.txt', shell = True)
 

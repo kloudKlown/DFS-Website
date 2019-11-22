@@ -26,6 +26,11 @@ NBAAllData = NBATableData
 OffensiveStats = read.csv('OffensiveStats_All.csv')
 DefensiveStats = read.csv('DefensiveStats_All.csv')
 
+#OffensiveStats = subset(OffensiveStats, select = -X)
+OffensiveStats = subset(OffensiveStats, select = -X.1)
+
+#DefensiveStats = subset(DefensiveStats, select = -X)
+DefensiveStats = subset(DefensiveStats, select = -X.1)
 
 ######################################################
 ############### Team Defensive stats ######################
@@ -345,7 +350,7 @@ DefensiveStatsToday[is.null(DefensiveStatsToday)] = 0
 
 allPlayers = unique(TodaysPlayers$PlayerName)
 OffensiveStatsToday = data.frame(matrix(ncol=38))
-colnames(OffensiveStatsToday) = c("PlayerName", "Tm", "PlayerPosition" , "Date", "Opp",  "TotalPoints","DKP",
+colnames(OffensiveStatsToday) = c("PlayerName", "Tm", "Pos" , "Date", "Opp",  "TotalPoints","DKP",
                              "Home","MP",
                              "FG","FGA","ThreeP","ThreePA","FT","FTA","ORB","DRB",
                              "TRB","AST","STL","BLK","TOV","PF","TSPer","eFGPer","ORBPer",
@@ -383,7 +388,7 @@ for (player in allPlayers) {
     
   temp$Date = TodaysDate
   temp$PlayerName = player
-  temp$PlayerPosition = as.character(subsetPlayerData$Position[1])
+  temp$Pos = as.character(subsetPlayerData$Position[1])
   temp$Tm = CurrenTeam
   temp$Opp = Opponent 
   temp$MP = mean(as.numeric(subsetPlayerData$MP))/60
@@ -422,9 +427,18 @@ for (player in allPlayers) {
     OffensiveStatsToday = rbind(temp, OffensiveStatsToday)
 }
 
+OffensiveStatsToday = OffensiveStatsToday[!is.na(OffensiveStatsToday$Date),]
+DefensiveStatsToday = DefensiveStatsToday[!is.na(DefensiveStatsToday$Date),]
+
+OffensiveStats = OffensiveStats[!OffensiveStats$Date == 0,]
+DefensiveStats = DefensiveStats[!DefensiveStats$Date == 0,]
+
 OffensiveStatsToday[is.na(OffensiveStatsToday)] = 0
 OffensiveStatsToday[is.null(OffensiveStatsToday)] = 0
 OffensiveStatsToday$X  = 0
+
+OffensiveStatsToday$Date = as.Date(OffensiveStatsToday$Date)
+OffensiveStats$Date = as.Date(OffensiveStats$Date)
 
 OffensiveStats = rbind(OffensiveStatsToday , OffensiveStats)
 DefensiveStats = rbind(DefensiveStatsToday , DefensiveStats)
@@ -433,7 +447,7 @@ DefensiveStats = rbind(DefensiveStatsToday , DefensiveStats)
 ################## Prediction
 
 ################## Results ###############################
-CombinedStats = merge(x = OffensiveStats, y = DefensiveStats, by.x = c("Date", "PlayerPosition", "Tm"), 
+CombinedStats = merge(x = OffensiveStats, y = DefensiveStats, by.x = c("Date", "Pos", "Tm"), 
                       by.y = c("Date", "Pos", "Tm") )
 
 write.csv(CombinedStats, file = "CombinedStats.csv")
