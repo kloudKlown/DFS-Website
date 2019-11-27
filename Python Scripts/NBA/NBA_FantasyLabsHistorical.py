@@ -250,10 +250,11 @@ def main(priorDays):
         return
 
     for i in range(0, int(priorDays[0])):
-        dateYear = datetime.today() + timedelta(days = i)          
+        dateYear = datetime.today() - timedelta(days = i)          
         ExtractTeams(i, dateYear)
     driver.close()
 
 if __name__ == "__main__":
    main(sys.argv[1:])   
+   
 

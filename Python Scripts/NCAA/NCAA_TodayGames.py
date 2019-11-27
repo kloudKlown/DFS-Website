@@ -14,10 +14,13 @@ import time
 from datetime import datetime
 from bs4 import BeautifulSoup
 
+os.chdir(r"C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\Python Scripts\NCAA")
+
 dir_path = os.getcwd()
 dir_path = "\\".join(dir_path.split("\\")[0:-1]) + "\\chromedriver.exe"
 positionHeaders = {}
-subprocess.check_output('del NCAA_TodayGames.txt', shell = True)
+subprocess.check_output('del NCAA_TodayGames.R', shell = True)
+os.remove("../../R Files/NCAA_TodayGames.R")
 
 def ClearSpecialCharacters(data):
 
@@ -29,14 +32,14 @@ def ClearSpecialCharacters(data):
 
 
 
-fi = open('NCAA_TodayGames.txt', 'w+')
-
+fi = open('../../R Files/NCAA_TodayGames.R', 'w+')
+fi.write("game1 = c(")
 # Extract team urls and names
 
+
 def ExtractTeams():
-
+    ##############################################################################################################################
     # for year in YEAR:
-
     month = datetime.now().month
     day = datetime.now().day
     year = datetime.now().year
@@ -60,7 +63,8 @@ def ExtractTeams():
             teamName = str(each)
             print(teamName)            
             fi.write( '"'+ ClearSpecialCharacters(each.text.lower()) + '",')            
-    fi.close()
+    driver.close()
     
-
 ExtractTeams()
+fi.write(" \"\" )")
+fi.close()
