@@ -28,7 +28,7 @@ AllDataNCAA$PlayerPosition = toupper(AllDataNCAA$PlayerPosition)
 AllDataNCAA$PlayerPosition = gsub("/[A-Z]*", "", (AllDataNCAA$PlayerPosition) , perl = TRUE)
 AllDataNCAA[is.na(AllDataNCAA)] = 0
 AllDataNCAA[is.null(AllDataNCAA)] = 0
-
+AllDataNCAA$TotalPoints = AllDataNCAA$FT * 1 + AllDataNCAA$TwoP * 2 + AllDataNCAA$ThreeP * 3
 
 TodayDate = Sys.Date()
 # game1 = c("georgetown","duke","georgemason","maryland","mountst.mary's","kentucky","purduefortwayne","ohiostate","houston","oregon","lsu","utahstate","villanova","mississippistate","xavier","uconn","texas","california","baylor","coastalcarolina","montana","washington","albany(ny)","quinnipiac","bethunecookman","incarnateword","bostonuniversity","westvirginia","bowlinggreenstate","westernkentucky","buffalo","towson","calpoly","creighton","centralarkansas","californiabaptist","clevelandstate","uncwilmington","columbiainternational","furman","duquesne","airforce","easternmichigan","umbc","evansville","eastcarolina","floridainternational","easternkentucky","fordham","nevada","fresnopacific","longbeachstate","gardnerwebb","southcarolina","harvard","holycross","houstonbaptist","michigan","idahostate","santaclara","illinoisstate","cincinnati","indianastate","loyolamarymount","lesley","merrimack","liberty","morganstate","lipscomb","navy","liubrooklyn","sandiegostate","mcneesestate","richmond","miami(fl)","florida","umkc","georgewashington","missouris&t","southeastmissouristate","missouristate","st.joseph's","monmouth","kennesawstate","moreheadstate","butler","norfolkstate","northwestern","northalabama","louisianatech","northcarolinaa&t","nichollsstate","prairieview","georgiastate","presbyterian","sacredheart","radford","bradley","rhodeisland","northtexas","rice","milwaukee","southcarolinastate","vanderbilt","southdakota","arkansas","southern","nebraska","st.francis(il)","easternillinois","stetson","iona","temple","usc","tulane","middletennessee","utah","ohio","valparaiso","grandcanyon","wakeforest","davidson","westernmichigan","oklahomastate","wiley","utsa")
@@ -40,6 +40,7 @@ DefensiveStatsNCAA = subset(DefensiveStatsNCAA, select = -X)
 OffensiveStatsNCAA = subset(OffensiveStatsNCAA, select = -X)
 
 subset(OffensiveStatsNCAA, as.Date(OffensiveStatsNCAA$Date) == as.Date("2019-11-22"))
+
 ##########################################
 ##########################################
 
@@ -124,6 +125,8 @@ for (eachTeam in unique(AllDataNCAA$School)) {
 }
 
 DefensiveStatsNCAA = rbind(DefensiveStatsNCAACurrent, DefensiveStatsNCAA)
+write.csv(DefensiveStatsNCAA, file = "DefensiveStatsNCAA_All.csv")
+
 
 ### Get Offensive Stats for each player
 OffensiveStatsNCAACurrent = OffensiveStatsNCAA[0,]
@@ -166,6 +169,13 @@ for (player in 1:nrow(allPlayers)) {
                               & as.Date(AllDataNCAA$Date) < as.Date(DateLevels[date]) 
                               & as.Date(AllDataNCAA$Date) > (as.Date(DateLevels[date]) - 300))  
     
+    currentGame = subset(AllDataNCAA, AllDataNCAA$PlayerName == player$PlayerName & player$School == AllDataNCAA$School
+                         & as.Date(AllDataNCAA$Date) == as.Date(DateLevels[date]) 
+    )
+    if (nrow(currentGame) == 0 ){
+      next
+    }
+    
     if (nrow(subsetPlayerData) == 0){
       next
     }
@@ -195,11 +205,13 @@ for (player in 1:nrow(allPlayers)) {
     temp$PlayerName = player$PlayerName
     temp$PlayerPosition = as.character(subsetPlayerData$PlayerPosition[1])
     temp$Tm = as.character(lastTeam[length(lastTeam)])
-    temp$TotalPoints = 0
+    temp$TotalPoints = currentGame$TotalPoints[1]
     #### How good the defense is
     for (column in 8:length(colnames(temp))){
       temp[, colnames(temp)[column]]  = mean(subsetPlayerData[, colnames(temp)[column]])
     }
+    
+    
     
     OffensiveStatsNCAACurrent = rbind(temp, OffensiveStatsNCAACurrent)   
      
@@ -209,13 +221,15 @@ for (player in 1:nrow(allPlayers)) {
 
 
 OffensiveStatsNCAA = rbind(OffensiveStatsNCAACurrent, OffensiveStatsNCAA)
+write.csv(OffensiveStatsNCAA, file = "OffensiveStatsNCAA_All.csv")
+
 
 ####################################################################################
 ####################################################################################
 ### Get Defensive stats for each team
 TodaysSchools = unique(subset(AllDataNCAA, AllDataNCAA$School %in% game1)$School)
 DefensiveStatsNCAAToday = DefensiveStatsNCAA[0,]
-
+PositionsAll = "G"
 for (eachTeam in TodaysSchools) {
   # Iterate over each team
   subsetTeamData = subset(AllDataNCAA, AllDataNCAA$School == eachTeam)  
@@ -261,7 +275,7 @@ for (eachTeam in TodaysSchools) {
     
     subsetOppData = subset(AllDataNCAA, AllDataNCAA$Opponent %in% unique(Opp) 
                            & as.Date(AllDataNCAA$Date) < as.Date(TodayDate) 
-                           & as.Date(AllDataNCAA$Date) > (as.Date(TodayDate) - 30) &
+                           & as.Date(AllDataNCAA$Date) > (as.Date(TodayDate) - 5) &
                              as.character(AllDataNCAA$PlayerPosition) == pos )
     
     if (nrow(subsetOppData) == 0){
@@ -276,7 +290,7 @@ for (eachTeam in TodaysSchools) {
     for (column in 25:length(colnames(temp)) ){
       print(colnames(temp)[column])
       col = gsub('Opp', '',  colnames(temp)[column], perl = TRUE)
-      temp[, colnames(temp)[column]]  = sum(subsetOppData[, col])
+      temp[, colnames(temp)[column]]  = sum(AG[, col])
     }
     
     DefensiveStatsNCAAToday = rbind(temp, DefensiveStatsNCAAToday)
@@ -317,7 +331,7 @@ for (player in 1:nrow(allPlayers)) {
   temp = OffensiveStatsNCAA[1,]
   subsetPlayerData = subset(AllDataNCAA, AllDataNCAA$PlayerName == player$PlayerName & AllDataNCAA$School == player$School 
                             & as.Date(AllDataNCAA$Date) < as.Date(TodayDate) 
-                            & as.Date(AllDataNCAA$Date) > (as.Date(TodayDate) - 300)
+                            & as.Date(AllDataNCAA$Date) > (as.Date(TodayDate) - 30)
   )  
   
   if (nrow(subsetPlayerData) == 0){
@@ -393,6 +407,14 @@ for (player in 1:nrow(allPlayers)) {
                               & CombinedStats$Tm == as.character(player$Tm)
                               & as.Date(CombinedStats$Date) > (as.Date(DateCheck) - 300) )
   
+  if(nrow(Data_Cleaned_Train) < 10){
+    Data_Cleaned_Train = subset(CombinedStats,CombinedStats$Tm == player$Tm 
+                                & as.Date(CombinedStats$Date) < as.Date(DateCheck)
+                                & CombinedStats$Tm == as.character(player$Tm)
+                                & as.Date(CombinedStats$Date) > (as.Date(DateCheck) - 30) )  
+  }
+  
+  
   Data_Cleaned_Train = Data_Cleaned_Train[order(Data_Cleaned_Train$Date , decreasing = TRUE ),]
   
   if(nrow(Data_Cleaned_Train) > 50){
@@ -411,12 +433,12 @@ for (player in 1:nrow(allPlayers)) {
   # "ThreePper.x","FT.x",   "FTA.x",  "FTper.x",
   rf = randomForest( Data_Cleaned_Train[,c("MP", "Home","ORB.x", "TRB.x",  "AST.x",  "STL.x",  "BLK.x",  
                                            "TOV.x",  "PF.x", "FG.y", "TRB.y","TOV.y",
-                                           "FGAOpp", "ThreePAOpp", "TRBOpp", "ASTOpp", "STLOpp", "BLKOpp")], 
+                                           "FGAOpp", "TRBOpp", "ASTOpp", "STLOpp", "BLKOpp")], 
                      y = Data_Cleaned_Train[,c("TotalPoints")], ntree=500, type='regression')
   
   RFPred = predict( rf,  Data_Cleaned_Test[,c("MP","Home",
                                               "ORB.x", "TRB.x",  "AST.x",  "STL.x",  "BLK.x",  "TOV.x",  "PF.x",
-                                              "FG.y", "TRB.y","TOV.y","FGAOpp", "ThreePAOpp", "TRBOpp", "ASTOpp", "STLOpp", "BLKOpp")] ,type = c("response") )
+                                              "FG.y", "TRB.y","TOV.y","FGAOpp", "TRBOpp", "ASTOpp", "STLOpp", "BLKOpp")] ,type = c("response") )
   
   
   

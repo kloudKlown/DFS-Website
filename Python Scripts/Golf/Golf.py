@@ -31,13 +31,17 @@ for each in cursor.fetchall():
         pass
 
 
-def Player(url):
+def Player(url):    
     teamData = subprocess.check_output(['curl', url], shell = True)
     soup = BeautifulSoup(teamData, features='html.parser')
     player = soup.find("div", {"class": "mod-page-header"})
-    player = player.find("h1")    
+    if (player == None):
+        return 0
+    player = player.find("h1")
     playerID = url.split("id/")[-1]
-    playerID = playerID.split("/")[0]            
+    playerID = playerID.split("/")[0]
+    
+    
     try:
         if(PlayerList[player.text] == 1):                
             pass
@@ -46,7 +50,7 @@ def Player(url):
         playerData = [player.text, playerID]        
         cursor.execute(playerInsert, tuple(playerData))
         cursor.commit()
-
+    return 1
 
 def GetScorecards(url, tournamentID, years):
 
@@ -56,11 +60,28 @@ def GetScorecards(url, tournamentID, years):
         teamData = subprocess.check_output(['curl', url], shell = True)
         soup = BeautifulSoup(teamData, features='html.parser')
         scorecards = soup.findAll("div", {"class": "mod-container mod-table mod-no-header-footer mod-player-stats"})
-        scorecards = scorecards[-1].findAll("div", {"class" : "roundSwap"})
+        stats = soup.findAll("div", {"class": "mod-container mod-table mod-no-footer mod-player-stats"})
 
+        #################################################################################################
+        ## Player Stats ##
+        if(stats != None):
+            stats = stats[0].find("tr", {"class": "oddrow"})            
+            playerInsert = ("INSERT INTO Golf_PlayerStats VALUES (?,?,?,?,?,?,?,?,?,?)")
+            playerData = [int(playerID),int(tournamentID), years]            
+            for each in stats.findAll("td"):                
+                try:
+                    playerData.append(float(each.text))
+                except:
+                    playerData.append(0)            
+            cursor.execute(playerInsert, tuple(playerData))
+            cursor.commit()            
+
+        scorecards = scorecards[-1].findAll("div", {"class" : "roundSwap"})        
         roundID = 1
         print(len(scorecards), url)
         playerInsert = ("INSERT INTO Golf_PlayerLog VALUES (?,?,?,?,?,?,?,?)")
+        #################################################################################################
+        ## Player Logs ##
 
         for each in scorecards:        
             colheads = each.findAll("tr", {"class": "colhead"})
@@ -108,7 +129,7 @@ def GetScorecards(url, tournamentID, years):
             i = 0    
             try:
                 for score in ScoresCollected:            
-                    playerData = [playerID, tournamentID, years, roundID, score["Hole"], score["Yards"], score["Par"], ShotCollected[i]]            
+                    playerData = [playerID, tournamentID, years, roundID, score["Hole"], score["Yards"], score["Par"], ShotCollected[i]]
                     cursor.execute(playerInsert, tuple(playerData))
                     cursor.commit()
                     i = i + 1
@@ -125,11 +146,15 @@ def GetTournamets(url, years):
     teamData = subprocess.check_output(['curl', url], shell = True)
     soup = BeautifulSoup(teamData, features='html.parser')
     tournaments = soup.find("div", {"class": "select-container"})
+    if (tournaments == None):
+        return 0
     tournaments = tournaments.findAll("select")
     tournaments = tournaments[-1].findAll("option")
-    
-    for each in tournaments:
+    print(tournaments)
+
+    for each in tournaments[1:]:
         if "tournamentId" in each["value"]:
+            print(each)
             tournamentID = each["value"].split("tournamentId/")[-1]   
             GetScorecards(each["value"][2:], tournamentID, years)            
 
@@ -140,24 +165,33 @@ def GetYears(url):
     scorecards = soup.find("div", {"class": "select-container"})
     scorecards = scorecards.findAll("select")
     scorecards = scorecards[0].findAll("option")
-    years = 2020
+    if (len(scorecards) > 2):
+        years = int(scorecards[1].text)
+    else:
+        return 0
+    print(scorecards)
+        
+    for each in scorecards[1:]:
+        if (years < 2016):
+            break        
+        
+        if "scorecards" in each["value"] and "year" not in each["value"]:
+            eachUrl = each["value"][2:] + "/year/" + str(years)
+            GetTournamets(eachUrl, years)            
 
-    for each in scorecards:
         if "year" in each["value"]:            
             GetTournamets(each["value"][2:], years)
-            years = years - 1
-        if (years < 2014):
-            break
+
+        years = years - 1
 
 def ExtractPlayers():
     teamData = subprocess.check_output(['curl', MainUrl], shell = True)
-    soup = BeautifulSoup(teamData, features='html.parser')
-    linkList = soup.findAll("a")    
-    linkList = [x for x in linkList if re.match(".*http://www.espn.com/golf/player.*", str(x))]    
+    soup = BeautifulSoup(teamData, features='html.parser')    
+    linkList = ["http://www.espn.com/golf/player/scorecards/_/id/" + str(x) for x in range(1, 6636)]    
 
     for each in linkList:        
-        url = "http://www.espn.com/golf/player/scorecards/" + each["href"].split("www.espn.com/golf/player/")[-1]        
-        Player(each["href"])
-        GetYears(url)           
+        r = Player(each)
+        if (r == 1):
+            GetYears(each)           
 
 ExtractPlayers()
