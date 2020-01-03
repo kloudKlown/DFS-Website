@@ -1,44 +1,47 @@
-setwd("D:/NBA")
+setwd("C:/Users/suhas/Source/Repos/kloudKlown/DFS-Website/R Files")
 source('RIncludes.R')
+source('NCAA_TodayGames.R')
 
-TodayDate = "2019-3-13"
-game1 = c("sacramentostate","northernarizona","clemson","ncstate","umass","georgewashington","coloradostate","boisestate","idahostate","southernutah","miamifl","virginiatech","fordham","richmond","arizona","usc","idaho","montanastate","wyoming","newmexico","california","colorado","houstonbaptist","lamar","southcarolinastate","norfolkstate","nebraska","rutgers","sanjosestate","airforce","middletennessee","alabamabirmingham","bucknell","colgate","floridaatlantic","louisianatech","notredame","louisville","georgia","missouri","butler","providence","oklahomastate","tcu","coppinstate","northcarolinaa&t","centralarkansas","texasa&mcorpuschristi","northtexas","floridainternational","northwestern","illinois","westvirginia","oklahoma","depaul","st.johnsny","pitt","syracuse","vanderbilt","texasa&m","stanford","ucla","rice","marshall","washingtonstate","oregon")
+library(odbc)
+con <- dbConnect(odbc(),
+                 Driver = "SQL Server",
+                 Server = "localhost",
+                 Database = "NBA",
+                 Trusted_Connection = "True",
+                 Port = 1433)
 
+BBSavantPlayer = dbSendQuery(con, "Select * From [NCAA_PlayerLog]")
+AllDataNCAA = dbFetch(BBSavantPlayer)
+dbClearResult(BBSavantPlayer)
 
+AllDataNCAA$School = tolower(AllDataNCAA$School)
+AllDataNCAA$Opponent = tolower(AllDataNCAA$Opponent)
+colnames(AllDataNCAA)[colnames(AllDataNCAA)=="ï..Date"] <- "Date"
+colnames(AllDataNCAA)[colnames(AllDataNCAA)=="ï..PlayerName"] <- "PlayerName"
+AllDataNCAA$PlayerName = gsub("(?=[A-Z])", " ", AllDataNCAA$PlayerName , perl = TRUE)
+AllDataNCAA$PlayerName = gsub("^\\s", "", AllDataNCAA$PlayerName , perl = TRUE)
+AllDataNCAA[AllDataNCAA == "NULL"] = 0
+AllDataNCAA$Date = as.Date(AllDataNCAA$Date)
 
+# colnames(AllDataNCAA)[colnames(AllDataNCAA)=="oneGS"] <- "Team"
+AllDataNCAA$PlayerPosition = toupper(AllDataNCAA$PlayerPosition)
+AllDataNCAA$PlayerPosition = gsub("/[A-Z]*", "", (AllDataNCAA$PlayerPosition) , perl = TRUE)
+AllDataNCAA[is.na(AllDataNCAA)] = 0
+AllDataNCAA[is.null(AllDataNCAA)] = 0
+AllDataNCAA$TotalPoints = AllDataNCAA$FT * 1 + AllDataNCAA$TwoP * 2 + AllDataNCAA$ThreeP * 3
 
-###setwd### Clean and Analyse BureauData
-AllNCAAData = read.csv(file = "TableDataNCAA.csv", header = TRUE)
-AllNCAAData$School = tolower(AllNCAAData$School)
-AllNCAAData$Opponent = tolower(AllNCAAData$Opponent)
-colnames(AllNCAAData)[colnames(AllNCAAData)=="ï..Date"] <- "Date"
-AllNCAAData$PlayerName = gsub("(?=[A-Z])", " ", AllNCAAData$PlayerName , perl = TRUE)
-AllNCAAData$PlayerName = gsub("^\\s", "", AllNCAAData$PlayerName , perl = TRUE)
-AllNCAAData[AllNCAAData == "NULL"] = 0
-AllNCAAData$Date = as.Date(AllNCAAData$Date)
-
-# colnames(AllNCAAData)[colnames(AllNCAAData)=="oneGS"] <- "Team"
-AllNCAAData$PlayerPosition = toupper(AllNCAAData$PlayerPosition)
-AllNCAAData$PlayerPosition = gsub("/[A-Z]*", "", (AllNCAAData$PlayerPosition) , perl = TRUE)
-TeamsNCAA = unique(AllNCAAData$School)
 
 
 ##############################################################################
 ###### Get 2017 data to check
 
-AllDataNCAA = subset(AllNCAAData, as.Date(AllNCAAData$Date) > "2018-09-01" & as.Date(AllNCAAData$Date) < "2019-12-01")
+AllDataNCAA = subset(AllDataNCAA, as.Date(AllDataNCAA$Date) > "2018-09-01" & as.Date(AllDataNCAA$Date) < "2020-12-01")
 # View(AllDataNCAA)
 
 DateLevels = as.factor(unique(AllDataNCAA[order(AllDataNCAA$Date , decreasing = FALSE ),]$Date))
 AllDataNCAA[is.na(AllDataNCAA)] = 0
 AllDataNCAA[is.null(AllDataNCAA)] = 0
 AllColumnNames = colnames(AllDataNCAA)
-
-
-# for (colname in 14:33){
-#   print(AllColumnNames[colname])
-#   AllDataNCAA[,colname] = as.numeric(levels(AllDataNCAA[,colname]))[AllDataNCAA[,colname]]
-# }
 
 className = data.frame(sapply(AllDataNCAA, class))
 colNames = colnames(AllDataNCAA)
@@ -56,6 +59,7 @@ colnames(DefensiveStatsNCAA) = c("Tm","Pos" ,"Date","FG","FGA","FGper", "TwoP","
 DefensiveStatsNCAA[is.na(DefensiveStatsNCAA)] = 0
 
 PositionsAll = unique( AllDataNCAA$PlayerPosition )
+TeamsNCAA = unique(AllDataNCAA$School)
 
 ### Get Defensive stats for each team
 for (eachTeam in TeamsNCAA) {
@@ -115,6 +119,7 @@ for (eachTeam in TeamsNCAA) {
   }
 }
 
+DefensiveStatsNCAA$Date = as.Date(DefensiveStatsNCAA$Date)
 
 ############################################################
 ##################################################
@@ -127,13 +132,12 @@ write.csv(DefensiveStatsNCAA, file = "DefensiveStatsNCAA_All.csv")
 
 
 ######### Offensive Stats
-OffensiveStats = data.frame(matrix(ncol=30))
+OffensiveStats = data.frame(matrix(ncol=28))
 colnames(OffensiveStats) = c("PlayerName", "Tm", "PlayerPosition" , "Date", "Home",
                              "Opp",  "TotalPoints", "MP","FG","FGA","FGper","TwoP",
                              "TwoPper","TwoPA","ThreeP","ThreePA",
                              "ThreePper","FT","FTA","FTper","ORB","DRB",
-                             "TRB","AST","STL","BLK","TOV","PF",
-                             "GmSc","plusMinus")
+                             "TRB","AST","STL","BLK","TOV","PF")
 
 AllDataNCAA$TotalPoints = AllDataNCAA$FT * 1 + AllDataNCAA$TwoP * 2 + AllDataNCAA$ThreeP * 3
 
@@ -197,6 +201,8 @@ for (player in allPlayers) {
 
 OffensiveStats[is.na(OffensiveStats)] = 0
 OffensiveStats[is.null(OffensiveStats)] = 0
+OffensiveStatsNCAA = OffensiveStats
+write.csv(OffensiveStatsNCAA, file = "OffensiveStatsNCAA_All.csv")
 
 ######### Offensive Stats
 ### Today's games

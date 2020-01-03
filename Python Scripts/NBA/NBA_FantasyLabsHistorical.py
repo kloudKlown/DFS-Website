@@ -229,7 +229,7 @@ def ExtractTeams(priorDays = 0, dateYear = 0):
 url = "https://www.fantasylabs.com/account/login/"
 co = Options()
 co.add_argument(f'user-agent={user_agent}')
-co.add_argument("--window-size=1440,4880")
+co.add_argument("--window-size=1440,20000")
 co.add_argument("--headless")
 driver = webdriver.Chrome( options = co, executable_path = "D:\\MLB\\spiders\\chromedriver.exe")
 
@@ -253,6 +253,8 @@ def main(priorDays):
         dateYear = datetime.today() - timedelta(days = i)          
         ExtractTeams(i, dateYear)
     driver.close()
+    quit()
+    exit()
 
 if __name__ == "__main__":
    main(sys.argv[1:])   

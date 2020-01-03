@@ -47,6 +47,11 @@ team = {
 def main():
     driver = webdriver.Chrome( executable_path = dir_path)
     driver.get("https://stats.nba.com/players/list/")
+    ### DB connection and cleanup
+    connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NBA;""Trusted_Connection=yes;")
+    cursor = connection.cursor()                
+    cursor.execute("Delete From NBAShotChart Where gameDate > '2019-07-01'")                
+    cursor.commit()    
     time.sleep(5)    
     html = driver.page_source
     soup = BeautifulSoup(html, features="html.parser")
@@ -71,10 +76,7 @@ def main():
                 #soup = BeautifulSoup(pageData, features="html.parser")
                 #body = soup.find("body").text                
                 dict_from_json = json.loads(pageData)                
-                body = dict_from_json["resultSets"][0]["rowSet"]                
-                ### DB connection and cleanup
-                connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NBA;""Trusted_Connection=yes;")
-                cursor = connection.cursor()                
+                body = dict_from_json["resultSets"][0]["rowSet"]
                 shotData = []                
                 playerShot = ("INSERT INTO [NBAShotChart] VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
                 for bodyDetails in body:                    

@@ -42,9 +42,10 @@ def ExtractTeams():
     # for year in YEAR:
     month = datetime.now().month
     day = datetime.now().day
-    year = datetime.now().year
+    year = datetime.now().year    
     url = 'https://www.sports-reference.com/cbb/boxscores/index.cgi?month=' + str(month) + '&day=' + str(day ) + '&year='+ str(year)
     co = Options()
+    co.add_argument("-no-sandbox")
     driver = webdriver.Chrome( options = co, executable_path = dir_path)
     driver.get(url)
     wait = WebDriverWait(driver, 10)

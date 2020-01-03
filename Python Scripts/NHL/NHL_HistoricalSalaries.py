@@ -15,38 +15,39 @@ from datetime import datetime, timedelta
 import pyodbc
 positionHeaders = {}
 teamDict = { 
-        "ATL" : "ATL",
+            "ANA" : "ANA",
+            "ARI" : "ARI",
+            "BUF" : "BUF",
             "BOS" : "BOS",
-            "BKN" : "BRK",
-            "CHA" : "CHO",
+            "CAR" : "CAR",
+            "CBJ" : "CBJ",
+            "CGY" : "CGY",
             "CHI" : "CHI",
-            "CLE" : "CLE",
+            "COL" : "COL",
             "DAL" : "DAL",
-            "DEN" : "DEN",
             "DET" : "DET",
-            "GSW" : "GSW",
-            "HOU" : "HOU",
-            "IND" : "IND",
-            "LAC" : "LAC",
-            "LAL" : "LAL",
-            "MEM" : "MEM",
-            "MIA" : "MIA",
-            "MIL" : "MIL",
+            "EDM" : "EDM",
+            "FLA" : "FLA",
+            "LAK" : "LAK",
             "MIN" : "MIN",
-            "NOP" : "NOP",
-            "NYK" : "NYK",
-            "OKC" : "OKC",
-            "ORL" : "ORL",
+            "MON" : "MTL",
+            "NJD" : "NJD",
+            "NSH" : "NSH",
+            "NYI" : "NYI",
+            "NYR" : "NYR",
+            "OTT" : "OTT",
             "PHI" : "PHI",
-            "PHX" : "PHO",
-            "POR" : "POR",
-            "SAC" : "SAC",
-            "SAS" : "SAS",
+            "PIT" : "PIT",
+            "SJS" : "SJS",
+            "STL" : "STL",
+            "TBL" : "TBL",
             "TOR" : "TOR",
-            "UTA" : "UTA",
-            "WAS" : "WAS"
-}
-
+            "VAN" : "VAN",
+            "VGK" : "VEG",
+            "WPG" : "WPG",
+            "WSH" : "WSH"
+    }
+    
 def ClearSpecialCharacters(data):
     if '\xa0' in data:        
         data = 'blank'
@@ -61,9 +62,64 @@ def ClearSpecialCharacters(data):
 
 user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3686.68 Safari/537.36'  
 ### DB connection and cleanup
-connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NBA;""Trusted_Connection=yes;")
+connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NHL;""Trusted_Connection=yes;")
 cursor = connection.cursor()
 sqlUpdate = []
+
+
+def ExtractPlayers(strDateYearPrint):
+    try:
+        html = driver.page_source
+        soup = BeautifulSoup(html, features='html.parser')
+        playerList = soup.findAll('div', {'class': 'fixedDataTableLayout_rowsContainer'})[0]        
+        OddPlayers = {}
+        i = 0
+        
+        for divs in playerList.findAll('div', {'class': 'fixedDataTableRowLayout_rowWrapper'}):            
+            if ("Player" in divs.text):
+                continue
+            if ("Name" in divs.text):
+                continue
+            OddPlayers[i] = []
+            for player in divs.findAll("div", {"class": "fixedDataTableCellLayout_main public_fixedDataTableCell_main"}):
+                OddPlayers[i].append(player.text)
+            i = i + 1        
+
+        for key in OddPlayers.keys():            
+            player = OddPlayers[key][0].rstrip().lstrip()            
+            player = re.sub('[^a-zA-Z0-9@\n\.\s]', '', player)            
+            salary = float(OddPlayers[key][1].rstrip().lstrip().replace('$', '').replace('K', ''))
+            salary =  salary * 1000
+            position = OddPlayers[key][2].rstrip().lstrip()            
+            team = OddPlayers[key][3].rstrip().lstrip()
+            opp = OddPlayers[key][4].replace("vs ", "").rstrip().lstrip()
+            opp = opp.replace("@", "").rstrip().lstrip()
+            vegasTotal = OddPlayers[key][8].rstrip().lstrip()
+            vegasT = OddPlayers[key][9].rstrip().lstrip()
+            line = OddPlayers[key][10].rstrip().lstrip()
+            pp = OddPlayers[key][11].rstrip().lstrip()
+            
+            team = teamDict[team]            
+            playerInsertList = []
+            playerInsertList.append(player)
+            playerInsertList.append(salary)
+            playerInsertList.append(position)
+            playerInsertList.append(team)
+            playerInsertList.append(opp)
+            playerInsertList.append(strDateYearPrint)
+            playerInsertList.append(vegasTotal)
+            playerInsertList.append(vegasT)
+            playerInsertList.append(line)
+            playerInsertList.append(pp)
+            print(playerInsertList)
+            playerInsertData = ("INSERT INTO NHL_FantasyLabs VALUES (?,?,?,?,?,?,?,?,?,?)") 
+            cursor.execute(playerInsertData, tuple(playerInsertList))
+            cursor.commit()        
+        return 1
+
+    except :
+        pass
+
 
 # Extract team urls and names
 def ExtractTeams(priorDays = 0, dateYear = 0):
@@ -80,153 +136,54 @@ def ExtractTeams(priorDays = 0, dateYear = 0):
         time.sleep(4)
         dateS = AddZeroToDates(dateYear.day)
         monthS = AddZeroToDates(dateYear.month)
-        yearS = dateYear.year        
+        yearS = dateYear.year
         strDateYear =  str(monthS) + str(dateS) + str(yearS)
         strDateYearPrint =  str(yearS) + '-' + str(monthS)  + '-' + str(dateS)
-        url = "https://www.fantasylabs.com/nba/player-models/?date=" + strDateYear
+        url = "https://rotogrinders.com/lineuphq/nhl?site=draftkings&date=" + strDateYearPrint
         driver.get(url)
         time.sleep(4)
-
-        html = driver.page_source    
-        soup = BeautifulSoup(html, features='html.parser')
-        playerList = soup.findAll('div', {'class': 'ag-pinned-cols-container'})[0]
-        OddPlayers = {}
-        cursor.execute("Delete From NBA_FantasyLabs WHERE FL_DateTime ='" + strDateYearPrint + "';")
+       
+        cursor.execute("Delete From NHL_FantasyLabs WHERE FL_DateTime ='" + strDateYearPrint + "';")
         cursor.commit()
-        i = 0
-        for divs in playerList.findAll('div', {'class': 'ag-row ag-row-odd ag-row-level-0'}):
-            OddPlayers[i] = []
-            for div in divs.findAll('div'):
-                OddPlayers[i].append(div.text)
-            i = i + 1
-        OddPlayerDetails = {}
-        playerDetailsList = soup.findAll('div', {'class': 'ag-body-viewport'})[0]   
-        i = 0
+        # Get strikers
+        bClass = driver.find_elements_by_class_name("lhq-filter__button")
+        bClass[0].click()
+        ExtractPlayers(strDateYearPrint)         
         
-        for divs in playerDetailsList.findAll('div', {'class': 'ag-row ag-row-odd ag-row-level-0'}):
-            OddPlayerDetails[i] = []
-            for div in divs.findAll('div'):
-                OddPlayerDetails[i].append(div.text)        
-            i = i + 1
+        # Get Goalies
+        bClass[1].click()
+        ExtractPlayers(strDateYearPrint)       
 
-        for key in OddPlayers.keys():            
-            player = (OddPlayers[key][3].split('(')[0]).rstrip().lstrip()            
-            player = re.sub('[^a-zA-Z0-9@\n\.\s]', '', player)
-            lev = [Levenshtein.ratio(p, player) for p in player]
-            index = lev.index(max(lev))
-            salary = OddPlayers[key][4].rstrip().lstrip().replace('$', '').replace(',', '')            
-            position = OddPlayers[key][5].rstrip().lstrip()
-            roster = OddPlayers[key][6].rstrip().lstrip()
-            team = OddPlayerDetails[key][0].rstrip().lstrip()
-            opp = OddPlayerDetails[key][1].rstrip().lstrip()
-            opp = opp.split('-')[0].rstrip().lstrip()
-            proj = OddPlayerDetails[key][2].rstrip().lstrip()
-            rating = OddPlayers[key][2].rstrip().lstrip()
-            actual = OddPlayerDetails[key][11].rstrip().lstrip()   
-            team = teamDict[team]         
-            
-            if actual == "":
-                actual = "0"
-            playerInsertList = []
-            playerInsertList.append(player)
-            playerInsertList.append(player)
-            playerInsertList.append(salary)
-            playerInsertList.append(position)
-            playerInsertList.append(roster)
-            playerInsertList.append(team)
-            playerInsertList.append(opp)
-            playerInsertList.append(strDateYearPrint)
-            playerInsertList.append(proj)
-            playerInsertList.append(rating)
-            playerInsertList.append(actual)
-            print(playerInsertList)
-            playerInsertData = ("INSERT INTO NBA_FantasyLabs VALUES (?,?,?,?,?,?,?,?,?,?,?)")        
-            cursor.execute(playerInsertData, tuple(playerInsertList))
-            cursor.commit()
-
-        EvenPlayers = {}
-        time.sleep(4)
-        i = 0
-        playerList = soup.findAll('div', {'class': 'ag-pinned-cols-container'})[0]
-        for divs in playerList.findAll('div', {'class': 'ag-row ag-row-even ag-row-level-0'}):
-            EvenPlayers[i] = []
-            for div in divs.findAll('div'):
-                EvenPlayers[i].append(div.text)
-            i = i + 1
-
-        EvenPlayerDetails = {}
-        playerDetailsList = soup.findAll('div', {'class': 'ag-body-viewport'})[0]
-        i = 0
-        for divs in playerDetailsList.findAll('div', {'class': 'ag-row ag-row-even ag-row-level-0'}):
-            EvenPlayerDetails[i] = []
-            for div in divs.findAll('div'):
-                EvenPlayerDetails[i].append(div.text)        
-            i = i + 1
-        for key in EvenPlayers.keys():
-            player = (EvenPlayers[key][3].split('(')[0]).rstrip().lstrip()
-            player = re.sub('[^a-zA-Z0-9@\n\.\s]', '', player)
-            lev = [Levenshtein.ratio(p, player) for p in player]
-            index = lev.index(max(lev))        
-            salary = EvenPlayers[key][4].rstrip().lstrip().replace('$', '').replace(',', '')
-            position = EvenPlayers[key][5].rstrip().lstrip()
-            roster = EvenPlayers[key][6].rstrip().lstrip()
-            team = EvenPlayerDetails[key][0].rstrip().lstrip()
-            opp = EvenPlayerDetails[key][1].rstrip().lstrip()
-            opp = opp.split('-')[0].rstrip().lstrip()
-            proj = EvenPlayerDetails[key][5].rstrip().lstrip()
-            rating = EvenPlayers[key][2].rstrip().lstrip()
-            actual = EvenPlayerDetails[key][12].rstrip().lstrip()
-            team = teamDict[team]
-            
-            if actual == "":
-                actual = "0"       
-            playerInsertList = []
-            playerInsertList.append(player)
-            playerInsertList.append(player)
-            playerInsertList.append(salary)
-            playerInsertList.append(position)
-            playerInsertList.append(roster)
-            playerInsertList.append(team)
-            playerInsertList.append(opp)
-            playerInsertList.append(strDateYearPrint)
-            playerInsertList.append(proj)
-            playerInsertList.append(rating)
-            playerInsertList.append(actual)
-            print(playerInsertList)
-            playerInsertData = ("INSERT INTO NBA_FantasyLabs VALUES (?,?,?,?,?,?,?,?,?,?,?)")
-            cursor.execute(playerInsertData, tuple(playerInsertList))
-            cursor.commit()
-            
-        time.sleep(4)            
-    except Exception:
-        
+    except Exception:           
         pass    
 
-url = "https://www.fantasylabs.com/account/login/"
+
+url = "https://rotogrinders.com/sign-in"
 co = Options()
 co.add_argument(f'user-agent={user_agent}')
-co.add_argument("--window-size=1440,4880")
+co.add_argument("--window-size=1440,15000")
 co.add_argument("--headless")
 driver = webdriver.Chrome( options = co, executable_path = "D:\\MLB\\spiders\\chromedriver.exe")
 
 def main(priorDays):    
     driver.get(url)
-    email = driver.find_elements_by_xpath("/html/body/div[3]/form[1]/div[2]/div/input")
-    email[0].send_keys("suhas.servesh@gmail.com")
-    password = driver.find_elements_by_xpath("/html/body/div[3]/form[1]/div[3]/div/input")
-    password[0].send_keys("30102996Kross1")
-    buttonClick = driver.find_elements_by_xpath("/html/body/div[3]/form[1]/div[4]/button")    
-    buttonClick[0].click()    
-    time.sleep(4)
-    # driver.get('chrome://settings/')
-    # driver.execute_script('chrome.settingsPrivate.setDefaultZoom(0.1);')        
+    email = driver.find_elements_by_xpath("//*[@id=\"username\"]")
+    email[0].send_keys("gotftw51@gmail.com")
+    password = driver.find_elements_by_xpath("//*[@id=\"password\"]")
+    password[0].send_keys("ilovepanda123")
+    buttonClick = driver.find_elements_by_xpath("//*[@id=\"top\"]/div/section/div/section/div/div/div[2]/form/input[5]")
+    buttonClick[0].click()
+
     # time.sleep(4)
+    # driver.get('chrome://settings/')
+    # driver.execute_script('chrome.settingsPrivate.setDefaultZoom(0.1);')
+
     if len(priorDays) == 0:
         ExtractTeams()
         return
 
     for i in range(0, int(priorDays[0])):
-        dateYear = datetime.today() + timedelta(days = i)          
+        dateYear = datetime.today() - timedelta(days = i)          
         ExtractTeams(i, dateYear)
     driver.close()
 

@@ -93,7 +93,7 @@ def GetVegasOdds(dateYear = datetime(2019, 10, 16)):
 def main(days):
 
     for i in range(0, int(days[0])):
-        dateYear = datetime.today() + timedelta(days = i)  
+        dateYear = datetime.today() - timedelta(days = i)  
         GetVegasOdds(dateYear)
 
 if __name__ == '__main__':

@@ -22,14 +22,14 @@ NBATableData = NBATableData[,c("PlayerName","Position","Date","Team","blank","Op
 
 
 NBAAllData = NBATableData
-
+NBAAllData$Date = as.Date(NBAAllData$Date)
 OffensiveStats = read.csv('OffensiveStats_All.csv')
 DefensiveStats = read.csv('DefensiveStats_All.csv')
 
-#OffensiveStats = subset(OffensiveStats, select = -X)
+OffensiveStats = subset(OffensiveStats, select = -X)
 OffensiveStats = subset(OffensiveStats, select = -X.1)
 
-#DefensiveStats = subset(DefensiveStats, select = -X)
+DefensiveStats = subset(DefensiveStats, select = -X)
 DefensiveStats = subset(DefensiveStats, select = -X.1)
 
 ######################################################
@@ -88,15 +88,15 @@ for (eachTeam in Teams) {
         next;
       }
       
-      temp$Date = DateLevels[date]
-      temp$Tm = eachTeam
-      temp$Pos = pos
-      
       #### How does team perform in this position historically
-      for (column in 4:31){
+      for (column in 4:30){
         print(colnames(temp)[column])
         temp[, colnames(temp)[column]]  = mean(subsetTeamData[, colnames(temp)[column]])
       }
+      temp$Date = as.Date(DateLevels[date]) 
+      temp$Tm = eachTeam
+      temp$Pos = pos
+      
       
       ### Get Opposition Players in the game
       OppPositionPlayers = unique(subset(NBAAllData, NBAAllData$Team == currentGame$Opp[1]
@@ -137,7 +137,7 @@ for (eachTeam in Teams) {
 ######################################################
 ######### Offensive Stats
 OffensiveStatsNew = data.frame(matrix(ncol=38))
-colnames(OffensiveStatsNew) = c("PlayerName", "Tm", "PlayerPosition" , "Date", "Opp",  "TotalPoints","DKP",
+colnames(OffensiveStatsNew) = c("PlayerName", "Tm", "Pos" , "Date", "Opp",  "TotalPoints","DKP",
                              "Home","MP",
                              "FG","FGA","ThreeP","ThreePA","FT","FTA","ORB","DRB",
                              "TRB","AST","STL","BLK","TOV","PF","TSPer","eFGPer","ORBPer",
@@ -154,7 +154,7 @@ for (player in allPlayers) {
   
   ## Get Playerdata
   subsetPlayerData = subset(NBAAllData, NBAAllData$PlayerName == player)  
-  DefensiveStatsMaxDate = max(as.Date(subset(OffensiveStats, OffensiveStats$PlayerName == player)$Date ), na.rm =  TRUE)  
+  DefensiveStatsMaxDate = max(as.Date(subset(OffensiveStats, OffensiveStats$PlayerName == player)$Date ), na.rm =  TRUE)
   
   if (nrow(subsetPlayerData) == 0)
   {
@@ -192,7 +192,7 @@ for (player in allPlayers) {
     
     temp$Date = DateLevels[date]
     temp$PlayerName = player
-    temp$PlayerPosition = as.character(subsetPlayerData$Position[1])
+    temp$Pos = as.character(subsetPlayerData$Position[1])
     temp$Tm = as.character(subsetPlayerData$Team[1])
     temp$Opp = as.character(currentGame$Opp[1])     
     temp$MP = mean(as.numeric(subsetPlayerData$MP))/60
@@ -238,9 +238,9 @@ for (player in allPlayers) {
 OffensiveStatsNew[is.na(OffensiveStatsNew)] = 0
 OffensiveStatsNew[is.null(OffensiveStatsNew)] = 0
 
-OffensiveStatsNew$X = 0
-DefensiveStatsNew$X = 0
+OffensiveStatsNew$Date = as.Date(OffensiveStatsNew$Date)
 
+OffensiveStats = OffensiveStats[5:nrow(OffensiveStats),] 
 
 DefensiveStats = rbind(DefensiveStatsNew, DefensiveStats)
 OffensiveStats = rbind(OffensiveStatsNew, OffensiveStats)
@@ -251,6 +251,10 @@ DefensiveStats[is.null(DefensiveStats)] = 0
 
 OffensiveStats[is.na(OffensiveStats)] = 0
 OffensiveStats[is.null(OffensiveStats)] = 0
+
+write.csv(DefensiveStats, file = "DefensiveStats_All.csv")
+write.csv(OffensiveStats, file = "OffensiveStats_All.csv")
+
 
 ###### Today's games ####################
 ###### Today's games ########################## Today's games ####################
@@ -302,7 +306,7 @@ for (eachTeam in Teams) {
       temp$Pos = pos
       
       #### How does team perform in this position historically
-      for (column in 4:31){
+      for (column in 4:30){
         print(colnames(temp)[column])
         temp[, colnames(temp)[column]]  = mean(subsetTeamData[, colnames(temp)[column]])
       }
@@ -347,7 +351,7 @@ for (eachTeam in Teams) {
 DefensiveStatsToday[is.na(DefensiveStatsToday)] = 0
 DefensiveStatsToday[is.null(DefensiveStatsToday)] = 0
 ######### Offensive Stats
-
+TodaysPlayers = TodaysPlayers[-1,]
 allPlayers = unique(TodaysPlayers$PlayerName)
 OffensiveStatsToday = data.frame(matrix(ncol=38))
 colnames(OffensiveStatsToday) = c("PlayerName", "Tm", "Pos" , "Date", "Opp",  "TotalPoints","DKP",
@@ -435,7 +439,7 @@ DefensiveStats = DefensiveStats[!DefensiveStats$Date == 0,]
 
 OffensiveStatsToday[is.na(OffensiveStatsToday)] = 0
 OffensiveStatsToday[is.null(OffensiveStatsToday)] = 0
-OffensiveStatsToday$X  = 0
+# OffensiveStatsToday$X  = 0
 
 OffensiveStatsToday$Date = as.Date(OffensiveStatsToday$Date)
 OffensiveStats$Date = as.Date(OffensiveStats$Date)

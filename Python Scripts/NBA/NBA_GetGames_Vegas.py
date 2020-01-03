@@ -9,6 +9,14 @@ import pyodbc
 import time 
 import json
 
+def ClearSpecialCharacters(data):
+
+    data = data.replace('-','')
+    data = data.replace('<a>','')
+    data = data.replace('</a>','')
+    data = data.replace(' ','')
+    return data
+
 teamDict = { 
         "ATL" : "ATL",
             "BOS" : "BOS",
@@ -57,7 +65,7 @@ def GetVegasOdds(dateYear = datetime(2019, 10, 16)):
     
     cursor.execute("Delete From NBA_Games WHERE GameDate ='" + strDateYear + "';")
     cursor.commit()
-    url = "https://www.vegasinsider.com/nba/scoreboard/" #scores.cfm/game_date/" + strDateYear
+    url = "https://www.vegasinsider.com/nba/scoreboard/"#scores.cfm/game_date/" + strDateYear
     teamData = subprocess.check_output(['curl', url], shell = True)
     soup = BeautifulSoup(teamData, features='html.parser')
     tds = soup.findAll("td", {"class" : "sportPicksBorder"})    
@@ -75,14 +83,44 @@ def GetVegasOdds(dateYear = datetime(2019, 10, 16)):
             playerDataTuple.append(strDateYear)
 
             for team in teams:
-                team = team.find("a")
-                teamList.append(teamDict[team.text])
-                od = team.parent.parent.next_sibling.next_sibling.text                        
+                school = team.find("a")
+                teamList.append(teamDict[school.text])                                
+                od = school.parent.parent.next_sibling.next_sibling.text
+                playerOpp = team.next_sibling.next_sibling                
+                print(od)
+                schoolOpp = playerOpp.find("a")                
+                teamList.append(teamDict[schoolOpp.text])                
+                odOpp = schoolOpp.parent.parent.next_sibling.next_sibling.text
+                print(odOpp)
+
+                if "PK" in odOpp:
+                    odOpp = 0
+                if (float(odOpp) < 100):
+                    odds["line"] = float(odOpp)
+                    odds["fv"] = teamDict[schoolOpp.text]
+                else:
+                    odds["ou"] = float(odOpp)
+                
+                if "PK" in od:
+                    od = 0
+                    
                 if (float(od) < 100):
                     odds["line"] = float(od)
-                    odds["fv"] = teamDict[team.text]
+                    odds["fv"] = teamDict[school.text]
                 else:
                     odds["ou"] = float(od)                
+                break
+
+                input()
+                # team = team.find("a")
+                # teamList.append(teamDict[team.text])
+                # od = team.parent.parent.next_sibling.next_sibling.text                        
+                # if (float(od) < 100):
+                #     odds["line"] = float(od)
+                #     odds["fv"] = teamDict[team.text]
+                # else:
+                #     odds["ou"] = float(od)      
+                              
             playerDataTuple = playerDataTuple + teamList + list(odds.values())
             print(playerDataTuple, odds)
             cursor.execute(playerInsertData, tuple(playerDataTuple))
@@ -93,7 +131,7 @@ def GetVegasOdds(dateYear = datetime(2019, 10, 16)):
 def main(days):
 
     for i in range(0, int(days[0])):
-        dateYear = datetime.today() + timedelta(days = i)  
+        dateYear = datetime.today() - timedelta(days = i)  
         GetVegasOdds(dateYear)
 
 if __name__ == '__main__':

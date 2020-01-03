@@ -34,7 +34,8 @@ NHLTableData = NHLTableData[,c("PlayerName","PlayerPosition","GID","GameDate","G
                                "Team","HW","Opp","WinLoss","Goals","Assists",
                                "Points","PlusMinus","Penalties","EGoals","PPGoals","SHGoals",
                                "GWGoals","EVAssits","PPAssits","SHAssits" ,"ShotsOnGoal","ShootingPer",
-                               "Shits","MP","Hits","Blocks","FaceOffWins","FaceOffLoss", "FaceOffPer")]
+                               "Shits","MP","Hits","Blocks","FaceOffWins","FaceOffLoss", "FaceOffPer",
+                               "Line", "VegasT")]
 
 
 NHLTableData$TotalGoals = NHLTableData$Goals
@@ -205,6 +206,7 @@ for (player in allPlayers) {
     temp$Team = as.character(subsetPlayerData$Team[1])
     temp$Opp = as.character(currentGame$Opp[1])     
     temp$MP = mean(as.numeric(subsetPlayerData$MP))/60
+    temp$Line = currentGame$Line[1]
     if (currentGame$HW == '@' | currentGame$HW == 'N'){
       temp$HW = 0
     }

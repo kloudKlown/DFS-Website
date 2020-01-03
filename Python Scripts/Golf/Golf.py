@@ -187,7 +187,7 @@ def GetYears(url):
 def ExtractPlayers():
     teamData = subprocess.check_output(['curl', MainUrl], shell = True)
     soup = BeautifulSoup(teamData, features='html.parser')    
-    linkList = ["http://www.espn.com/golf/player/scorecards/_/id/" + str(x) for x in range(1, 6636)]    
+    linkList = ["http://www.espn.com/golf/player/scorecards/_/id/" + str(x) for x in range(1, 11450)]    
 
     for each in linkList:        
         r = Player(each)

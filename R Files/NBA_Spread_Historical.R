@@ -23,7 +23,7 @@ NBATableData = NBATableData[,c("PlayerName","Position","Date","Team","blank","Op
 
 NBAAllData = NBATableData
 
-
+NBAAllData$Date = as.Date(NBAAllData$Date)
 ######################################################
 ############### Team Defensive stats ######################
 ######################################################

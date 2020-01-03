@@ -31,21 +31,16 @@ AllDataNCAA[is.null(AllDataNCAA)] = 0
 AllDataNCAA$TotalPoints = AllDataNCAA$FT * 1 + AllDataNCAA$TwoP * 2 + AllDataNCAA$ThreeP * 3
 
 TodayDate = Sys.Date()
-# game1 = c("georgetown","duke","georgemason","maryland","mountst.mary's","kentucky","purduefortwayne","ohiostate","houston","oregon","lsu","utahstate","villanova","mississippistate","xavier","uconn","texas","california","baylor","coastalcarolina","montana","washington","albany(ny)","quinnipiac","bethunecookman","incarnateword","bostonuniversity","westvirginia","bowlinggreenstate","westernkentucky","buffalo","towson","calpoly","creighton","centralarkansas","californiabaptist","clevelandstate","uncwilmington","columbiainternational","furman","duquesne","airforce","easternmichigan","umbc","evansville","eastcarolina","floridainternational","easternkentucky","fordham","nevada","fresnopacific","longbeachstate","gardnerwebb","southcarolina","harvard","holycross","houstonbaptist","michigan","idahostate","santaclara","illinoisstate","cincinnati","indianastate","loyolamarymount","lesley","merrimack","liberty","morganstate","lipscomb","navy","liubrooklyn","sandiegostate","mcneesestate","richmond","miami(fl)","florida","umkc","georgewashington","missouris&t","southeastmissouristate","missouristate","st.joseph's","monmouth","kennesawstate","moreheadstate","butler","norfolkstate","northwestern","northalabama","louisianatech","northcarolinaa&t","nichollsstate","prairieview","georgiastate","presbyterian","sacredheart","radford","bradley","rhodeisland","northtexas","rice","milwaukee","southcarolinastate","vanderbilt","southdakota","arkansas","southern","nebraska","st.francis(il)","easternillinois","stetson","iona","temple","usc","tulane","middletennessee","utah","ohio","valparaiso","grandcanyon","wakeforest","davidson","westernmichigan","oklahomastate","wiley","utsa")
-
-
 OffensiveStatsNCAA = read.csv('OffensiveStatsNCAA_All.csv')
 DefensiveStatsNCAA = read.csv('DefensiveStatsNCAA_All.csv')
 DefensiveStatsNCAA = subset(DefensiveStatsNCAA, select = -X)
 OffensiveStatsNCAA = subset(OffensiveStatsNCAA, select = -X)
 
-subset(OffensiveStatsNCAA, as.Date(OffensiveStatsNCAA$Date) == as.Date("2019-11-22"))
-
 ##########################################
 ##########################################
 
-OffensiveStatsNCAA = subset(OffensiveStatsNCAA, as.Date(OffensiveStatsNCAA$Date) < max(as.Date(AllDataNCAA$Date)))
-DefensiveStatsNCAA = subset(DefensiveStatsNCAA, as.Date(DefensiveStatsNCAA$Date) < max(as.Date(AllDataNCAA$Date)))
+OffensiveStatsNCAA = subset(OffensiveStatsNCAA, as.Date(OffensiveStatsNCAA$Date) <= max(as.Date(AllDataNCAA$Date)))
+DefensiveStatsNCAA = subset(DefensiveStatsNCAA, as.Date(DefensiveStatsNCAA$Date) <= max(as.Date(AllDataNCAA$Date)))
 PositionsAll = "G"
 
 #################################################################
@@ -301,7 +296,7 @@ for (eachTeam in TodaysSchools) {
 DefensiveStatsNCAA = rbind(DefensiveStatsNCAAToday, DefensiveStatsNCAA)
 
 
-allPlayers = unique(subset(AllDataNCAA, as.Date(AllDataNCAA$Date) > (as.Date(TodayDate) - 30)
+allPlayers = unique(subset(AllDataNCAA, as.Date(AllDataNCAA$Date) > (as.Date(TodayDate) - 60)
                            & AllDataNCAA$School %in% game1))
 
 OffensiveStatsNCAAToday = OffensiveStatsNCAA[0,]
@@ -421,7 +416,7 @@ for (player in 1:nrow(allPlayers)) {
     Data_Cleaned_Train = Data_Cleaned_Train[0:50,]
   }
   
-  if (nrow(Data_Cleaned_Train) == 0 | nrow(Data_Cleaned_Test) == 0 ){
+  if (nrow(Data_Cleaned_Train) == 0 | nrow(Data_Cleaned_Test) == 0 | length(Data_Cleaned_Train$Date > as.Date('2019-08-11')) == 0){
     next;
   }
   
@@ -531,7 +526,7 @@ NewResults = temp[0,]
 
 for(t in 1:length(teams) ){
   ResTeam = subset(Results, Results$Team == teams[t])
-  OppOnent = subset(Results, Results$Team == ResTeam[1,]$Opp)
+  OppOnent = subset(Results, Results$Team == as.character(ResTeam[1,]$Opp))
   
   homeAway = subset(CombinedStats, as.Date(CombinedStats$Date) == (as.Date(TodayDate)) & 
                       ResTeam[1,]$Team == CombinedStats$Tm )

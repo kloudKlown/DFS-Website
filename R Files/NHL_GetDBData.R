@@ -6,7 +6,7 @@ con <- dbConnect(odbc(),
                  Trusted_Connection = "True",
                  Port = 1433)
 
-NHLSavantPlayer = dbSendQuery(con, "Select * From [NHL_PlayerLog] Where GameDate > '2017-10-01'")
+NHLSavantPlayer = dbSendQuery(con, "exec usp_GetPlayerLogs")
 NHLTableData = dbFetch(NHLSavantPlayer)
 dbClearResult(NHLSavantPlayer)
 rm(NHLSavantPlayer)

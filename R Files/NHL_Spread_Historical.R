@@ -17,7 +17,8 @@ NHLTableData = NHLTableData[,c("PlayerName","PlayerPosition","GID","GameDate","G
                                "Team","HW","Opp","WinLoss","Goals","Assists",
                                "Points","PlusMinus","Penalties","EGoals","PPGoals","SHGoals",
                                "GWGoals","EVAssits","PPAssits","SHAssits" ,"ShotsOnGoal","ShootingPer",
-                               "Shits","MP","Hits","Blocks","FaceOffWins","FaceOffLoss", "FaceOffPer")]
+                               "Shits","MP","Hits","Blocks","FaceOffWins","FaceOffLoss", "FaceOffPer"
+                               ,"Line", "VegasT")]
 NHLTableData = subset(NHLTableData, as.Date(NHLTableData$GameDate) > as.Date("2017-10-01") )
 
 
@@ -44,6 +45,7 @@ Teams = unique(NHLTableData$Team)
 
 ### Get Defensive stats for each team
 for (eachTeam in Teams) {
+  
   # Iterate over each team
   subsetTeamData = subset(NHLTableData, NHLTableData$Team == eachTeam)  
   
@@ -134,12 +136,12 @@ write.csv(DefensiveStatsNHL, file = "DefensiveStatsNHL_All.csv")
 
 ######################################################
 ######### Offensive Stats
-OffensiveStatsNHL = data.frame(matrix(ncol=35))
+OffensiveStatsNHL = data.frame(matrix(ncol=37))
 colnames(OffensiveStatsNHL) = c("PlayerName", "Team", "PlayerPosition" , "GameDate", "Opp", "MP","HW",
                                 "TotalGoals","DKP", "Goals","Assists","Points","PlusMinus","Penalties","EGoals","PPGoals","SHGoals",
                                 "GWGoals","EVAssits","PPAssits","SHAssits" ,"ShotsOnGoal","ShootingPer",
                                 "Shits","Hits","Blocks","FaceOffWins","FaceOffLoss", "FaceOffPer",
-                                "GoalsOpp","FaceOffPerOpp","EVAssitsOpp","ShotsOnGoalOpp", "HitsOpp","BlocksOpp"
+                                "GoalsOpp","FaceOffPerOpp","EVAssitsOpp","ShotsOnGoalOpp", "HitsOpp","BlocksOpp","Line", "VegasT"
                                 )
 
 NHLTableData$TotalGoals = NHLTableData$Goals
@@ -187,6 +189,8 @@ for (player in allPlayers) {
     temp$Team = as.character(subsetPlayerData$Team[1])
     temp$Opp = as.character(currentGame$Opp[1])     
     temp$MP = mean(as.numeric(subsetPlayerData$MP))/60
+    temp$Line = currentGame$Line[1]
+    temp$VegasT = currentGame$VegasT[1]
     if (currentGame$HW == '@' | currentGame$HW == 'N'){
       temp$HW = 0
     }
@@ -195,7 +199,7 @@ for (player in allPlayers) {
     }
     
     #### How good the player is last 30 days
-    for (column in 8:(length(colnames(temp)) - 6) ){
+    for (column in 8:(length(colnames(temp)) - 8) ){
       print(colnames(temp)[column])
       temp[, colnames(temp)[column]]  = mean(subsetPlayerData[, colnames(temp)[column]])
     }
@@ -381,7 +385,7 @@ abline(h=0.3)
 ########## varclus Batters
 
 
-DateCheck = Sys.Date() - 16
+DateCheck = Sys.Date() - 3
 allPlayers = unique(CombinedStatsNHL$PlayerName.x)
 
 Results = data.frame( RFPred = numeric(), player = factor(), position = factor(), salary = numeric(), 
@@ -389,7 +393,7 @@ Results = data.frame( RFPred = numeric(), player = factor(), position = factor()
                       Actual = numeric(), Opp = numeric(), ShotsTaken = numeric(), Goals = numeric())
 
 allPlayers = subset(CombinedStatsNHL, as.Date(CombinedStatsNHL$GameDate) == DateCheck)$PlayerName.x
-
+allPlayers
 ##############################################################
 ################## NHL Results ###############################
 for (player in allPlayers){
@@ -398,7 +402,7 @@ for (player in allPlayers){
                              & CombinedStatsNHL$PlayerName.x == as.character(player) )
   
   Data_Cleaned_Train = subset(CombinedStatsNHL, as.Date(CombinedStatsNHL$GameDate) < as.Date(DateCheck)
-                              & as.Date(CombinedStatsNHL$GameDate) > (as.Date(DateCheck) - 30)
+                              & as.Date(CombinedStatsNHL$GameDate) > (as.Date(DateCheck) - 60)
                               & CombinedStatsNHL$PlayerName.x == as.character(player) )
   
   Actual = subset(NHLTableData, as.Date(NHLTableData$GameDate) == as.Date(DateCheck) 
@@ -413,7 +417,7 @@ for (player in allPlayers){
   }
   
   rf = randomForest(Data_Cleaned_Train[,c("MP.x","HW.x", "Goals.x",  "Assists.x", "Points.x","Penalties.x","ShotsOnGoal.x", 
-                                          "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x", 
+                                          "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x","Line",
                                           "ShotsOnGoalOpp.x","HitsOpp.x","BlocksOpp.x","Goals.y",  "Assists.y","Points.y", "Penalties.y",  
                                           "MP.y","Hits.y","Blocks.y","FaceOffPer.y",  "GoalsOpp.y", "AssistsOpp",
                                           "ShotsOnGoalOpp.y","HitsOpp.y","BlocksOpp.y","GoalsAgainst", "ShotsAgainst",
@@ -421,14 +425,14 @@ for (player in allPlayers){
                     y = Data_Cleaned_Train[,c("DKP.x")], ntree=50 ,type='regression')
   
   RFPred = predict( rf,  Data_Cleaned_Test[,c("MP.x","HW.x", "Goals.x",  "Assists.x", "Points.x","Penalties.x","ShotsOnGoal.x", 
-                                              "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x", 
+                                              "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x","Line",
                                               "ShotsOnGoalOpp.x","HitsOpp.x","BlocksOpp.x","Goals.y",  "Assists.y","Points.y", "Penalties.y",  
                                               "MP.y","Hits.y","Blocks.y","FaceOffPer.y",  "GoalsOpp.y", "AssistsOpp",
                                               "ShotsOnGoalOpp.y","HitsOpp.y","BlocksOpp.y","GoalsAgainst", "ShotsAgainst",
                                               "Saves","ShoutOuts", "Hits","Blocks","ShotsOpp","HitsOpp")] ,type = c("response") )
 
   rfGoals = randomForest(Data_Cleaned_Train[,c("MP.x","HW.x", "Goals.x", "Assists.x", "Points.x","Penalties.x","ShotsOnGoal.x", 
-                                          "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x", 
+                                          "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x", "Line",
                                           "ShotsOnGoalOpp.x","HitsOpp.x","BlocksOpp.x","Goals.y",  "Assists.y","Points.y", "Penalties.y",  
                                           "MP.y","Hits.y","Blocks.y","FaceOffPer.y",  "GoalsOpp.y", "AssistsOpp",
                                           "ShotsOnGoalOpp.y","HitsOpp.y","BlocksOpp.y","GoalsAgainst", "ShotsAgainst",
@@ -436,7 +440,7 @@ for (player in allPlayers){
                     y = Data_Cleaned_Train[,c("TotalGoals")], ntree=50 ,type='regression')
   
   RFPredGoals = predict( rfGoals,  Data_Cleaned_Test[,c("MP.x","HW.x", "Goals.x",  "Assists.x", "Points.x","Penalties.x","ShotsOnGoal.x", 
-                                              "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x", 
+                                              "Hits.x","Blocks.x", "FaceOffPer.x", "GoalsOpp.x", "FaceOffPerOpp", "EVAssitsOpp.x", "Line",
                                               "ShotsOnGoalOpp.x","HitsOpp.x","BlocksOpp.x","Goals.y",  "Assists.y","Points.y", "Penalties.y",  
                                               "MP.y","Hits.y","Blocks.y","FaceOffPer.y",  "GoalsOpp.y", "AssistsOpp",
                                               "ShotsOnGoalOpp.y","HitsOpp.y","BlocksOpp.y","GoalsAgainst", "ShotsAgainst",

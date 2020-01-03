@@ -77,11 +77,11 @@ INSERT INTO NBAReferenceToDraftKings VALUES ('KarlAnthony Towns', 'K. Towns');
 	Find Differences
 */
 
---WITH DK_Unmatched AS(
---Select DISTINCT FL.Player_Name From NBA_FantasyLabs FL LEFT JOIN
---[NBAReferenceToDraftKings] DK ON FL.Player_Name = DK.DK_PlayerName
---WHERE DK.DK_PlayerName is NULL
---)
+WITH DK_Unmatched AS(
+Select DISTINCT FL.Player_Name From NBA_FantasyLabs FL LEFT JOIN
+[NBAReferenceToDraftKings] DK ON FL.Player_Name = DK.DK_PlayerName
+WHERE DK.DK_PlayerName is NULL
+)
 
---Select DISTINCT Player_Name, PL.PlayerName From NBA_PlayerLog PL
---RIGHT JOIN DK_Unmatched DK ON PL.PlayerName = DK.Player_Name
+Select DISTINCT Player_Name, PL.PlayerName From NBA_PlayerLog PL
+RIGHT JOIN DK_Unmatched DK ON PL.PlayerName = DK.Player_Name

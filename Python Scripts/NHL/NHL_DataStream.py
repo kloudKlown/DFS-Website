@@ -9,13 +9,13 @@ import time
 import datetime
 import pyodbc
 
-YEAR = [2019,2020] 
+YEAR = [2020] 
 positionHeaders = {}
 connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NHL;""Trusted_Connection=yes;")
 cursor = connection.cursor()
-cursor.execute("Delete from NHL_PlayerLog Where [GameDate] > '2017-10-01';")
+cursor.execute("Delete from NHL_PlayerLog Where [GameDate] > '2019-10-01';")
 cursor.commit()
-cursor.execute("Delete from NHL_PlayerLog_Goalie Where [GameDate] > '2017-10-01';")
+cursor.execute("Delete from NHL_PlayerLog_Goalie Where [GameDate] > '2019-10-01';")
 cursor.commit()
 PlayerList = {}
 cursor.execute('Select PlayerName from NHL_Player')
@@ -90,7 +90,8 @@ def ExtractPlayersFromRoster(teamURL, teamName, year, connection, cursor):
         if len(position) > 0 and len(player) > 0:
             #player = ClearSpecialCharacters(player, True)
             player = player.replace("(TW)", "")
-            player = re.sub('[^a-zA-Z0-9@\n\.\s]', '', player)                
+            player = re.sub('[^a-zA-Z0-9@\n\.\s]', '', player)
+            player = player.replace(' ', ' ')
             player = PlayerUnicodeConversion(player)
             if (re.match(".*C.*",position)):
                 position = "C"                                
@@ -288,9 +289,6 @@ def ExtractPlayersDataGoalie(player, playerPosition, playerLink, year, connectio
                 playerDataTuple[14] = float(playerDataTuple[14])
             else:
                 playerDataTuple[14] = 0
-
-
-
 
             ## Minute Second field ( 25th field)
             minField = str(playerDataTuple[17])                        

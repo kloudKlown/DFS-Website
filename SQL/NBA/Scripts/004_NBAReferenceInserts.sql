@@ -5,7 +5,7 @@ Select
 INNER JOIN
 	NBA_PlayerLog NBARef 
 ON
-	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr',''), 'III',''),'IV', ''), ' ', ''),'III','')=
+	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(NBARef.PlayerName, '-', ''), '''',''), '.', ''), 'Jr',''), 'III',''),'IV', ''), ' ', ''),'III','')=
 	REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr',''), 'III',''),'IV', ''), ' ', ''),'III','')
 WHERE 
 	NBARef.PlayerName is NULL;
@@ -14,12 +14,14 @@ WHERE
 
 INSERT INTO NBAReferenceToShotChartMap
 SELECT
-	Distinct Shot.PlayerName, 
+	Distinct 
+	Shot.PlayerName, 
 	NBARef.PlayerName 
 From 
 	NBAShotChart Shot INNER JOIN NBA_PlayerLog NBARef  ON 
-REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(NBARef.PlayerName, '-', ''), '''',''), '.', ''),'Jr',''), 'III',''),'IV', ''), ' ', ''),'II','') = 
-REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr',''), 'III',''),'IV', ''), ' ', ''),'III','')
+REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(NBARef.PlayerName, '-', ''), '''',''), '.', ''),'Jr',''), 'III',''),'IV', ''), ' ', ''),'II',''),'  ','') = 
+REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Shot.PlayerName, '-', ''), '''',''), '.', ''), 'Jr',''), 'III',''),'IV', ''), ' ', ''),'III',''),'  ','')
+
 
 INSERT INTO NBAReferenceToShotChartMap values
 ('Luka Doncic','Luka Donic'),
@@ -36,8 +38,12 @@ INSERT INTO NBAReferenceToShotChartMap values
 
 
 
---Select DISTINCT 
---	SH.PlayerName, DK.ShotChart_PlayerName FROM NBAShotChart SH
---	LEFT JOIN NBAReferenceToShotChartMap DK ON SH.PlayerName = DK.ShotChart_PlayerName
---WHERE
---	DK.ShotChart_PlayerName IS NULL
+Select DISTINCT 
+	SH.PlayerName, DK.ShotChart_PlayerName FROM NBAShotChart SH
+	LEFT JOIN NBAReferenceToShotChartMap DK ON SH.PlayerName = DK.ShotChart_PlayerName
+WHERE
+	DK.ShotChart_PlayerName IS NULL
+
+
+--Select * FROM NBAShotChart where PlayerName like '%Bowman%'
+--Select * FROM NBA_Player where PlayerName like '%Bowman%'
