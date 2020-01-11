@@ -22,5 +22,5 @@ steps:
     rootFolderOrFile: '$(Build.BinariesDirectory)'
     includeRootFolder: true
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    archiveFile: '$(System.DefaultWorkingDirectory)/**/*.zip'
     replaceExistingArchive: true
