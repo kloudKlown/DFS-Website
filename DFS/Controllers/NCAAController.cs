@@ -67,7 +67,7 @@ namespace DFS.UI.Controllers
                 AwayTeam = playerTopMinutes.First(y => y.Team == x.Key).Opposition,
                 playerTopMinutes.First(y => y.Team == x.Key).OU,
                 playerTopMinutes.First(y => y.Team == x.Key).Line,
-                playerTopMinutes.First(y => y.Team == x.Key).FV,
+                playerTopMinutes.First(y => y.Team == x.Key).FV, 
             }).ToList();
 
             games = games.OrderBy(x => (x.TotalTeamScore + x.OpposingTeamScore)).ToList();
