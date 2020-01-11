@@ -1,4 +1,5 @@
 # ASP.NET Core
+
 # Build and test ASP.NET Core projects targeting .NET Core.
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
@@ -15,3 +16,11 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Free Trial (b56f9af0-153b-4245-87a3-d250d09a9abb)'
+    appType: 'webApp'
+    WebAppName: 'DFSFanatic'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
