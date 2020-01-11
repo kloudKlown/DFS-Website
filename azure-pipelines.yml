@@ -17,10 +17,10 @@ steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
 
-- task: AzureRmWebAppDeployment@4
+- task: ArchiveFiles@2
   inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Free Trial (b56f9af0-153b-4245-87a3-d250d09a9abb)'
-    appType: 'webApp'
-    WebAppName: 'DFSFanatic'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
