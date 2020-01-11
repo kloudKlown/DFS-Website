@@ -1,0 +1,226 @@
+﻿@using DFS.UI.Common;
+@model DFS.UI.Models.NCAAPlayerViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="card no-border col-md-12">
+    <div class="card-header text-white bg-dark">
+        <h4>Player Projections</h4>
+    </div>
+    <div class="card-body form-group row col-md-6">
+        <div class="col-md-12">
+            <label class="col-md-3">
+                Game Date
+            </label>
+            <input type="text" id="datepicker" />
+            <span class="fa fa-calendar-alt fa-cal"></span>
+        </div>
+    </div>
+    <div class="col-md-12 gamepicker" id="gamesList">
+        <h6 class="text-left">Filter Teams</h6>
+        <div class="cardAll pull-left">
+            <button class="btn-primary">
+                All
+                <i class="fas fa-check"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<br />
+<div id="ZoneChart" class="col-md-12 noNewLine no-padding">
+    <div class="card no-border col-md-6 noNewLine no-padding">
+        <div class="col-md-12">
+            <div class="card-body-jqgrid col-md-12">
+                <table id="playerShotZone"></table>
+            </div>
+        </div>
+    </div>
+    <div class="card no-border col-md-6 noNewLine no-padding">
+        <div class="col-md-12">
+            <div class="card-body-jqgrid col-md-12">
+                <table id="playerTeamZone"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input id="selectedTeam" hidden/>
+
+<div class="card no-border col-md-12">
+    <div class="row">
+        <div class="contianer col-md-12">
+            <div class="card-body-jqgrid">
+                <table id="jqGrid"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var playerStatColumnNames = ["Name", "Team", "Predicted", "Min Played", "Height", "Allowed", "Scored"]
+
+    var playerStatColumn = [
+        { name: 'player', index: 'Name', width: 180, align: 'left', editable: false, classes: "playerName", summaryType: 'count' },
+        { name: 'team', index: 'Team', width: 200, align: 'right', editable: false },
+        { name: 'predicted', index: 'Predicted', width: 70, align: 'right', editable: false, sortable: true, search: false, summaryType: 'sum' },
+        {
+            name: 'minutesPlayed', index: 'MinutesPlayed', width: 100, align: 'right', editable: false, sortable: true, search: true,
+            formatter: function (cellvalue, options, rowObject) {
+                return rowObject.minutesPlayed.minutes;
+            }
+        },
+        { name: 'Height', index: 'Height', width: 80, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'averagePointsAllowed', index: 'AveragePointsAllowed', width: 80, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'averagePointsScored', index: 'AveragePointsScored', width: 80, align: 'right', editable: false, sortable: true, search: false },
+
+    ];
+
+
+    $(function () {
+        var date = $("#datepicker");
+        var gamesList = $("#gamesList");
+        var selectedTeam = $("#selectedTeam");
+
+        date.datepicker();
+        $(".fa-cal").on("click", function () {
+            date.datepicker("show");
+        })
+
+        date.change(function (e) {
+            params = {}
+            params.date = $(this).val()
+
+            $.ajax({
+                url: "/NCAA/GetGamesForDate",
+                type: "POST",
+                data: params,
+                success: function (data) {
+                    PopulateGames(JSON.parse(data));
+                },
+                error: function () {
+                }
+            });
+
+        });
+
+        function PopulateGames(data) {
+            gamesList.find('.card').remove();
+            var j = 0;
+            $.each(data, function (i, value) {
+                j = j + 1;
+                gamesList.append($("<div class='card'>" +
+                    "<button class='TeamName'>" + value.HomeTeam + "</button><button class='TeamName'>" + value.AwayTeam + "</button>" +
+                    "<br/><b>" + value.TotalTeamScore + " - " + value.OpposingTeamScore + "</b>" +
+                    "<br/><b> Line: " + value.Line + " OU: " + value.OU + " FV: " + value.FV + "</b> </div>")
+                );
+                if (j % 4 === 0) {
+                    gamesList.append($("<br/>"));
+                    j = 0;
+                }
+            });
+        };
+
+
+        gamesList.on("click", '.TeamName', function (e) {
+            var params = {};
+            params.date = date.val();
+            selectedTeam.val($(this).text());
+            
+            $("#jqGrid").jqGrid({
+                prmNames: {
+                    _search: true,
+                    sidx: "sidx",
+                    rows: "numRows",
+                    page: "page",
+                    sord: "sortOrder",
+                    filters: null,
+                },
+                postData: {
+                    team: function () { return selectedTeam.val(); },
+                    mp: function () { return $("#gs_jqGrid_minutesPlayed").val(); }
+                },
+                url: "/NCAA/GetGridData",
+                colNames: playerStatColumnNames,
+                colModel: playerStatColumn,
+                pager: '#shotPager',
+                datatype: "json",
+                gridview: true,
+                loadonce: false,
+                rowNum: 100,
+                height: "auto",
+                shrinkToFit: false,
+                autowidth: true,
+                repeatitems: false,
+                jsonReader: {
+                    root: "data",
+                    repeatitems: false,
+                },
+                grouping: true,
+                groupingView: {
+                    groupField: ['team'],
+                    groupSummary: [true],
+                    groupText: ["<b>{0}</b>"],
+                    groupColumnShow: [true],
+                    groupCollapse: false,
+                    groupOrder: ['asc']
+                }
+            });
+            $("#jqGrid").jqGrid('filterToolbar', { stringResult: true, defaultSearch: 'cn' });
+
+            $("#jqGrid").trigger("reloadGrid");
+        });
+
+
+        var mainGrid = function () {
+            $("#jqGrid").jqGrid({
+                prmNames: {
+                    _search: true,
+                    sidx: "sidx",
+                    rows: "numRows",
+                    page: "page",
+                    sord: "sortOrder",
+                    filters: null,
+                },
+                postData: {
+                    name: function () { return $("#gs_jqGrid_name").val() },
+                    team: function () { return $("#gs_jqGrid_team").val() },
+                },
+                url: "/NCAA/GetGridData",
+                colNames: playerStatColumnNames,
+                colModel: playerStatColumn,
+                pager: '#shotPager',
+                datatype: "json",
+                gridview: true,
+                loadonce: false,
+                rowNum: 100,
+                height: "auto",
+                shrinkToFit: false,
+                autowidth: true,
+                repeatitems: false,
+                jsonReader: {
+                    root: "data",
+                    repeatitems: false,
+                },
+                grouping: true,
+                groupingView: {
+                    groupField: ['team'],
+                    groupSummary: [true],
+                    groupText: ["<b>{0}</b>"],
+                    groupColumnShow: [true],
+                    groupCollapse: false,
+                    groupOrder: ['asc']
+                }
+            });
+            $("#jqGrid").jqGrid('filterToolbar', { stringResult: true, defaultSearch: 'cn' });
+
+
+        };
+
+
+        date.val(new Date().toLocaleDateString());
+        date.trigger("change");
+    });
+</script>

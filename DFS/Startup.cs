@@ -26,12 +26,6 @@ namespace DFS
                                  optional: false,
                                  reloadOnChange: true)
                     .AddEnvironmentVariables();
-
-            if(builder != null)
-            {
-
-            }
-
             Configuration = builder.Build();
         }
 
@@ -48,6 +42,7 @@ namespace DFS
             });
 
             services.AddMvc(o => o.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc().AddRazorRuntimeCompilation();
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
             services.AddSession();            
             services.AddScoped<IUrlHelper>(x =>
@@ -59,7 +54,7 @@ namespace DFS
 
             services.AddSingleton<IConfigurationService>(new ConfigurationService(Configuration));
             services.AddSingleton<INBAService>(new NBAService());
-
+            services.AddSingleton<INCAAService>(new NCAAService());            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,7 +62,7 @@ namespace DFS
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();                
             }
             else
             {

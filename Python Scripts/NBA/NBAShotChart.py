@@ -8,6 +8,7 @@ import hashlib
 import time 
 import json
 from seleniumwire import webdriver 
+from selenium.webdriver.chrome.options import Options
 
 dir_path = os.getcwd()
 dir_path = "\\".join(dir_path.split("\\")[0:-1]) + "\\chromedriver.exe"
@@ -45,7 +46,9 @@ team = {
 }
 
 def main():
-    driver = webdriver.Chrome( executable_path = dir_path)
+    co = Options()
+    co.add_argument("-no-sandbox")    
+    driver = webdriver.Chrome( executable_path = dir_path, options = co)
     driver.get("https://stats.nba.com/players/list/")
     ### DB connection and cleanup
     connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NBA;""Trusted_Connection=yes;")

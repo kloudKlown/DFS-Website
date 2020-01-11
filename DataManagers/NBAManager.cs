@@ -14,16 +14,16 @@ namespace DFS.Data.Managers
     {
         private readonly string NBADatabase = DFS.Common.Constants.DataBase.NBA;
 
-        public IEnumerable<NBATeam> GetAllNBATeams()
+        public IEnumerable<SportsTeam> GetAllNBATeams()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<NBAPlayers> GetAllPlayers()
+        public IEnumerable<Player> GetAllPlayers()
         {
             using (IDbConnection connection = GetConnection(NBADatabase))
             {
-                return connection.Query<NBAPlayers>("usp_GetAllPlayers", commandType: CommandType.StoredProcedure);
+                return connection.Query<Player>("usp_GetAllPlayers", commandType: CommandType.StoredProcedure);
             }
         }
         
@@ -42,8 +42,8 @@ namespace DFS.Data.Managers
                 {
                     games.Add(new NBAGames
                     {
-                        HomeTeam = new NBATeam(item.HomeTeam),
-                        AwayTeam = new NBATeam(item.AwayTeam),
+                        HomeTeam = new SportsTeam(item.HomeTeam),
+                        AwayTeam = new SportsTeam(item.AwayTeam),
                         OverUnder = item.OverUnder,
                         Line = item.Line,
                         Favourite = item.Favourite
@@ -204,7 +204,7 @@ namespace DFS.Data.Managers
                 Position = item.PlayerPosition,
                 Height = item.Height,
                 Weight = item.Weight,
-                Team = new NBATeam(item.Team),
+                Team = new SportsTeam(item.Team),
                 MinutesPlayed = item.MinutesPlayed,
                 Usage = item.Usage,
                 DefensiveRating = item.DefRating,
@@ -233,8 +233,8 @@ namespace DFS.Data.Managers
             {
                 playerName = item.PlayerName,
                 GameDate = item.GameDate,
-                Opp = new NBATeam(item.Opp),
-                Team = new NBATeam(item.Team),
+                Opp = new SportsTeam(item.Opp),
+                Team = new SportsTeam(item.Team),
                 Totals = item.Totals,
                 FreeThrows = item.FreeThrows,
                 Zones = item.Zones,
@@ -246,9 +246,9 @@ namespace DFS.Data.Managers
         {
             return new NBATeamPlayers
             {
-                Player = new NBAPlayers(item.Name, item.Position, item.Height, item.Weight),
+                Player = new Player(item.Name, item.Position, item.Height, item.Weight),
                 GameDate = item.GameDate,
-                Team = new NBATeam(item.Team),
+                Team = new SportsTeam(item.Team),
                 Predicted = item.Predicted,
                 Salary = item.ActualSalary,
                 SalaryDifference = item.SalaryDiff,

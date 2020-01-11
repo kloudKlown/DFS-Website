@@ -6,17 +6,17 @@
     {
         public NBAPlayerZoneStats()
         {
-            Team = new NBATeam();
-            Opp = new NBATeam();
+            Team = new SportsTeam();
+            Opp = new SportsTeam();
         }
 
         public DateTime GameDate { get; set; }
 
         public string playerName { get; set; }
 
-        public NBATeam Team { get; set; }
+        public SportsTeam Team { get; set; }
 
-        public NBATeam Opp { get; set; }
+        public SportsTeam Opp { get; set; }
 
         public int Totals { get; set; }
 

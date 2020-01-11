@@ -11,9 +11,16 @@ YEAR = [2019, 2020]
 positionHeaders = {}
 connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NBA;""Trusted_Connection=yes;")
 cursor = connection.cursor()
-cursor.execute("Delete from NCAA_PlayerLog Where [Date] > '2019-10-10'")
+cursor.execute("Delete from NCAA_PlayerLog Where [Date] > '2019-07-01'")
 cursor.commit()
 
+PlayerList = {}
+cursor.execute('Select PlayerName from NCAA_Player')
+for each in cursor.fetchall():
+    try:
+        PlayerList[each.PlayerName.lower()] = 1
+    finally:
+        pass
 
 def ClearSpecialCharacters(data, header):
     if header:
@@ -52,7 +59,6 @@ def ExtractPlayersFromRoster(teamURL, teamName, year):
     # NOH -> NOP
 
     teamURL = 'https://www.sports-reference.com' + teamURL + str(year) + '.html' 
-    # print(teamURL)
     print(teamURL)
     teamRoster = subprocess.check_output(['curl' , teamURL], shell = True)
     teamRoster = str(teamRoster)
@@ -97,6 +103,23 @@ def ExtractPlayersData(player, playerPosition, playerLink, year):
     soup = BeautifulSoup(playerGameLog[10000:], features='html.parser')
     playerGameLogData = soup.find('div', {'id': 'all_gamelog'}) 
 
+    WH = soup.find("span", {'itemprop' : 'weight'})
+
+    if (WH != None):
+        height, weight = str(WH.next_sibling).split(',')        
+        height = re.sub('[^a-zA-Z0-9@\n\.\s]', '', height).replace('cm', '')
+        weight = re.sub('[^a-zA-Z0-9@\n\.\s]', '', weight).replace('kg', '')
+        try:
+            if(PlayerList[player.lower()] == 1):                
+                pass
+        except KeyError as e:
+            playerInsert = ("INSERT INTO NCAA_Player VALUES (?, ?, ?, ?)")
+            playerData = [player, playerPosition, int(height), int(weight)]
+            cursor.execute(playerInsert, tuple(playerData))
+            print(tuple(playerData))
+            cursor.commit()
+            PlayerList[player.lower()] = 1
+            pass        
 
     if (playerGameLogData == None):
         return 0

@@ -512,7 +512,7 @@ for (player in 1:nrow(allPlayers)) {
 ##########
 ##########
 
-dbSendQuery(con, "Delete From  NCAA_DK_Prediction")
+dbSendQuery(con, "Delete From NCAA_DK_Prediction")
 dbWriteTable(con, name = "NCAA_DK_Prediction", value = data.frame(Results), row.names = FALSE, append = TRUE)  
 
 ##########

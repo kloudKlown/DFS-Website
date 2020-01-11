@@ -13,12 +13,20 @@
     {
         protected INBAService NBAService { get; private set; }
 
+        protected INCAAService NCAAService { get; private set; }
+
         protected ISession Session => HttpContext.Session;
 
         public BaseController(INBAService nBA)
         {
             NBAService = nBA;
         }
+        
+        public BaseController(INCAAService ncaa)
+        {
+            NCAAService = ncaa;
+        }
+
 
     }
 }

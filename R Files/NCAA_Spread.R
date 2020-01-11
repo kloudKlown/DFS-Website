@@ -76,9 +76,6 @@ for (eachTeam in TeamsNCAA) {
   ### Position######
   ## Iterate over date
   for (date in 2:length(DateLevels)){
-    print(date)
-    print(length(DateLevels))
-    
     for (pos in as.factor(PositionsAll) ){
       # Iterate over each date
       temp = DefensiveStatsNCAA[1,]
@@ -94,7 +91,6 @@ for (eachTeam in TeamsNCAA) {
       temp$Pos = pos
       #### How good the defense is
       for (column in 4:22){
-        print(colnames(temp)[column])
         #print(colnames(temp)[column])
         temp[, colnames(temp)[column]]  = sum(subsetTeamData[, colnames(temp)[column]])
       }
@@ -107,8 +103,6 @@ for (eachTeam in TeamsNCAA) {
       
       #### How many points have been allowed
       for (column in 25:length(colnames(temp)) ){
-        print(colnames(temp)[column])
-        
         col = gsub('Opp', '',  colnames(temp)[column], perl = TRUE)
         temp[, colnames(temp)[column]]  = sum(subsetOppData[, col])
       }
@@ -189,7 +183,6 @@ for (player in allPlayers) {
     
     #### How good the defense is
     for (column in 8:length(colnames(temp))){
-      print(colnames(temp)[column])
       temp[, colnames(temp)[column]]  = mean(subsetPlayerData[, colnames(temp)[column]])
     }
     

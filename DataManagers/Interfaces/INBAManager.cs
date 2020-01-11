@@ -7,9 +7,9 @@ namespace DFS.Data.Managers.Interfaces
 {
     public interface INBAManager
     {
-        IEnumerable<NBAPlayers> GetAllPlayers();
+        IEnumerable<Player> GetAllPlayers();
 
-        IEnumerable<NBATeam> GetAllNBATeams();
+        IEnumerable<SportsTeam> GetAllNBATeams();
 
         IEnumerable<NBATeamPlayers> GetPlayersByDateAndTeam(DateTime date, string team, string opp);
 

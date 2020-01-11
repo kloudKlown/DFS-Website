@@ -8,20 +8,20 @@ namespace DFS.Entities
 
         public NBATeamPlayers()
         {
-            Player = new NBAPlayers();
-            Team = new NBATeam();
+            Player = new Player();
+            Team = new SportsTeam();
         }
 
        public NBATeamPlayers(string name, string position, int height, int weight, string team, DateTime gameDate)
         {
-            Player = new NBAPlayers(name, position, height, weight);
-            Team = new NBATeam(team);
+            Player = new Player(name, position, height, weight);
+            Team = new SportsTeam(team);
             GameDate = gameDate;
         }
 
-        public NBAPlayers Player { get; set; }
+        public Player Player { get; set; }
 
-        public NBATeam Team { get; set; }  
+        public SportsTeam Team { get; set; }  
 
         public DateTime GameDate { get; set; }
 

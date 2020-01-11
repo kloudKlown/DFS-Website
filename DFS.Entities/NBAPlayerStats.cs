@@ -6,18 +6,18 @@ namespace DFS.Entities
 {
     [Serializable]
 
-    public class NBAPlayerStats : NBAPlayers
+    public class NBAPlayerStats : Player
     {
 
         public NBAPlayerStats() : 
             base()
         {
-            Team = new NBATeam();
+            Team = new SportsTeam();
         }
 
         public DateTime GameDate { get; set; }
 
-        public NBATeam Team { get; set; }
+        public SportsTeam Team { get; set; }
 
         public bool Home { get; set; }        
 
