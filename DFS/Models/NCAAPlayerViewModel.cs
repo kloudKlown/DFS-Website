@@ -31,6 +31,7 @@ namespace DFS.UI.Models
             TotalTeamScore = item.TotalTeamScore;
             OpposingTeamScore = item.OpposingTeamScore;
             Total = item.Total;
+            SimpleProjection = item.SimpleProjection;
 
         }
 
@@ -69,5 +70,7 @@ namespace DFS.UI.Models
         public double Total { get; set; }
 
         public double Actual { get; set; }
+
+        public double SimpleProjection { get; set; }
     }
 }

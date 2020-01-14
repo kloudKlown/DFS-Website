@@ -47,10 +47,11 @@ namespace DFS.Data.Managers
                 TotalTeamScore = item.TotalTeamScore,
                 AveragePointsAllowed = item.AveragePointsAllowed,
                 AveragePointsScored = item.AveragePointsScored,
-                Line = item.Line,
-                OU = item.OU,
-                FV = item.FV,
-                OpposingTeamScore = item.OpposingTeamScore
+                Line = item.Line == null ? 0 : item.Line,
+                OU = item.OU == null ? 0 : item.OU,
+                FV = item.FV == null ? "0" : item.FV,
+                OpposingTeamScore = item.OpposingTeamScore,
+                SimpleProjection = item.SimpleProjection
             };
         }
     }

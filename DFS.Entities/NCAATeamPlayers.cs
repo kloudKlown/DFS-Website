@@ -37,6 +37,8 @@ namespace DFS.Entities
 
         public double AveragePointsAllowed { get; set; }
 
+        public double SimpleProjection { get; set; }
+
         public double AveragePointsScored { get; set; }
 
         public double Line { get; set; }

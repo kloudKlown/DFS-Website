@@ -319,7 +319,7 @@ for (eachTeam in Teams) {
       
       ### Get Opposition Players in the game
       OppPositionPlayers = unique(subset(NBAAllData, NBAAllData$Team == Opponent
-                                         & as.Date(NBAAllData$Date) == as.Date(DateLevels[date])
+                                         & NBAAllData$Team == TodaysPlayers$Team
                                          & as.character(NBAAllData$Position) == pos)$PlayerName)
       
       ### Get Opposition Players and their dates to find all games these players particiated in
@@ -452,7 +452,7 @@ DefensiveStats = rbind(DefensiveStatsToday , DefensiveStats)
 
 ################## Results ###############################
 CombinedStats = merge(x = OffensiveStats, y = DefensiveStats, by.x = c("Date", "Pos", "Tm"), 
-                      by.y = c("Date", "Pos", "Tm") )
+                      by.y = c("Date", "Pos", "Opp") )
 
 write.csv(CombinedStats, file = "CombinedStats.csv")
 
@@ -467,7 +467,7 @@ Results = data.frame( RFPred = numeric(), player = factor(), position = factor()
                       playerList = factor(), TeamScore = numeric(), Actual = numeric(),
                       simpleProjection = numeric(), Opp = numeric())
 
-allPlayers = subset(CombinedStats, as.Date(CombinedStats$Date) == DateCheck)$PlayerName
+allPlayers = unique(subset(CombinedStats, as.Date(CombinedStats$Date) == DateCheck)$PlayerName)
 
 ##############################################################
 ################## NBA Results ###############################
@@ -524,7 +524,6 @@ for (player in allPlayers){
                                                   "TOV.y","PF.y","PTS","TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
                                                   "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp","ThreePAOpp","FTAOpp",
                                                   "TRBOpp","ASTOpp","STLOpp","TOVOpp")] ,type = c("response") )
-  
   
   Prediction2 = as.data.frame(RFPred)
   Prediction2["player"] = player

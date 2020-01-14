@@ -81,7 +81,7 @@ namespace DFS.UI.Controllers
             if (HttpContext.Session.GetString("NCAAPrediction") != null)
             {
                 List<NCAAPlayerViewModel> playerList = Session.GetObject<List<NCAAPlayerViewModel>>("NCAAPrediction");
-
+                playerList = playerList.FindAll(x => x.OU > 0);
                 if (!string.IsNullOrWhiteSpace(sidx))
                 {
                     sidx = char.ToUpper(sidx[0]) + sidx.Substring(1);

@@ -60,7 +60,7 @@
 
 <script>
 
-    var playerStatColumnNames = ["Name", "Team", "Predicted", "Min Played", "Height", "Allowed", "Scored"]
+    var playerStatColumnNames = ["Name", "Team", "Predicted", "Min Played", "SimpleProjection", "Allowed", "Scored"]
 
     var playerStatColumn = [
         { name: 'player', index: 'Name', width: 180, align: 'left', editable: false, classes: "playerName", summaryType: 'count' },
@@ -72,7 +72,7 @@
                 return rowObject.minutesPlayed.minutes;
             }
         },
-        { name: 'Height', index: 'Height', width: 80, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'simpleProjection', index: 'SimpleProjection', width: 80, align: 'right', editable: false, sortable: true, search: false, summaryType: 'sum' },
         { name: 'averagePointsAllowed', index: 'AveragePointsAllowed', width: 80, align: 'right', editable: false, sortable: true, search: false },
         { name: 'averagePointsScored', index: 'AveragePointsScored', width: 80, align: 'right', editable: false, sortable: true, search: false },
 

@@ -270,7 +270,7 @@ for (eachTeam in TodaysSchools) {
     
     subsetOppData = subset(AllDataNCAA, AllDataNCAA$Opponent %in% unique(Opp) 
                            & as.Date(AllDataNCAA$Date) < as.Date(TodayDate) 
-                           & as.Date(AllDataNCAA$Date) > (as.Date(TodayDate) - 5) &
+                           & as.Date(AllDataNCAA$Date) > (as.Date(TodayDate) - 15) &
                              as.character(AllDataNCAA$PlayerPosition) == pos )
     
     if (nrow(subsetOppData) == 0){
@@ -402,10 +402,9 @@ for (player in 1:nrow(allPlayers)) {
                               & CombinedStats$Tm == as.character(player$Tm)
                               & as.Date(CombinedStats$Date) > (as.Date(DateCheck) - 300) )
   
-  if(nrow(Data_Cleaned_Train) < 10){
+  if(nrow(Data_Cleaned_Train) < 2){
     Data_Cleaned_Train = subset(CombinedStats,CombinedStats$Tm == player$Tm 
                                 & as.Date(CombinedStats$Date) < as.Date(DateCheck)
-                                & CombinedStats$Tm == as.character(player$Tm)
                                 & as.Date(CombinedStats$Date) > (as.Date(DateCheck) - 30) )  
   }
   
@@ -420,16 +419,10 @@ for (player in 1:nrow(allPlayers)) {
     next;
   }
   
-  # if (Data_Cleaned_Test$MP < 10 ){
-  #   next;
-  # }
-  
-  # "FG.x",   "FGA.x",  "FGper.x","ThreeP.x",   "ThreePA.x", 
-  # "ThreePper.x","FT.x",   "FTA.x",  "FTper.x",
   rf = randomForest( Data_Cleaned_Train[,c("MP", "Home","ORB.x", "TRB.x",  "AST.x",  "STL.x",  "BLK.x",  
                                            "TOV.x",  "PF.x", "FG.y", "TRB.y","TOV.y",
                                            "FGAOpp", "TRBOpp", "ASTOpp", "STLOpp", "BLKOpp")], 
-                     y = Data_Cleaned_Train[,c("TotalPoints")], ntree=500, type='regression')
+                     y = Data_Cleaned_Train[,c("TotalPoints")], ntree=50, type='regression')
   
   RFPred = predict( rf,  Data_Cleaned_Test[,c("MP","Home",
                                               "ORB.x", "TRB.x",  "AST.x",  "STL.x",  "BLK.x",  "TOV.x",  "PF.x",
@@ -440,6 +433,7 @@ for (player in 1:nrow(allPlayers)) {
   as.data.frame(RFPred)
   
   Prediction2 = as.data.frame(RFPred)
+  Prediction2["simpleProjection"] = Data_Cleaned_Test$FG.x*2 + Data_Cleaned_Test$ThreeP.x*3 + Data_Cleaned_Test$FT.x
   Prediction2["player"] = player$PlayerName
   Prediction2["position"] = Data_Cleaned_Test$PlayerPosition
   Prediction2["salary"] = Prediction2$RFPred * 1000/5 
@@ -451,60 +445,6 @@ for (player in 1:nrow(allPlayers)) {
   Prediction2["TeamScore"] = 0
   Prediction2["Actual"] = Data_Cleaned_Test$TotalPoints
   Prediction2["Opp"] = Data_Cleaned_Test$Opp
-  
-  # # Get preivous teams against this position ( last 20 days )
-  # previousTeams = subset(AllDataNCAA, AllDataNCAA$Opp == as.character(Data_Cleaned_Test$Opp) 
-  #                        & as.Date(AllDataNCAA$Date) > (as.Date(DateCheck) - 60)
-  #                        & as.Date(AllDataNCAA$Date) < (as.Date(DateCheck))
-  #                        & AllDataNCAA$PlayerPosition == Data_Cleaned_Test$PlayerPosition
-  #                        & AllDataNCAA$PTS > (Data_Cleaned_Test$FT.x + Data_Cleaned_Test$ThreeP.x*3 + 2*(Data_Cleaned_Test$FG.x - Data_Cleaned_Test$ThreeP.x) - 1)
-  #                        & AllDataNCAA$PTS < (Data_Cleaned_Test$FT.x + Data_Cleaned_Test$ThreeP.x*3 + 2*(Data_Cleaned_Test$FG.x - Data_Cleaned_Test$ThreeP.x) + 1)
-  # )
-  # i = 0
-  # 
-  # while(nrow(previousTeams) < 4){
-  #   i = i + 1
-  #   # Get preivous teams against this position ( last 20 days )
-  #   previousTeams = subset(AllDataNCAA, AllDataNCAA$Opp == as.character(Data_Cleaned_Test$Opp) 
-  #                          & as.Date(AllDataNCAA$Date) > (as.Date(DateCheck) - 60)
-  #                          & as.Date(AllDataNCAA$Date) < (as.Date(DateCheck))
-  #                          & AllDataNCAA$PlayerPosition == Data_Cleaned_Test$PlayerPosition
-  #                          & AllDataNCAA$PTS > (Data_Cleaned_Test$FT.x + Data_Cleaned_Test$ThreeP.x*3 + 2*(Data_Cleaned_Test$FG.x - Data_Cleaned_Test$ThreeP.x) - i*0.5)
-  #                          & AllDataNCAA$PTS < (Data_Cleaned_Test$FT.x + Data_Cleaned_Test$ThreeP.x*3 + 2*(Data_Cleaned_Test$FG.x - Data_Cleaned_Test$ThreeP.x)+ i*0.5)
-  #   )
-  #   if (i > 10){
-  #     break
-  #   }
-  # }
-  # 
-  # dataTM = ""
-  # 
-  # if (nrow(previousTeams) > 0){
-  #   for (jk in 1:nrow(previousTeams)) {
-  #     datejk = previousTeams$Date[jk]
-  #     tm = previousTeams$Tm[jk]
-  #     previousTeamData = subset(AllDataNCAA, 
-  #                               as.Date(AllDataNCAA$Date) == as.Date(datejk)
-  #                               & AllDataNCAA$Tm == tm
-  #                               & AllDataNCAA$PTS > previousTeams$PTS[jk] )
-  #     dataTM = paste(previousTeamData$PlayerName, '-', previousTeamData$PTS, collapse = '|H|')
-  #     previousTeams$PlayerPosition[jk] = dataTM
-  #     dataTM = ""
-  #   }
-  #   
-  # }
-  # 
-  # ####### Previous teams
-  # if (nrow(previousTeams) > 0){
-  #   Prediction2["playerList"] = paste('=',previousTeams$PlayerName,'-' , previousTeams$PTS, collapse = '||||||')
-  #   Prediction2["pointsAllowedAgainstPosition"] = mean(previousTeams$PTS)  
-  # }
-  # else{
-  #   Prediction2["playerList"] = 0
-  #   Prediction2["pointsAllowedAgainstPosition"] = 0
-  # }
-  
-  Prediction2["simpleProjection"] = 0
   
   Results = rbind(Results, Prediction2)
   
