@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj": {}
+    "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj": {}
   },
   "projects": {
-    "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj": {
+    "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj",
+        "projectUniqueName": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj",
         "projectName": "DFS.Common",
-        "projectPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj",
+        "projectPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj",
         "packagesPath": "C:\\Users\\suhas\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Constants\\obj\\",
+        "outputPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Constants\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\suhas\\AppData\\Roaming\\NuGet\\NuGet.Config",

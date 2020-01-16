@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj": {}
+    "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj": {}
   },
   "projects": {
-    "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj": {
+    "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj",
+        "projectUniqueName": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj",
         "projectName": "DFS.Data",
-        "projectPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj",
+        "projectPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj",
         "packagesPath": "C:\\Users\\suhas\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\obj\\",
+        "outputPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\suhas\\AppData\\Roaming\\NuGet\\NuGet.Config",

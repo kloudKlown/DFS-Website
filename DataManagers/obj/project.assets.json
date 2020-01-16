@@ -3262,11 +3262,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DataManagers\\DFS.Data.Managers.csproj",
+      "projectUniqueName": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DataManagers\\DFS.Data.Managers.csproj",
       "projectName": "DFS.Data.Managers",
-      "projectPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DataManagers\\DFS.Data.Managers.csproj",
+      "projectPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DataManagers\\DFS.Data.Managers.csproj",
       "packagesPath": "C:\\Users\\suhas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DataManagers\\obj\\",
+      "outputPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DataManagers\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\suhas\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3282,11 +3282,11 @@
       "frameworks": {
         "netstandard2.0": {
           "projectReferences": {
-            "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj": {
-              "projectPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj"
+            "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj": {
+              "projectPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Constants\\DFS.Common.csproj"
             },
-            "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Entities\\DFS.Entities.csproj": {
-              "projectPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Entities\\DFS.Entities.csproj"
+            "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Entities\\DFS.Entities.csproj": {
+              "projectPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Entities\\DFS.Entities.csproj"
             }
           }
         }

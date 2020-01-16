@@ -47,7 +47,7 @@ team = {
 
 def main():
     co = Options()
-    co.add_argument("-no-sandbox")    
+    co.add_argument("--no-sandbox")    
     driver = webdriver.Chrome( executable_path = dir_path, options = co)
     driver.get("https://stats.nba.com/players/list/")
     ### DB connection and cleanup

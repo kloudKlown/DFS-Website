@@ -3327,11 +3327,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Services\\DFS.Services.csproj",
+      "projectUniqueName": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Services\\DFS.Services.csproj",
       "projectName": "DFS.Services",
-      "projectPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Services\\DFS.Services.csproj",
+      "projectPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Services\\DFS.Services.csproj",
       "packagesPath": "C:\\Users\\suhas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Services\\obj\\",
+      "outputPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Services\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\suhas\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3347,11 +3347,11 @@
       "frameworks": {
         "netstandard2.0": {
           "projectReferences": {
-            "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DataManagers\\DFS.Data.Managers.csproj": {
-              "projectPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DataManagers\\DFS.Data.Managers.csproj"
+            "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DataManagers\\DFS.Data.Managers.csproj": {
+              "projectPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DataManagers\\DFS.Data.Managers.csproj"
             },
-            "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj": {
-              "projectPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj"
+            "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj": {
+              "projectPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Data\\DFS.Data.csproj"
             }
           }
         }

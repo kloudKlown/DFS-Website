@@ -452,7 +452,7 @@ DefensiveStats = rbind(DefensiveStatsToday , DefensiveStats)
 
 ################## Results ###############################
 CombinedStats = merge(x = OffensiveStats, y = DefensiveStats, by.x = c("Date", "Pos", "Tm"), 
-                      by.y = c("Date", "Pos", "Opp") )
+                      by.y = c("Date", "Pos", "Tm") )
 
 write.csv(CombinedStats, file = "CombinedStats.csv")
 

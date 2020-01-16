@@ -8837,11 +8837,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS\\DFS.UI.csproj",
+      "projectUniqueName": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS\\DFS.UI.csproj",
       "projectName": "DFS.UI",
-      "projectPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS\\DFS.UI.csproj",
+      "projectPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS\\DFS.UI.csproj",
       "packagesPath": "C:\\Users\\suhas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS\\obj\\",
+      "outputPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\suhas\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -8857,8 +8857,8 @@
       "frameworks": {
         "netcoreapp3.0": {
           "projectReferences": {
-            "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Services\\DFS.Services.csproj": {
-              "projectPath": "C:\\Users\\suhas\\Source\\Repos\\kloudKlown\\DFS-Website\\DFS.Services\\DFS.Services.csproj"
+            "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Services\\DFS.Services.csproj": {
+              "projectPath": "C:\\Users\\suhas\\source\\repos\\kloudKlown\\DFS-Website\\DFS.Services\\DFS.Services.csproj"
             }
           }
         }
