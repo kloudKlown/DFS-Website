@@ -20,7 +20,7 @@ colnames(AllDataNCAA)[colnames(AllDataNCAA)=="ï..Date"] <- "Date"
 colnames(AllDataNCAA)[colnames(AllDataNCAA)=="ï..PlayerName"] <- "PlayerName"
 AllDataNCAA$PlayerName = gsub("(?=[A-Z])", " ", AllDataNCAA$PlayerName , perl = TRUE)
 AllDataNCAA$PlayerName = gsub("^\\s", "", AllDataNCAA$PlayerName , perl = TRUE)
-AllDataNCAA[AllDataNCAA == "NULL"] = 0
+# AllDataNCAA[AllDataNCAA == "NULL"] = 0
 AllDataNCAA$Date = as.Date(AllDataNCAA$Date)
 
 # colnames(AllDataNCAA)[colnames(AllDataNCAA)=="oneGS"] <- "Team"
@@ -31,6 +31,7 @@ AllDataNCAA[is.null(AllDataNCAA)] = 0
 AllDataNCAA$TotalPoints = AllDataNCAA$FT * 1 + AllDataNCAA$TwoP * 2 + AllDataNCAA$ThreeP * 3
 
 TodayDate = Sys.Date()
+print(TodayDate)
 OffensiveStatsNCAA = read.csv('OffensiveStatsNCAA_All.csv')
 DefensiveStatsNCAA = read.csv('DefensiveStatsNCAA_All.csv')
 DefensiveStatsNCAA = subset(DefensiveStatsNCAA, select = -X)
@@ -374,7 +375,16 @@ OffensiveStatsNCAA = rbind(OffensiveStatsNCAAToday , OffensiveStatsNCAA)
 
 ########## Combine  Offensive and team defensive stats ####################
 TodayDate = Sys.Date()
-CombinedStats = merge(OffensiveStatsNCAA, DefensiveStatsNCAA, by.x = c("Date", "Opp"), by.y = c("Date", "Tm" ))
+# CombinedStats = merge(OffensiveStatsNCAA, DefensiveStatsNCAA, by.x = c("Date", "Opp"), by.y = c("Date", "Tm" ))
+
+CombinedStats = merge(OffensiveStatsNCAA, DefensiveStatsNCAA, by.x = c("Date", "Tm"), by.y = c("Date", "Tm" ))
+CombinedStats = merge(CombinedStats, DefensiveStatsNCAA, by.x = c("Date", "Opp"), by.y = c("Date", "Tm" ))
+CombinedStats = subset(CombinedStats, select = -c(Pos.x, Pos.y, GmSc.y, plusMinus.y, GmSc.x, plusMinus.x))
+
+predictionMatrix_Diff =c("BLK","AST","FG","TwoP","STL","FGA","ORB","FTper","FT","TOV","PF","Home","ThreePper.y","ThreePper","ThreeP","ThreePA","ThreeP.y","ThreePA.y",
+                         "BLKOpp.y","FTAOpp.y","TOVOpp.y","STLOpp.y","ASTOpp.y","BLKOpp.x","FTAOpp.x","TOVOpp.x","STLOpp.x","ASTOpp.x","AST.x","STL.x","TOV.x",
+                         "MP","BLK.x","FGper.x","TwoPper.x","PF.x","ORB.x","DRB.x","AST.y","FG.y","TwoP.y","BLK.y","STL.y","TOV.y","PF.y","FGA.y","ORB.y","FTper.y")
+
 allPlayers = unique(CombinedStats$PlayerName)
 DateCheck = TodayDate
 
@@ -382,7 +392,7 @@ Results = data.frame( RFPred = numeric(), player = factor(), position = factor()
                       MP = numeric(), team = factor(), pointsScored = numeric() , assists = numeric(),
                       rebound = numeric(), pointsAllowedAgainstPosition = numeric(),
                       playerList = factor(), TeamScore = numeric(), Actual = numeric(),
-                      simpleProjection = numeric(), Opp = numeric())
+                      simpleProjection = numeric(), Opp = numeric(), gameDate = factor())
 
 allPlayers = unique(subset(CombinedStats, as.Date(CombinedStats$Date) == as.Date(DateCheck)))
 ############################################################
@@ -419,18 +429,10 @@ for (player in 1:nrow(allPlayers)) {
     next;
   }
   
-  rf = randomForest( Data_Cleaned_Train[,c("MP", "Home","ORB.x", "TRB.x",  "AST.x",  "STL.x",  "BLK.x",  
-                                           "TOV.x",  "PF.x", "FG.y", "TRB.y","TOV.y",
-                                           "FGAOpp", "TRBOpp", "ASTOpp", "STLOpp", "BLKOpp")], 
+  rf = randomForest( Data_Cleaned_Train[,predictionMatrix_Diff], 
                      y = Data_Cleaned_Train[,c("TotalPoints")], ntree=50, type='regression')
   
-  RFPred = predict( rf,  Data_Cleaned_Test[,c("MP","Home",
-                                              "ORB.x", "TRB.x",  "AST.x",  "STL.x",  "BLK.x",  "TOV.x",  "PF.x",
-                                              "FG.y", "TRB.y","TOV.y","FGAOpp", "TRBOpp", "ASTOpp", "STLOpp", "BLKOpp")] ,type = c("response") )
-  
-  
-  
-  as.data.frame(RFPred)
+  RFPred = predict( rf,  Data_Cleaned_Test[,predictionMatrix_Diff] ,type = c("response") )
   
   Prediction2 = as.data.frame(RFPred)
   Prediction2["simpleProjection"] = Data_Cleaned_Test$FG.x*2 + Data_Cleaned_Test$ThreeP.x*3 + Data_Cleaned_Test$FT.x
@@ -445,14 +447,14 @@ for (player in 1:nrow(allPlayers)) {
   Prediction2["TeamScore"] = 0
   Prediction2["Actual"] = Data_Cleaned_Test$TotalPoints
   Prediction2["Opp"] = Data_Cleaned_Test$Opp
-  
+  Prediction2["GameDate"] = DateCheck
   Results = rbind(Results, Prediction2)
   
 }
 ##########
 ##########
 
-dbSendQuery(con, "Delete From NCAA_DK_Prediction")
+dbSendQuery(con, paste("DELETE From NCAA_DK_Prediction where GameDate = '", Sys.Date() , "'"))
 dbWriteTable(con, name = "NCAA_DK_Prediction", value = data.frame(Results), row.names = FALSE, append = TRUE)  
 
 ##########
@@ -529,15 +531,16 @@ for(t in 1:length(teams) ){
   
   temp$Team = ResTeam[1,]$Team
   temp$Opp = ResTeam[1,]$Opp
+  temp$GameDate = DateCheck
   
   NewResults = rbind(NewResults, temp)
 }
 
 NewResults = subset(NewResults, select = -matrix.ncol...1.)
-
 NewResults[is.na(NewResults)] = 0
 
-dbSendQuery(con, "Delete From  NCAA_DK_Prediction2")
+# dbSendQuery(con, "DROP TABLE  NCAA_DK_Prediction2")
+dbSendQuery(con, paste("DELETE From NCAA_DK_Prediction2 where GameDate = '", Sys.Date() , "'"))
 dbWriteTable(con, name = "NCAA_DK_Prediction2", value = data.frame(NewResults), row.names = FALSE, append = TRUE)  
 
 

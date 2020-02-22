@@ -10,8 +10,8 @@ library(varhandle)
 library(tidyr)
 require(devtools)
 #install_version("DiagrammeR", version = "0.9.0", repos = "http://cran.us.r-project.org")
-require(DiagrammeR)
+#require(DiagrammeR)
 
-library(mxnet)
+#library(mxnet)
 library(Hmisc)
 

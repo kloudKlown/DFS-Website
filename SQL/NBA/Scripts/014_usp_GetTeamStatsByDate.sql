@@ -43,7 +43,7 @@ BEGIN
 		NBA_PlayerLog PL INNER JOIN NBA_Player P ON P.PlayerName = PL.PlayerName	
 		INNER JOIN NBA_PlayerLog_Advanced PLA ON PLA.PlayerName = PL.PlayerName AND PLA.[Date] = PL.[Date]		
 	WHERE 
-		PL.[Date] in (SELECT TOP 5 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )					
+		PL.[Date] in (SELECT DISTINCT TOP 5 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @teamName_ ORDER BY [DATE] desc )					
 		and PL.Tm = @teamName_
 	GROUP BY PL.PlayerName, PL.Tm, PL.PlayerPosition
 	ORDER BY MinutesPlayed DESC
@@ -77,7 +77,7 @@ BEGIN
 	FROM
 		NBA_PlayerLog PL INNER JOIN NBA_Player P ON P.PlayerName = PL.PlayerName	
 		INNER JOIN NBA_PlayerLog_Advanced PLA ON PLA.PlayerName = PL.PlayerName AND PLA.[Date] = PL.[Date]
-	WHERE PL.[Date] in (SELECT TOP 5 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )					
+	WHERE PL.[Date] in (SELECT DISTINCT TOP 5 [Date] FROM NBA_PlayerLog where [Date] < @date_ AND Tm = @oppName_ ORDER BY [DATE] desc )					
 	and PL.Tm = @oppName_
 	GROUP BY PL.PlayerName, PL.Tm, PL.PlayerPosition
 	ORDER BY MinutesPlayed DESC

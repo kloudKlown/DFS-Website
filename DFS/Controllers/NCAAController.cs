@@ -64,13 +64,19 @@ namespace DFS.UI.Controllers
                 HomeTeam = x.Key,
                 TotalTeamScore = Math.Round(playerTopMinutes.First(y => y.Team == x.Key).TotalTeamScore, 2),
                 OpposingTeamScore = Math.Round(playerTopMinutes.First(y => y.Team == x.Key).OpposingTeamScore, 2),
+                Predicted = Math.Round(playerTopMinutes.FindAll(y => y.Team == x.Key).Select(x => x.Predicted).ToList().Sum( x=> x), 2),
+                PredictedOpp = Math.Round(playerTopMinutes.FindAll(y => y.Opposition == x.Key).Select(x => x.Predicted).ToList().Sum(x => x), 2),
                 AwayTeam = playerTopMinutes.First(y => y.Team == x.Key).Opposition,
                 playerTopMinutes.First(y => y.Team == x.Key).OU,
                 playerTopMinutes.First(y => y.Team == x.Key).Line,
-                playerTopMinutes.First(y => y.Team == x.Key).FV, 
+                playerTopMinutes.First(y => y.Team == x.Key).FV,
+                OppAllowed = Math.Round(playerTopMinutes.First(y => y.Opposition == x.Key).AveragePointsAllowed, 2),
+                TeamAllowed = Math.Round(playerTopMinutes.First(y => y.Team == x.Key).AveragePointsAllowed, 2),
+                Actual = Math.Round(players.FindAll(y => y.Team == x.Key).Select(x => x.Actual).ToList().Sum(x => x), 2),
+                ActualOpp = Math.Round(players.FindAll(y => y.Opposition == x.Key).Select(x => x.Actual).ToList().Sum(x => x), 2)
             }).ToList();
 
-            games = games.OrderBy(x => (x.TotalTeamScore + x.OpposingTeamScore)).ToList();
+            games = games.OrderBy(x => (x.Predicted + x.PredictedOpp)).ToList();
 
             return Json(JsonConvert.SerializeObject(games));
         }

@@ -25,5 +25,7 @@ namespace DFS.Data.Managers.Interfaces
 
         IEnumerable<NBAPlayerZoneStats> GetTeamZoneStats(string team);
 
+        IEnumerable<NBAPlayerZoneStats> GetTopScorerShotChart(string team);
+
     }
 }

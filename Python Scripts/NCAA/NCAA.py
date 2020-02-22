@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import inflect 
 import pyodbc
 
-YEAR = [2019, 2020] 
+YEAR = [2020] 
 positionHeaders = {}
 connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NBA;""Trusted_Connection=yes;")
 cursor = connection.cursor()
@@ -211,10 +211,10 @@ def ExtractPlayersData(player, playerPosition, playerLink, year):
         if (len(playerDataTuple) > 15 ):                
             dateField = str(playerDataTuple[3])[0:4] + "-" + str(playerDataTuple[3])[4:6] + "-" + str(playerDataTuple[3])[6:8]
             playerDataTuple[3] = dateField  
-            playerDataTuple[5] = str(playerDataTuple[5])
-            print("playerDataTuple Value = ", playerDataTuple) 
+            playerDataTuple[5] = str(playerDataTuple[5])            
             cursor.execute(playerInsertData, tuple(playerDataTuple))
             cursor.commit()                 
+            print("playerDataTuple Value = ", playerDataTuple) 
             playerDataTuple = []            
             count += 1    
     return 0

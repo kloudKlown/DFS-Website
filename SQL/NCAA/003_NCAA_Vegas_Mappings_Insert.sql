@@ -298,3 +298,6 @@
  Insert Into NCAA_Vegas_Teams_Mapping VALUES ('Pitt', 'pittsburgh' );
  Insert Into NCAA_Vegas_Teams_Mapping VALUES ('UCDavis', 'californiadavis' );
  Insert Into NCAA_Vegas_Teams_Mapping VALUES ('Penn', 'pennsylvania' );
+ Insert Into NCAA_Vegas_Teams_Mapping VALUES ('iona', 'ionacollege' );
+ Insert Into NCAA_Vegas_Teams_Mapping VALUES ('monmouth', 'monmouthuniversitynewjersey' );
+ Insert Into NCAA_Vegas_Teams_Mapping VALUES ('sacramentostate', 'californiastatesacramento' );

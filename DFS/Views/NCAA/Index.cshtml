@@ -108,12 +108,16 @@
 
         function PopulateGames(data) {
             gamesList.find('.card').remove();
+            gamesList.find('br').remove();
             var j = 0;
             $.each(data, function (i, value) {
                 j = j + 1;
                 gamesList.append($("<div class='card'>" +
                     "<button class='TeamName'>" + value.HomeTeam + "</button><button class='TeamName'>" + value.AwayTeam + "</button>" +
-                    "<br/><b>" + value.TotalTeamScore + " - " + value.OpposingTeamScore + "</b>" +
+                    "<br/>Pre: <b>" + value.Predicted + " - " + value.PredictedOpp + "</b>" +
+                    "<br/>Avg: <b>" + value.TotalTeamScore + " - " + value.OpposingTeamScore + "</b>" +
+                    "<br/>All: <b>" + value.TeamAllowed + " - " + value.OppAllowed + "</b>" +
+                    "<br/>Act: <b>" + value.Actual + " - " + value.ActualOpp + "</b>" +
                     "<br/><b> Line: " + value.Line + " OU: " + value.OU + " FV: " + value.FV + "</b> </div>")
                 );
                 if (j % 4 === 0) {

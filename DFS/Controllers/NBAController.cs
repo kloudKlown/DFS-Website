@@ -186,6 +186,25 @@
             return Json(new { shotZone = JsonConvert.SerializeObject(combinedResultSet) });
         }
 
+        public IActionResult GetTopScorerShotChart(string Team)
+        {
+            List<NBAPlayerZoneStats> zones = NBAService.GetTopScorerShotChart(Team);            
+            var groupedR = zones.GroupBy(x => x.Zones, x => x.Shot);
+
+            var result = groupedR.Select(x => new {
+                Player = ' ',
+                ShotType = x.Key,
+                MadeShots = x.ToList().FindAll(v => v == "Made Shot").ToList().Count,
+                TotalShots = x.ToList().Count,
+                ZonePer = (x.ToList().FindAll(v => v == "Made Shot").ToList().Count * 100) / (x.ToList().Count + 1)
+            }).ToList();
+
+            result = result.OrderByDescending(x => x.TotalShots).ToList();
+
+
+            return Json(new { shotZone = JsonConvert.SerializeObject(result) });
+        }
+
 
         public IActionResult GetTeamZones(string team)
         {

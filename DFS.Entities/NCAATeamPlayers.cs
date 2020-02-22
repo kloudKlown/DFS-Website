@@ -53,5 +53,7 @@ namespace DFS.Entities
 
         public double Total { get; set; }
 
+        public double ActualPoints { get; set; }
+
     }
 }

@@ -37,6 +37,23 @@ dbClearResult(ShotTeamPlayer)
 rm(ShotTeamPlayer)
 
 
+ShotTeamPlayer = dbSendQuery(con, paste("Select CAST(GameDate as date) Date, 
+(OU/2 - Line) FVScore, FV,
+(OU/2 + Line) DogScore, 
+	CASE 
+		WHEN FV = Team THEN Opp
+		ELSE
+			Team
+	END Dog
+From NBA_Games ORDER BY 1 DESC"))
+VegasScore = dbFetch(ShotTeamPlayer)
+dbClearResult(ShotTeamPlayer)
+rm(ShotTeamPlayer)
+
+
+
+
+
 temp1 = ShotPlayerLog[ShotPlayerLog$`Made Shot` == 1,]
 temp2 = ShotPlayerLog[ShotPlayerLog$`Made Shot` == 0,]
 
@@ -53,5 +70,3 @@ ShotTeamPlayerLog = merge(x = temp1, y = temp2,  by.x = c("GameDate", "HomeTeam"
                       by.y = c("GameDate", "HomeTeam"))
 rm(temp1)
 rm(temp2)
-
-

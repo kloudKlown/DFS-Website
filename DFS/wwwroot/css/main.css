@@ -119,11 +119,20 @@
         right: -15%;
     }
 
+.ZoneChart {
+    background: #C9DAF7;
+}
 
+.ui-jqgrid-title {
+    font-weight: bolder;
+    font-size: large;
+    text-align: center !important;
+    background: #C9DAF7;
+    display: grid;
+}
 /*
     Body
 */
-
 body {
     background-color: #C9DAF7;
 }

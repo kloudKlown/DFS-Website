@@ -32,6 +32,7 @@ namespace DFS.UI.Models
             OpposingTeamScore = item.OpposingTeamScore;
             Total = item.Total;
             SimpleProjection = item.SimpleProjection;
+            Actual = item.ActualPoints;
 
         }
 

@@ -51,7 +51,8 @@ namespace DFS.Data.Managers
                 OU = item.OU == null ? 0 : item.OU,
                 FV = item.FV == null ? "0" : item.FV,
                 OpposingTeamScore = item.OpposingTeamScore,
-                SimpleProjection = item.SimpleProjection
+                SimpleProjection = item.SimpleProjection,
+                ActualPoints = item.ActualPoints == null ? 0 : item.ActualPoints
             };
         }
     }

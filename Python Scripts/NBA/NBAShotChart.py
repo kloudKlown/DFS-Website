@@ -47,6 +47,7 @@ team = {
 
 def main():
     co = Options()
+    print("In Main")
     co.add_argument("--no-sandbox")    
     driver = webdriver.Chrome( executable_path = dir_path, options = co)
     driver.get("https://stats.nba.com/players/list/")
@@ -55,6 +56,7 @@ def main():
     cursor = connection.cursor()                
     cursor.execute("Delete From NBAShotChart Where gameDate > '2019-07-01'")                
     cursor.commit()    
+    print("Deleted")
     time.sleep(5)    
     html = driver.page_source
     soup = BeautifulSoup(html, features="html.parser")

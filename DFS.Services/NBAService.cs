@@ -114,6 +114,27 @@ namespace DFS.Services.Interfaces
             }
         }
 
+        public List<NBAPlayerZoneStats> GetTopScorerShotChart(string teamName)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(teamName))
+                {
+                    return NBAManager.GetTopScorerShotChart(teamName).Select(x => x).ToList();
+                }
+                else
+                {
+                    return new List<NBAPlayerZoneStats>();
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+
         public List<NBAPlayerZoneStats> GetTeamZoneStats(string team)
         {
             try

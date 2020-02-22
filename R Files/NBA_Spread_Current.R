@@ -1,3 +1,4 @@
+setwd("C:/Users/suhas/Source/Repos/kloudKlown/DFS-Website/R Files")
 library(Hmisc)
 library(corrplot)
 library(brnn)
@@ -10,7 +11,6 @@ library(varhandle)
 library(tidyr)
 require(devtools)
 # library(mxnet)
-setwd("D:/NBA")
 source('NBA_getDBData.R')
 
 NBATableData = NBATableData[,c("PlayerName","Position","Date","Team","blank","Opp","blank2","MP",
@@ -64,7 +64,7 @@ for (eachTeam in Teams) {
   ### Position######
   ## Iterate over date
   for (date in 1:length(DateLevels)){
-    print(paste("Team = ", eachTeam, " level " ,length(DateLevels)/date))
+    print(paste("Team = ", eachTeam, " level " ,length(DateLevels)/date, "-", DateLevels[date]))
     
     for (pos in as.factor(PositionsAll) ){
       # Iterate over each date
@@ -90,7 +90,7 @@ for (eachTeam in Teams) {
       
       #### How does team perform in this position historically
       for (column in 4:30){
-        print(colnames(temp)[column])
+        # print(colnames(temp)[column])
         temp[, colnames(temp)[column]]  = mean(subsetTeamData[, colnames(temp)[column]])
       }
       temp$Date = as.Date(DateLevels[date]) 
@@ -167,8 +167,6 @@ for (player in allPlayers) {
   if (length(DateLevels) == 0){
     next;
   }  
-  # Add current Date
-  # DateLevels = factor(c(levels(DateLevels),substring(Sys.time(),0,10)))
   print(player)
   ## Iterate over date
   for (date in 2:length(DateLevels)){
@@ -249,7 +247,7 @@ OffensiveStats = rbind(OffensiveStatsNew, OffensiveStats)
 DefensiveStats[is.na(DefensiveStats)] = 0
 DefensiveStats[is.null(DefensiveStats)] = 0
 
-OffensiveStats[is.na(OffensiveStats)] = 0
+OffensiveStats = OffensiveStats[-is.na(OffensiveStats),]
 OffensiveStats[is.null(OffensiveStats)] = 0
 
 write.csv(DefensiveStats, file = "DefensiveStats_All.csv")
@@ -262,7 +260,7 @@ write.csv(OffensiveStats, file = "OffensiveStats_All.csv")
 ###### Today's games ####################
 TodaysDate = Sys.Date()
 DefensiveStatsToday = DefensiveStats[0,]
-PositionsAll = unique(NBAAllData$Position)
+PositionsAll = c("C", "PG", "SG", "PF", "SF")
 Teams = c(unique(TodaysGames$Team), unique(TodaysGames$Opp))
 
 
@@ -291,8 +289,12 @@ for (eachTeam in Teams) {
       subsetTeamData = subsetTeamData[order(subsetTeamData$Date , decreasing = TRUE ),]
 
     
-      currentGame = subset(TodaysPlayers, TodaysPlayers$Team == eachTeam & TodaysPlayers$Position == pos)
-      subsetTeamData = subsetTeamData[subsetTeamData$PlayerName %in% currentGame$PlayerName,] 
+      currentGame = subset(TodaysPlayers, TodaysPlayers$Team == eachTeam 
+                           & TodaysPlayers$Position == pos)
+      if (nrow(currentGame) > 1){
+        subsetTeamData = subsetTeamData[subsetTeamData$PlayerName %in% currentGame$PlayerName,]   
+      }
+      
       if(nrow(subsetTeamData) > 50){
         subsetTeamData = subsetTeamData[0:50,]
       }
@@ -319,11 +321,11 @@ for (eachTeam in Teams) {
       
       ### Get Opposition Players in the game
       OppPositionPlayers = unique(subset(NBAAllData, NBAAllData$Team == Opponent
-                                         & NBAAllData$Team == TodaysPlayers$Team
+                                         & as.Date(NBAAllData$Date) > (TodaysDate - 30)
                                          & as.character(NBAAllData$Position) == pos)$PlayerName)
       
       ### Get Opposition Players and their dates to find all games these players particiated in
-      OppositionTeams = unique(subset(NBAAllData, NBAAllData$PlayerName %in% OppPositionPlayers)$Opp)
+      OppositionTeams = unique(subset(NBAAllData, NBAAllData$PlayerName %in% OppPositionPlayers & as.Date(NBAAllData$Date) > (TodaysDate - 60))$Opp)
       OppositionDates = unique(subset(NBAAllData, NBAAllData$PlayerName %in% OppPositionPlayers)$Date)
       
       ## Make sure do not include this date but eveytyhing before.
@@ -447,27 +449,50 @@ OffensiveStats$Date = as.Date(OffensiveStats$Date)
 OffensiveStats = rbind(OffensiveStatsToday , OffensiveStats)
 DefensiveStats = rbind(DefensiveStatsToday , DefensiveStats)
 
+DFP1 =  merge(x = DefensiveStats, y = VegasScore, by.x = c("Date", "Tm"),
+              by.y = c("Date", "FV" ))
+DFP1 = subset(DFP1, select = -Dog)
+DFP1["Spread"] = DFP1$FVScore - DFP1$DogScore
 
+DFP2 = merge(x = DefensiveStats, y = VegasScore, by.x = c("Date", "Tm"),
+             by.y = c("Date", "Dog" ))
+DFP2 = subset(DFP2, select = -FV)
+DFP2["Spread"] = DFP2$FVScore - DFP2$DogScore
+
+DefensiveStats = rbind(DFP1, DFP2)
 ################## Prediction
 
 ################## Results ###############################
 CombinedStats = merge(x = OffensiveStats, y = DefensiveStats, by.x = c("Date", "Pos", "Tm"), 
                       by.y = c("Date", "Pos", "Tm") )
 
-write.csv(CombinedStats, file = "CombinedStats.csv")
+CombinedStats = merge(x = CombinedStats, y = DefensiveStats, by.x = c("Date", "Pos", "Opp"), 
+                      by.y = c("Date", "Pos", "Tm") )
+
 
 DateCheck = Sys.Date()
 allPlayers = unique(CombinedStats$PlayerName)
 
 Results = data.frame( RFPred = numeric(), player = factor(), position = factor(), salary = numeric(), 
                       date = factor(),
-                      ActualMP = numeric(), MP = numeric(), team = factor(), pointsScored = numeric() , 
+                      ActualMP = numeric(), MP = numeric(), Team = factor(), pointsScored = numeric() , 
                       assists = numeric(),
                       rebound = numeric(), pointsAllowedAgainstPosition = numeric(), 
                       playerList = factor(), TeamScore = numeric(), Actual = numeric(),
                       simpleProjection = numeric(), Opp = numeric())
 
 allPlayers = unique(subset(CombinedStats, as.Date(CombinedStats$Date) == DateCheck)$PlayerName)
+
+predictionNames = c("FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
+                    "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
+                    "STLPer.x","BLKPer.x","TOVPer.x","USGPer.x","ORTGPer.x","DRTGPer.x",
+                    "ThreeP.y","FT.y","AST.y","STL.y",
+                    "TOV.y","PF.y","TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
+                    "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp.x","ThreePAOpp.x","FTAOpp.x",
+                    "TRBOpp.x","ASTOpp.x","STLOpp.x","TOVOpp.x",
+                    "FT","AST","STL","TOV","PF","TRBPer","STLPer","BLKPer","TOVPer",
+                    "USGPer","ORTGPer","DRTGPer","FGAOpp.y","ThreePAOpp.y","FTAOpp.y",
+                    "TRBOpp.y","ASTOpp.y","STLOpp.y","TOVOpp.y", "FVScore.x", "Spread.x")
 
 ##############################################################
 ################## NBA Results ###############################
@@ -478,7 +503,7 @@ for (player in allPlayers){
   
   Data_Cleaned_Train = subset(CombinedStats, as.Date(CombinedStats$Date) < as.Date(DateCheck)
                               & as.Date(CombinedStats$Date) > (as.Date(DateCheck) - 300)
-                              & CombinedStats$PlayerName == as.character(player) )
+                              & CombinedStats$PlayerName == as.character(player))
   
   Actual = subset(NBAAllData, as.Date(NBAAllData$Date) == as.Date(DateCheck) 
                   & NBAAllData$PlayerName == as.character(player) )
@@ -491,41 +516,24 @@ for (player in allPlayers){
     next;
   }
   
-  rf = randomForest(Data_Cleaned_Train[,c("FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
-                                          "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
-                                          "STLPer.x","BLKPer.x","TOVPer.x","USGPer.x","ORTGPer.x","DRTGPer.x",
-                                          "ThreeP.y","FT.y","AST.y","STL.y",
-                                          "TOV.y","PF.y","PTS", "TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
-                                          "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp","ThreePAOpp","FTAOpp",
-                                          "TRBOpp","ASTOpp","STLOpp","TOVOpp" )], 
-                    y = Data_Cleaned_Train[,c("DKP")], ntree=50 ,type='regression')
+  RFCollector = c()
+  for (variable in 1:5) {
+    rf = randomForest(Data_Cleaned_Train[,predictionNames], 
+                      y = Data_Cleaned_Train[,c("DKP")], ntree=100 ,type='regression')
+    
+    RFPred = predict( rf,  Data_Cleaned_Test[,predictionNames] ,type = c("response") )
+    
+    RFCollector[variable]  = RFPred
+  }
   
-  RFPred = predict( rf,  Data_Cleaned_Test[,c("FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
-                                              "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
-                                              "STLPer.x","BLKPer.x","TOVPer.x","USGPer.x","ORTGPer.x","DRTGPer.x",
-                                              "ThreeP.y","FT.y","AST.y","STL.y",
-                                              "TOV.y","PF.y","PTS","TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
-                                              "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp","ThreePAOpp","FTAOpp",
-                                              "TRBOpp","ASTOpp","STLOpp","TOVOpp")] ,type = c("response") )
   
-  rfTP = randomForest(Data_Cleaned_Train[,c("FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
-                                            "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
-                                            "STLPer.x","BLKPer.x","TOVPer.x","USGPer.x","ORTGPer.x","DRTGPer.x",
-                                            "ThreeP.y","FT.y","AST.y","STL.y",
-                                            "TOV.y","PF.y","PTS", "TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
-                                            "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp","ThreePAOpp","FTAOpp",
-                                            "TRBOpp","ASTOpp","STLOpp","TOVOpp" )], 
+  rfTP = randomForest(Data_Cleaned_Train[,predictionNames], 
                       y = Data_Cleaned_Train[,c("TotalPoints")], ntree=50 ,type='regression')
   
-  RFPredTP = predict( rfTP,  Data_Cleaned_Test[,c("FG.x","ThreeP.x","FT.x","TRB.x","STL.x","TOV.x","PF.x",
-                                                  "TSPer.x","ORBPer.x","TRBPer.x","ASTPer.x",
-                                                  "STLPer.x","BLKPer.x","TOVPer.x","USGPer.x","ORTGPer.x","DRTGPer.x",
-                                                  "ThreeP.y","FT.y","AST.y","STL.y",
-                                                  "TOV.y","PF.y","PTS","TRBPer.y","STLPer.y","BLKPer.y","TOVPer.y",
-                                                  "USGPer.y","ORTGPer.y","DRTGPer.y","FGAOpp","ThreePAOpp","FTAOpp",
-                                                  "TRBOpp","ASTOpp","STLOpp","TOVOpp")] ,type = c("response") )
+  RFPredTP = predict( rfTP,  Data_Cleaned_Test[,predictionNames] ,type = c("response") )
   
-  Prediction2 = as.data.frame(RFPred)
+  Prediction2 = Results[1,]
+  Prediction2["RFPred"] = mean(RFCollector)
   Prediction2["player"] = player
   Prediction2["position"] = Data_Cleaned_Test$PlayerPosition
   Prediction2["salary"] = Prediction2$RFPred * 1000/5 
@@ -540,61 +548,10 @@ for (player in allPlayers){
   Prediction2["Opp"] = Data_Cleaned_Test$Opp
   Prediction2["date"] = as.Date(DateCheck)
   
-  # Get preivous teams against this position ( last 20 days )
-  previousTeams = subset(NBAAllData, NBAAllData$Opp.x == as.character(Data_Cleaned_Test$Opp) 
-                         & as.Date(NBAAllData$Date) > (as.Date(DateCheck) - 20) & as.Date(NBAAllData$Date) < (as.Date(DateCheck))
-                         & NBAAllData$Position == Data_Cleaned_Test$PlayerPosition
-                         & NBAAllData$PTS > (Data_Cleaned_Test$FT.x + Data_Cleaned_Test$ThreeP.x*3 + 2*(Data_Cleaned_Test$FG.x - Data_Cleaned_Test$ThreeP.x) - 1)
-                         & NBAAllData$PTS < (Data_Cleaned_Test$FT.x + Data_Cleaned_Test$ThreeP.x*3 + 2*(Data_Cleaned_Test$FG.x - Data_Cleaned_Test$ThreeP.x) + 1))
-  i = 0
-  
-  while(nrow(previousTeams) < 4){
-    i = i + 1
-    # Get preivous teams against this position ( last 20 days )
-    previousTeams = subset(NBAAllData, NBAAllData$Opp.x == as.character(Data_Cleaned_Test$Opp) 
-                           & as.Date(NBAAllData$Date) > (as.Date(DateCheck) - 20)
-                           & as.Date(NBAAllData$Date) < (as.Date(DateCheck))
-                           & NBAAllData$Position == Data_Cleaned_Test$PlayerPosition
-                           & NBAAllData$PTS > (Data_Cleaned_Test$FT.x + Data_Cleaned_Test$ThreeP.x*3 + 2*(Data_Cleaned_Test$FG.x - Data_Cleaned_Test$ThreeP.x) - i*0.5)
-                           & NBAAllData$PTS < (Data_Cleaned_Test$FT.x + Data_Cleaned_Test$ThreeP.x*3 + 2*(Data_Cleaned_Test$FG.x - Data_Cleaned_Test$ThreeP.x)+ i*0.5)
-    )
-    if (i > 10){
-      break
-    }
-  }
-  
-  dataTM = ""
-  
-  if (nrow(previousTeams) > 0){
-    for (jk in 1:nrow(previousTeams)) {
-      datejk = previousTeams$Date[jk]
-      tm = previousTeams$Tm[jk]
-      previousTeamData = subset(NBAAllData, 
-                                as.Date(NBAAllData$Date) == as.Date(datejk)
-                                & NBAAllData$Tm == tm
-                                & NBAAllData$PTS > previousTeams$PTS[jk] )
-      dataTM = paste(previousTeamData$PlayerName, '-', previousTeamData$PTS, collapse = '|H|')
-      previousTeams$PlayerPosition[jk] = dataTM
-      dataTM = ""
-    }
-    
-  }
-  
-  ####### Previous teams
-  if (nrow(previousTeams) > 0){
-    Prediction2["playerList"] = paste('=',previousTeams$PlayerName,'-' , previousTeams$PTS, collapse = '||||||')
-    Prediction2["pointsAllowedAgainstPosition"] = mean(previousTeams$PTS)  
-  }
-  else{
-    Prediction2["playerList"] = 0
-    Prediction2["pointsAllowedAgainstPosition"] = 0
-  }
-  
-  Prediction2["simpleProjection"] = Prediction2$pointsAllowedAgainstPosition * 1 + Data_Cleaned_Test$ThreeP.x * .5 + Data_Cleaned_Test$AST.x * 1.25 +
-    Data_Cleaned_Test$TRB.x * 1.5 + (Data_Cleaned_Test$STL.x + Data_Cleaned_Test$BLK.x) * 2 - 3
   
   Results = rbind(Results, Prediction2)
 }
+
 
 dbWriteTable(con, name = "NBA_DK_Prediction", value = Results, row.names = FALSE, append = TRUE)  
 

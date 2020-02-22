@@ -101,7 +101,7 @@ namespace DFS.Data.Managers
 
         public IEnumerable<NBAPlayerStats> GetGameStatsByDate(DateTime date, string teamName, string oppositionName)
         {
-            List<NBAPlayerStats> result = new List<NBAPlayerStats>();
+            List<NBAPlayerStats> result = new List<NBAPlayerStats>(); 
             using (IDbConnection connection = GetConnection(NBADatabase))
             {
                 GridReader queryResult;
@@ -169,6 +169,30 @@ namespace DFS.Data.Managers
                 return result;
             }
         }
+
+        public IEnumerable<NBAPlayerZoneStats> GetTopScorerShotChart(string team)
+        {
+            List<NBAPlayerZoneStats> result = new List<NBAPlayerZoneStats>();
+            using (IDbConnection connection = GetConnection(NBADatabase))
+            {
+                var queryResult = connection.Query("usp_GetTopScorerShotChart",
+                        new
+                        {
+                            @team_ = team
+                        },
+                        commandType: CommandType.StoredProcedure);
+
+
+                // Result Set Team
+                foreach (var item in queryResult)
+                {
+                    result.Add(MapNBAPlayerZoneStats(item));
+                }
+
+                return result;
+            }
+        }
+
 
 
         public IEnumerable<NBAPlayerZoneStats> GetTeamZoneStats(string player)

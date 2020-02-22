@@ -34,7 +34,8 @@ INSERT INTO NBAReferenceToShotChartMap values
 ('Juancho Hernangomez', 'Juan Hernangomez'),
 ('Vince Edwards', 'Vincent Edwards'),
 ('Joel Embiid', 'Joel Embiid'),
-('Vincent Edwards', 'Vinc Edwards');
+('Vincent Edwards', 'Vinc Edwards'),
+('Walter Lemon Jr.','Walt Lemon');
 
 
 
@@ -45,5 +46,5 @@ WHERE
 	DK.ShotChart_PlayerName IS NULL
 
 
---Select * FROM NBAShotChart where PlayerName like '%Bowman%'
---Select * FROM NBA_Player where PlayerName like '%Bowman%'
+--Select * FROM NBAShotChart where PlayerName like '%Walter Lemon%'
+--Select * FROM NBA_Player where PlayerName like '%Bertans%'
