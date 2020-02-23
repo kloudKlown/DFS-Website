@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 import pyodbc
 import hashlib
-import time 
+import time
 from datetime import datetime
 from bs4 import BeautifulSoup
 

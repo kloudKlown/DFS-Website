@@ -7,7 +7,6 @@ import subprocess
 from datetime import datetime, timedelta
 import pyodbc
 import time 
-import json
 
 teamDict = { 
         "ATL" : "ATL",

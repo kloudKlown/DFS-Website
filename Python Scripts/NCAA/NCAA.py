@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import inflect 
 import pyodbc
 
-YEAR = [2020] 
+YEAR = [2020]
 positionHeaders = {}
 connection  = pyodbc.connect("Driver={SQL Server Native Client 11.0};""Server=.;" "Database=NBA;""Trusted_Connection=yes;")
 cursor = connection.cursor()

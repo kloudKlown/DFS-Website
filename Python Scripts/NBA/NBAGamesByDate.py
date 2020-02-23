@@ -6,8 +6,7 @@ from bs4 import BeautifulSoup
 import subprocess
 from datetime import datetime, timedelta
 import pyodbc
-import time 
-import json
+import time
 
 teamDict = { 
         "ATL" : "ATL",

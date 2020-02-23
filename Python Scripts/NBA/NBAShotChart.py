@@ -4,7 +4,6 @@ import sys
 import re
 from bs4 import BeautifulSoup
 import pyodbc
-import hashlib
 import time 
 import json
 from seleniumwire import webdriver 
