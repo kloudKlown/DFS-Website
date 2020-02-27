@@ -94,8 +94,7 @@ for (eachTeam in Teams) {
                                          & as.Date(NBAAllData$Date) == as.Date(DateLevels[date])
                                          & as.character(NBAAllData$Position) == pos)$PlayerName)
       
-      ### Get Opposition Players and their dates to find all games these players particiated in
-      
+      ### Get Opposition Players and their dates to find all games these players particiated in      
       OppositionTeams = unique(subset(NBAAllData, NBAAllData$PlayerName %in% OppPositionPlayers)$Opp)
       OppositionDates = unique(subset(NBAAllData, NBAAllData$PlayerName %in% OppPositionPlayers)$Date)
       ## Make sure do not include this date but eveytyhing before.

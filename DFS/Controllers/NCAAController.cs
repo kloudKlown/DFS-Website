@@ -70,8 +70,8 @@ namespace DFS.UI.Controllers
                 playerTopMinutes.First(y => y.Team == x.Key).OU,
                 playerTopMinutes.First(y => y.Team == x.Key).Line,
                 playerTopMinutes.First(y => y.Team == x.Key).FV,
-                OppAllowed = Math.Round(playerTopMinutes.First(y => y.Opposition == x.Key).AveragePointsAllowed, 2),
-                TeamAllowed = Math.Round(playerTopMinutes.First(y => y.Team == x.Key).AveragePointsAllowed, 2),
+                OppAllowed = playerTopMinutes.FirstOrDefault(y => y.Opposition == x.Key) != null ? Math.Round(playerTopMinutes.First(y => y.Opposition == x.Key).AveragePointsAllowed, 2) : 0,
+                TeamAllowed = playerTopMinutes.FirstOrDefault(y => y.Team == x.Key) != null ? Math.Round(playerTopMinutes.First(y => y.Team == x.Key).AveragePointsAllowed, 2) : 0,
                 Actual = Math.Round(players.FindAll(y => y.Team == x.Key).Select(x => x.Actual).ToList().Sum(x => x), 2),
                 ActualOpp = Math.Round(players.FindAll(y => y.Opposition == x.Key).Select(x => x.Actual).ToList().Sum(x => x), 2)
             }).ToList();

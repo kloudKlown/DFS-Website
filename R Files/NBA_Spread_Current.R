@@ -353,7 +353,9 @@ for (eachTeam in Teams) {
 DefensiveStatsToday[is.na(DefensiveStatsToday)] = 0
 DefensiveStatsToday[is.null(DefensiveStatsToday)] = 0
 ######### Offensive Stats
+TodaysPlayers[is.na(TodaysPlayers)] = 0
 TodaysPlayers = TodaysPlayers[-1,]
+
 allPlayers = unique(TodaysPlayers$PlayerName)
 OffensiveStatsToday = data.frame(matrix(ncol=38))
 colnames(OffensiveStatsToday) = c("PlayerName", "Tm", "Pos" , "Date", "Opp",  "TotalPoints","DKP",
