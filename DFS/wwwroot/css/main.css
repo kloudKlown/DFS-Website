@@ -152,7 +152,17 @@ body {
     font-size: large;
 }
 
-.text-dark{
+.navigationSubHeader {
+    background-color: #508FBB !important;
+    font-weight: normal;
+    font-size: medium;
+}
+
+.containerSubHeader{
+    width: initial;
+}
+
+.text-dark {
     color: white !important;
 }
 /*

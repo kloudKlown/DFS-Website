@@ -26,7 +26,25 @@ namespace DFS.Data.Managers
                 return connection.Query<Player>("usp_GetAllPlayers", commandType: CommandType.StoredProcedure);
             }
         }
-        
+
+        public bool PlayerSelected(DateTime Date, string Name, string Team)
+        {
+            using (IDbConnection connection = GetConnection(NBADatabase))
+            {
+                //usp_UpdateSelectedPlayers
+                var query = connection.Query<dynamic>("usp_UpdateSelectedPlayers",
+               new
+               {
+                   date_ = Date.ToShortDateString(),
+                   name_ = Name,
+                   team_ = Team
+               }, commandType: CommandType.StoredProcedure);
+            }
+
+            return true;
+
+        }
+
         public IEnumerable<NBAGames> GetNBAGames(DateTime date)
         {
             List<NBAGames> games = new List<NBAGames>();
@@ -70,7 +88,7 @@ namespace DFS.Data.Managers
                         gameDate_ = date,
                         daysBefore_ = daysBefore
                     },
-                    commandType: CommandType.StoredProcedure);                
+                    commandType: CommandType.StoredProcedure);
                 return result;
             }
         }
@@ -82,7 +100,7 @@ namespace DFS.Data.Managers
             {
                 var queryResult = connection.Query("usp_GetPlayersForDate",
                     new
-                    {                        
+                    {
                         date_ = date.Date,
                         teamName_ = team,
                         oppName_ = opp
@@ -93,7 +111,7 @@ namespace DFS.Data.Managers
                 {
                     result.Add(MapNBASelectedTeamPlayers(item));
                 }
-                
+
                 return result;
             }
         }
@@ -101,7 +119,7 @@ namespace DFS.Data.Managers
 
         public IEnumerable<NBAPlayerStats> GetGameStatsByDate(DateTime date, string teamName, string oppositionName)
         {
-            List<NBAPlayerStats> result = new List<NBAPlayerStats>(); 
+            List<NBAPlayerStats> result = new List<NBAPlayerStats>();
             using (IDbConnection connection = GetConnection(NBADatabase))
             {
                 GridReader queryResult;
@@ -159,7 +177,7 @@ namespace DFS.Data.Managers
                         },
                         commandType: CommandType.StoredProcedure);
 
-        
+
                 // Result Set Team
                 foreach (var item in queryResult)
                 {
@@ -248,9 +266,9 @@ namespace DFS.Data.Managers
                 Turnovers = item.Turnover,
                 Points = item.Points,
                 Fouls = item.Fouls
-        };
+            };
         }
-        
+
         private NBAPlayerZoneStats MapNBAPlayerZoneStats(dynamic item)
         {
             return new NBAPlayerZoneStats

@@ -1,28 +1,45 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@{
+    string address = ViewContext.RouteData.Values["Controller"].ToString();
+    string nbaBorder = (address == "NBA") ? "border" : "";
+    string ncaaBorder = (address == "NCAA") ? "border" : "";
+}
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 navigationHeader">
-    <div class="container">
-        <label class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Fantasy Helper</label>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-            <ul class="navbar-nav flex-grow-1">
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="NBA" asp-action="Index">NBA</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="NCAA" asp-action="Index">NCAA</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </li>
+    <div class="row">
+        <div class="container">
+            <label class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Fantasy Helper</label>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item @nbaBorder border-bottom-0">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="NBA" asp-action="Index">NBA</a>
+                    </li>
+                    <li class="nav-item @ncaaBorder">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="NCAA" asp-action="Index">NCAA</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container containerSubHeader">
+
+            <ul class="navbar-nav">
+                @if (address == "NBA")
+                {
+                    <li class="nav-item border border-right-0">
+                        <a class="nav-link text-dark navigationSubHeader" asp-area="" asp-controller="NBA" asp-action="Index">Lineup HQ</a>
+                    </li>
+
+                    <li class="nav-item border">
+                        <a class="nav-link text-dark navigationSubHeader" asp-area="" asp-controller="NBA" asp-action="SelectedPlayers">Selected Players</a>
+                    </li>
+                }
             </ul>
+
         </div>
     </div>
 </nav>

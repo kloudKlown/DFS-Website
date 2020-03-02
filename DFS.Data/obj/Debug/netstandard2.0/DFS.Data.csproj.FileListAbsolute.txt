@@ -7,11 +7,11 @@ D:\DFS Website\DFS\DFS.Data\bin\Debug\netstandard2.0\DFS.Data.pdb
 D:\DFS Website\DFS\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.csprojAssemblyReference.cache
 D:\DFS Website\DFS\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.dll
 D:\DFS Website\DFS\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.pdb
-C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Data\bin\Debug\netstandard2.0\DFS.Data.deps.json
-C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Data\bin\Debug\netstandard2.0\DFS.Data.dll
-C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Data\bin\Debug\netstandard2.0\DFS.Data.pdb
-C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.csprojAssemblyReference.cache
-C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.AssemblyInfoInputs.cache
-C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.AssemblyInfo.cs
-C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.dll
-C:\Users\suhas\Source\Repos\kloudKlown\DFS-Website\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.pdb
+C:\Users\suhas\source\repos\kloudKlown\DFS-Website\DFS.Data\bin\Debug\netstandard2.0\DFS.Data.deps.json
+C:\Users\suhas\source\repos\kloudKlown\DFS-Website\DFS.Data\bin\Debug\netstandard2.0\DFS.Data.dll
+C:\Users\suhas\source\repos\kloudKlown\DFS-Website\DFS.Data\bin\Debug\netstandard2.0\DFS.Data.pdb
+C:\Users\suhas\source\repos\kloudKlown\DFS-Website\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.AssemblyInfoInputs.cache
+C:\Users\suhas\source\repos\kloudKlown\DFS-Website\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.AssemblyInfo.cs
+C:\Users\suhas\source\repos\kloudKlown\DFS-Website\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.dll
+C:\Users\suhas\source\repos\kloudKlown\DFS-Website\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.pdb
+C:\Users\suhas\source\repos\kloudKlown\DFS-Website\DFS.Data\obj\Debug\netstandard2.0\DFS.Data.csprojAssemblyReference.cache

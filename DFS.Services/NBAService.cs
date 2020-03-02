@@ -18,17 +18,18 @@ namespace DFS.Services.Interfaces
             NBAManager = new NBAManager();
         }
 
-        //public List<NBAPlayers> GetAllPlayers()
-        //{
-        //    try
-        //    {
-        //        return NBAManager.GetAllPlayers().Select(x => x).ToList();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw e;
-        //    }
-        //}
+        public bool PlayerSelected(DateTime Date, string Name, string Team)
+        {
+            try
+            {
+                return NBAManager.PlayerSelected(Date, Name, Team);
+            }
+            catch (Exception e)
+            {
+                return false;                
+            }
+
+        }
 
         public List<NBATeamPlayers> GetPlayersByDateAndTeam(DateTime gameDate, string teamName, string oppositionName)
         {

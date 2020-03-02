@@ -73,10 +73,15 @@ namespace DFS.UI.Controllers
                 OppAllowed = playerTopMinutes.FirstOrDefault(y => y.Opposition == x.Key) != null ? Math.Round(playerTopMinutes.First(y => y.Opposition == x.Key).AveragePointsAllowed, 2) : 0,
                 TeamAllowed = playerTopMinutes.FirstOrDefault(y => y.Team == x.Key) != null ? Math.Round(playerTopMinutes.First(y => y.Team == x.Key).AveragePointsAllowed, 2) : 0,
                 Actual = Math.Round(players.FindAll(y => y.Team == x.Key).Select(x => x.Actual).ToList().Sum(x => x), 2),
-                ActualOpp = Math.Round(players.FindAll(y => y.Opposition == x.Key).Select(x => x.Actual).ToList().Sum(x => x), 2)
+                ActualOpp = Math.Round(players.FindAll(y => y.Opposition == x.Key).Select(x => x.Actual).ToList().Sum(x => x), 2)                
             }).ToList();
 
-            games = games.OrderBy(x => (x.Predicted + x.PredictedOpp)).ToList();
+            //OU
+            games = games.OrderBy(x => ((x.Predicted + x.PredictedOpp) + (x.OppAllowed + x.TeamAllowed) - 2*x.OU)).ToList();
+
+            //FV            
+            //games = games.OrderBy(x => (x.OppAllowed - x.TeamAllowed)).ToList();
+
 
             return Json(JsonConvert.SerializeObject(games));
         }

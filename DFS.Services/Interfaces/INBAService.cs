@@ -15,13 +15,15 @@ namespace DFS.Services.Interfaces
 
         List<NBAGames> GetNBAGames(DateTime date);
 
-        List<NBAPlayerStats> GetGameStatsByDate(DateTime date, string teamName, string oppositionName);
+        List<NBAPlayerStats> GetGameStatsByDate(DateTime Date, string TeamName, string OppositionName);
 
-        List<NBAPlayerZoneStats> GetPlayerZoneStats(string playerName);
+        List<NBAPlayerZoneStats> GetPlayerZoneStats(string PlayerName);
 
-        List<NBAPlayerZoneStats> GetTeamZoneStats(string team);
+        List<NBAPlayerZoneStats> GetTeamZoneStats(string Team);
 
-        List<NBAPlayerZoneStats> GetTopScorerShotChart(string team);
+        List<NBAPlayerZoneStats> GetTopScorerShotChart(string Team);
+
+        bool PlayerSelected(DateTime Date, string Name, string Team);
 
     }
 

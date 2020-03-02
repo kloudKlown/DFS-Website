@@ -84,12 +84,8 @@
         { name: 'TotalShots', index: 'TotalShots', width: 100, align: 'right', editable: false },
         { name: 'ZonePer', index: 'ZonePer', width: 100, align: 'right', editable: false, sortable: true }
     ];
-    var playerStatColumnNames = ["Name", "Team", "Pos", "Proj", "Salary", "Diff", "Actual", "Usage", "Mins", "Def.R", "Off.R", "Height", "FG", "FGA",
-        "3P", "3PA", "FT",
-        //"ORB", "DRB",
-        "TRB", "AST", "STL", "BLK",
-        //"TOV", "PF",
-        "PTS"]
+    var playerStatColumnNames = ["Name", "Team", "Pos", "Proj", "Salary", "Diff", "Actual", "Usage", "Mins", "Def.R", "Off.R", "PTS", "Height", "FG", "FGA",
+        "3P", "3PA", "FT", "TRB", "AST", "STL", "BLK"]
 
     var playerStatColumn = [
         { name: 'name', index: 'Name', width: 180, align: 'left', editable: false, classes: "playerName" },
@@ -121,22 +117,17 @@
         },
         { name: 'defensiveRating', index: 'DefensiveRating', width: 80, align: 'right', editable: false, sortable: true, search: false },
         { name: 'offensiveRating', index: 'OffensiveRating', width: 80, align: 'right', editable: false, sortable: true, search: false },
+        { name: 'points', index: 'Points', width: 50, align: 'right', editable: false, sortable: true, search: false, summaryType: 'sum' },
         { name: 'height', index: 'Height', width: 80, align: 'right', editable: false, sortable: true, search: false },
         { name: 'fieldGoal', index: 'FieldGoal', width: 50, align: 'right', editable: false, sortable: true, search: false },
         { name: 'fieldGoalAttempted', index: 'FieldGoalAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false, summaryType: 'sum' },
         { name: 'threePointer', index: 'ThreePointer', width: 50, align: 'right', editable: false, sortable: true, search: false },
         { name: 'threePointerAttempted', index: 'ThreePointerAttempted', width: 50, align: 'right', editable: false, sortable: true, search: false, summaryType: 'sum' },
         { name: 'freeThrow', index: 'FreeThrow', width: 50, align: 'right', editable: false, sortable: true, search: false },
-        //{ name: 'offensiveRebound', index: 'OffensiveRebound', width: 50, align: 'center', editable: false },
-        //{ name: 'defensiveRebound', index: 'DefensiveRebound', width: 50, align: 'center', editable: false },
         { name: 'totalRebound', index: 'TotalRebound', width: 50, align: 'right', editable: false, sortable: true, search: false, summaryType: 'sum' },
-        //{ name: 'totalReboundPercentage', index: 'TotalReboundPercentage', width: 50, align: 'center', editable: false, sortable: true },
         { name: 'assists', index: 'Assists', width: 50, align: 'right', editable: false, sortable: true, search: false },
         { name: 'steals', index: 'Steals', width: 50, align: 'right', editable: false, sortable: true, search: false },
         { name: 'blocks', index: 'Blocks', width: 50, align: 'right', editable: false, sortable: true, search: false },
-        //{ name: 'turnovers', index: 'Turnovers', width: 50, align: 'center', editable: false, sortable: true },
-        //{ name: 'fouls', index: 'Fouls', width: 50, align: 'center', editable: false, sortable: true },
-        { name: 'points', index: 'Points', width: 50, align: 'right', editable: false, sortable: true, search: false, summaryType: 'sum' }
     ];
 
 
@@ -180,7 +171,6 @@
                 gamesList.append($("<div class='card'><button class='TeamName'>" + value.HomeTeam + "</button><button class='TeamName'>" + value.AwayTeam + "</button>"));
             });
         };
-
 
         gamesList.on("click", '.TeamName', function (e) {
             var params = {};
@@ -270,6 +260,7 @@
                 loadonce: false,
                 rowNum: 100,
                 height: "auto",
+                multiselect: true,
                 shrinkToFit: false,
                 autowidth: true,
                 repeatitems: false,
@@ -285,7 +276,33 @@
                     groupColumnShow: [true],
                     groupCollapse: false,
                     groupOrder: ['asc']
+                },
+                onSelectRow: function (rowId, status, e) {
+                    var grid = $("#jqGrid");
+                    var date = $("#datepicker").val();
+                    var rowValues = grid.jqGrid('getRowData', rowId);
+                    var params = {};
+                    params["Date"] = date;
+                    params["Name"] = rowValues.name;
+                    params["Team"] = rowValues.team;
+
+                    debugger;
+                    $.ajax({
+                        url: "/NBA/PlayerSelected",
+                        type: "POST",
+                        data: params,
+                        success: function () {
+                            console.log("added");
+                        },
+                        error: function () {
+                        }
+                    });
+                },
+                loadComplete: function () {
+                    var grid = $("#jqGrid");
+                    grid.find("input").addClass("playerCheckbox");
                 }
+
             });
             $("#jqGrid").jqGrid('filterToolbar', { stringResult: true, defaultSearch: 'cn' });
 
@@ -428,12 +445,12 @@
         }
 
         var tabulateShotZones = function (shotData) {
-            $("#playerShotZone").jqGrid('GridUnload');
-            $("#playerShotZone").jqGrid('setGridParam', {
+            playerShotZone.jqGrid('GridUnload');
+            playerShotZone.jqGrid('setGridParam', {
                 data: shotData
             }).trigger("reloadGrid");
 
-            $("#playerShotZone").jqGrid({
+            playerShotZone.jqGrid({
                 colNames: gridPlayerCoulmnNames,
                 colModel: gridPlayerCoulmns,
                 datatype: "local",
@@ -447,7 +464,6 @@
         }
 
         clearChartDetials();
-
         date.val(new Date().toLocaleDateString());
         date.trigger("change");
     });
@@ -455,6 +471,7 @@
     // For players spawned in grid after ajaxStop rebind playerName action
     $(document).ajaxStop(function () {
         var playerName = $(".playerName");
+
         playerName.on("click", function (e) {
             var params = {};
             params["name"] = $(e.target).text().split("(")[0];
@@ -472,8 +489,6 @@
                 }
             });
         });
-
-
         var tabulateShotZones = function (shotData) {
             $("#playerShotZone").jqGrid('GridUnload');
             $("#playerShotZone").jqGrid('setGridParam', {

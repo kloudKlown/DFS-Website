@@ -114,10 +114,10 @@
                 j = j + 1;
                 gamesList.append($("<div class='card'>" +
                     "<button class='TeamName'>" + value.HomeTeam + "</button><button class='TeamName'>" + value.AwayTeam + "</button>" +
-                    "<br/>Pre: <b>" + value.Predicted + " - " + value.PredictedOpp + "</b>" +
+                    "<br/>Pre: <b>" + value.Predicted + " - " + value.PredictedOpp +  ' T: ' + Math.round((value.Predicted + value.PredictedOpp) ,2) + "</b>" +
                     "<br/>Avg: <b>" + value.TotalTeamScore + " - " + value.OpposingTeamScore + "</b>" +
-                    "<br/>All: <b>" + value.TeamAllowed + " - " + value.OppAllowed + "</b>" +
-                    "<br/>Act: <b>" + value.Actual + " - " + value.ActualOpp + "</b>" +
+                    "<br/>All: <b>" + value.TeamAllowed + " - " + value.OppAllowed +  ' T: ' + Math.round((value.TeamAllowed + value.OppAllowed) ,2) + "</b>" +
+                    "<br/>Act: <b>" + value.Actual + " - " + value.ActualOpp +  ' T: ' + Math.round((value.ActualOpp + value.Actual) ,2) + "</b>" +
                     "<br/><b> Line: " + value.Line + " OU: " + value.OU + " FV: " + value.FV + "</b> </div>")
                 );
                 if (j % 4 === 0) {

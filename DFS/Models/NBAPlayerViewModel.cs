@@ -42,7 +42,10 @@ namespace DFS.UI.Models
             Turnovers = item.Turnovers;
             Points = item.Points;
             Fouls = item.Fouls;
+            Selected = new Random().Next(0,1) == 0 ? true : false;
         }
+
+        public bool Selected { get; set; }
         
         public string Team { get; set; }
 

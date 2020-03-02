@@ -27,6 +27,11 @@
             return View();
         }
 
+        public IActionResult SelectedPlayers()
+        {
+
+            return View();
+        }
 
         [HttpPost]
         public IActionResult GetGamesForDate(DateTime date)
@@ -117,6 +122,12 @@
                 return Json(new { data = playerList });
             }
 
+            return Json(new { });
+        }
+
+        public IActionResult PlayerSelected(DateTime Date, string Name, string Team)
+        {
+            NBAService.PlayerSelected(Date, Name, Team);
             return Json(new { });
         }
 
